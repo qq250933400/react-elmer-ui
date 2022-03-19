@@ -47,10 +47,6 @@ export type TypeServiceSendOptions = {
     withCredentials?: boolean;
 };
 
-export const createServiceConfig = <T={}>(data: TypeServiceConfig<T>): TypeServiceConfig<T> => {
-    return data;
-};
-
 // const [serviceState, withServiceContext,] = createContext("ElmerServiceContext", {
 //     config: {}
 // });

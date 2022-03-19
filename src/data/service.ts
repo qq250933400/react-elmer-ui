@@ -1,4 +1,5 @@
-import { createServiceConfig } from "../HOC/withService/ElmerService";
+import { createServiceConfig } from "../HOC/withService/ServiceContext";
+
 const host = window.location.host;
 export default createServiceConfig({
     env: ENV,

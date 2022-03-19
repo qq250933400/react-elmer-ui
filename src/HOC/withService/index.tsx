@@ -1,8 +1,9 @@
 import React, { createContext, useCallback, useState } from 'react';
-import { TypeServiceConfig, createServiceConfig, ElmerService, TypeServiceSendOptions } from "./ElmerService";
+import { TypeServiceConfig, ElmerService, TypeServiceSendOptions } from "./ElmerService";
 import { getServiceObj } from "elmer-common/lib/decorators/Autowired";
 import { commonHandler } from "./ErrorHandle";
 import { useNavigate } from "react-router-dom";
+export  { createServiceConfig } from "./ServiceContext";
 
 type TypeServiceProviderProps = {
     env: string,
@@ -16,7 +17,6 @@ export type TypeService = {
     send<T={}>(option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions):Promise<T>;
 };
 
-export const createConfig = createServiceConfig;
 
 export const ServiceContext = createContext({
     config: {},
@@ -88,7 +88,7 @@ const withService = () => {
                             reject(err);
                         });
                 });
-            },[serviceObj]);
+            },[serviceObj, navigateTo]);
             return (
                 <ServiceContext.Consumer>
                     {

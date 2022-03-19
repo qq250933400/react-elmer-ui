@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback,useState, useMemo } from "react";
+import React, { ChangeEvent, useCallback,useState, useMemo, useEffect } from "react";
 import styles from "../style.module.scss";
 import utils from "../../utils";
 
@@ -16,27 +16,35 @@ type TypeLineInputProps = {
 const VerifyCodeInput = (props: TypeLineInputProps) => {
     const [ sendDisabled, setSendDisabled ] = useState(false);
     const [ timeoutText, setTimeoutText ] = useState("已发送");
+    const [ SendSMS, setSendSMS ] = useState(false);
     const onChange = useCallback((event: ChangeEvent) =>{
         const value = (event.target as HTMLInputElement).value;
         typeof props.onChange === "function" && props.onChange(value);
     },[props]);
     const timeTick = useCallback((timeCount: number) => {
-        if(timeCount > 1) {
-            setTimeoutText(`已发送(${timeCount}s)`);
-            setTimeout(() => timeTick(timeCount - 1), 1000);
-        } else {
-            setSendDisabled(false);
-        }
+        let timeout = timeCount;
+        const timeHandler = setInterval(()=> {
+            if(timeout > 1) {
+                timeout -= 1;console.log("run_time_", timeout);
+                setTimeoutText(`已发送(${timeout}s)`);
+            } else {
+                setSendDisabled(false);
+                setSendSMS(false);
+                clearInterval(timeHandler);
+            }
+        }, 1000);
+        return timeHandler;
+        
     }, [setTimeoutText, setSendDisabled]);
     const onSendClick = useCallback(()=> {
         if(!sendDisabled) {
             props.onBeforeSend().then(() => {
                 console.log("send-success");
                 setSendDisabled(true);
-                timeTick(90);
+                setSendSMS(true);
             });
         }
-    }, [sendDisabled, props, timeTick]);
+    }, [sendDisabled, props]);
     const sendProps = useMemo(() => {
         if(sendDisabled) {
             return {
@@ -52,8 +60,15 @@ const VerifyCodeInput = (props: TypeLineInputProps) => {
         } else {
             return timeoutText;
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sendDisabled, timeoutText]);
+    }, [props, sendDisabled, timeoutText]);
+    useEffect(()=>{
+        if(SendSMS) {
+            const timeHandler = timeTick(90);
+            return () => {
+                clearInterval(timeHandler);
+            }
+        }
+    },[ SendSMS,timeTick ]);
     return (
         <div className={utils.cn(styles.lineInput, props.className)}>
             <div>
