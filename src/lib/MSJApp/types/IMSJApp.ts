@@ -6,6 +6,9 @@ export interface IMSJAppOptions<M={}, TP={}> {
     models?: {[P in keyof M]: Model};
 }
 
-export interface IMSJAppRunOpt {
-    location: string;
+export interface IMSJAppRunOpt<T={}> {
+    /** 系统默认路径 */
+    location?: string;
+    /** 传递到impl.init方法参数 */
+    implInit?: T;
 }

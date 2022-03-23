@@ -1,17 +1,23 @@
-import { utils } from "elmer-common";
+import { utils, Observe } from "elmer-common";
 import { loaderFlag, TypeLoaderResult } from "./MLoader";
 import { Model, ModelFlag } from "./Model";
 import { getAppState } from "./ApiExport";
+import { Impl } from "./Impl";
+import { getPageById } from "./PageStorage";
+import { IPageInfo } from "../types/IPage";
+import { IEventHandlers } from "../types/IEventHandler";
 
 type TypeApiOptions = {
     useModels?: any;
     attachApis?: any;
 };
 
-export class Api<UseModel={}> {
+export class Api<UseModel={}> extends Observe<IEventHandlers> {
+    public impl!: Impl<UseModel>;
     private useModels: UseModel;
     private useModelObjs: any;
     constructor(option: TypeApiOptions) {
+        super();
         this.useModels = option.useModels || {};
         this.useModelObjs = {};
         if(option.attachApis) {
@@ -52,7 +58,7 @@ export class Api<UseModel={}> {
                 reject({
                     code: "Data_404",
                     msg: `引用数据不存在${name}。`
-                })
+                });
             }
         });
     }
@@ -63,7 +69,7 @@ export class Api<UseModel={}> {
      * @param args 自定义传递参数
      * @returns 
      */
-    callApi<Name extends keyof UseModel>(model: Name, method: keyof UseModel[Name], ...args:any[]):Promise<any> {
+    callApi<Name extends keyof UseModel>(model: Name, method: Exclude<keyof UseModel[Name], "api">, ...args:any[]):Promise<any> {
         return new Promise((resolve, reject) => {
             let instance = this.useModelObjs[model];
             if(instance) {
@@ -78,6 +84,12 @@ export class Api<UseModel={}> {
             } else {
                 // 不存在instance获取model初始化
                 const ModelFn:any = this.useModels[model];
+                if(!ModelFn) {
+                    reject({
+                        code: "Api404",
+                        msg: `调用模块${model}未定义。`
+                    });
+                }
                 if(ModelFn.flag === loaderFlag) {
                     // 异步模块
                     (ModelFn as TypeLoaderResult)
@@ -149,5 +161,15 @@ export class Api<UseModel={}> {
                 });
             }
         });
+    }
+    /**
+     * 返回当前App保存的所有数据
+     * @returns 所有数据
+     */
+    getStoreData(): any {
+        return this.impl.getData();
+    }
+    getPageById<T={}>(pageId: string): (IPageInfo & T) | null {
+        return getPageById<T>(pageId);
     }
 }

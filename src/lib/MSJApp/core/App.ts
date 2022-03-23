@@ -11,12 +11,13 @@ export class MSJApp<UseModel={}, AllApi={}> {
         if(ImplApi.flag !== ImplFlag) {
             throw new Error(`参数ImplApi必须是继承Impl的类。`);
         }
-        this.impl = new (ImplApi as any)();
         this.appId = "MSJApp_" + utils.guid();
         this.api = new Api<UseModel>({
             useModels: options.models,
             attachApis: options.attachApi
         }) as any;
+        this.impl = new (ImplApi as any)(this.api);
+        this.api.impl = this.impl as any;
         Object.defineProperty(this.api, "app", {
             value: this,
             enumerable: false,
@@ -24,8 +25,8 @@ export class MSJApp<UseModel={}, AllApi={}> {
             writable: false
         });
     }
-    run(opt: IMSJAppRunOpt): void {
-        
+    run<InitIMPL={}>(opt: IMSJAppRunOpt<InitIMPL>): void {
+        this.impl.init(opt?.implInit);
     }
     destory(): void {
         console.log("release all resource");

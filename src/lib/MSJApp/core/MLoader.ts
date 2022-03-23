@@ -7,9 +7,9 @@ export type TypeLoaderResult = {
 
 export const loaderFlag = "MSJ_App_loader_202203191208";
 
-export const MLoader = (loader: TypeLoader): any => {
+export const MLoader = <T={}>(loader: TypeLoader): T => {
     return {
         flag: loaderFlag,
         load: () => loader()
-    };
+    } as any;
 };
