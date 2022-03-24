@@ -3,7 +3,7 @@ import Loadable from "../../components/Loadable";
 const Login = Loadable({
     loader: () => import("./Login")
 });
-const Entry = Loadable({
+export const Entry = Loadable({
     loader: () => import("./Entry")
 });
 
@@ -12,9 +12,5 @@ export default [
     {
         path: "/admin/login",
         component: Login
-    },
-    {
-        path: "/",
-        component: Entry
     }
 ];

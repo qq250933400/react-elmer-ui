@@ -2,6 +2,7 @@ import React from "react";
 import I18nApp from "./i18n";
 import ValidationProvider from "../components/Validation";
 import AdminRouters from "./router";
+import "./data";
 
 const App = () => {
     return (

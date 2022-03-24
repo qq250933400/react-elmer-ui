@@ -1,6 +1,7 @@
-import { createInstance } from "../../lib/MSJApp";
+import { createInstance } from "@MSJApp";
 import { AppImpl } from "./AppImpl";
+import { TypeModel, UseModel } from "./Model";
 
-export const msjApi = createInstance(AppImpl, {
-
+export const msjApi = createInstance<TypeModel>(AppImpl, {
+    models: UseModel
 });

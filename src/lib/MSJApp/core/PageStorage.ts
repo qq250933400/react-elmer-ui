@@ -10,6 +10,8 @@ type TypeCreateWorkspaceResult = {
 };
 
 const pageState:any = {};
+
+export const CONSTPAGEDATAKEY = "MSJApp_Page_storage_202203341951";
 /**
  * 根据页面ID获取配置数据
  * @param pageId 页面ID
@@ -81,4 +83,8 @@ export const createWorkspace = (name: string): TypeCreateWorkspaceResult => {
         }
     }
     return myworkspace;
+};
+
+export const getWorkspace = (name: string): any => {
+    return pageState[name];
 };

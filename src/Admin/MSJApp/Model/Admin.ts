@@ -1,4 +1,4 @@
-import { Model } from "../../../lib/MSJApp";
+import { Model } from "@MSJApp";
 
 export default class Admin extends Model {
     say(): void {

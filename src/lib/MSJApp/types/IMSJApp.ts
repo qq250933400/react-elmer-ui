@@ -11,4 +11,5 @@ export interface IMSJAppRunOpt<T={}> {
     location?: string;
     /** 传递到impl.init方法参数 */
     implInit?: T;
+    workspace: string;
 }

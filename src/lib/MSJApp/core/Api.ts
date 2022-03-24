@@ -64,6 +64,18 @@ export class Api<UseModel={}> extends Observe<IEventHandlers> {
         });
     }
     /**
+     * 调用Model方法
+     * @param target - 指定调用model和方法名，示例: admin.log
+     * @param args - 传递参数
+     * @returns 
+     */
+    callApiEx(target: string, ...args: any[]): Promise<any> {
+        const NM = /^[a-z0-9_]{1,}\.[a-z0-9_]{1,}$/i.exec(target);
+        const model = NM ? NM[1] : "";
+        const method = NM ? NM[2] : "";
+        return this.callApi(model as any, method as any, ...args);
+    }
+    /**
      * 异步调用模块方法
      * @param model 定义的模块id
      * @param method 模块方法

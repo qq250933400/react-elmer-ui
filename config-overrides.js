@@ -1,15 +1,14 @@
 const getCommand = require("elmer-common/lib/utils/index").getCommand;
 const DefinePlugin = require("webpack").DefinePlugin;
+const path = require("path");
 module.exports = function override(config, env) {
     //do stuff with the webpack config...
     const envValue = getCommand(process.argv, "ENV");
     const overrideAlias = {
         ...(config.resolve?.alias || {}),
-        "MSJApp": "./src/lib/MSJApp",
-        "MSJApp/*": "./src/lib/MSJApp/*"
+        "@MSJApp": path.resolve(process.cwd(), "./src/lib/MSJApp"),
+        "@MSJApp/*": path.resolve(process.cwd(), "./src/lib/MSJApp/*")
     };
-    console.log(config);
-    console.log(overrideAlias);
     return {
         ...config,
         plugins: [

@@ -21,10 +21,12 @@
     "noEmit": false,
     "jsx": "react-jsx",
     "outDir": "./lib",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "MSJApp": ["./src/lib/MSJApp"],
-      "MSJApp/*": ["./src/lib/MSJApp/*"]
+      "@MSJApp": ["src/lib/MSJApp"],
+      "@MSJApp/*": ["src/lib/MSJApp/*"],
+      "@Admin": ["src/Admin"],
+      "@Admin/*": ["src/Admin/*"]
     }
   },
   "include": [

@@ -4,3 +4,4 @@ export { createInstance, asynData } from "./core/ApiExport";
 export { Model } from "./core/Model";
 export { MLoader } from "./core/MLoader";
 export { createWorkspace } from "./core/PageStorage";
+export * from "./types/IPage";

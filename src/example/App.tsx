@@ -9,6 +9,7 @@ const MSJApp = () => {
     const [ implUpdate, setImplUpdate ] = useState(true);
     useEffect(()=>{
         app.run({
+            workspace: "none",
             implInit: {
                 setState: (state: any) => {
                     setImplUpdate(true);console.log("newState---", state);
