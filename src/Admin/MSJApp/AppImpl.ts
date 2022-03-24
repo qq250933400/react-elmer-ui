@@ -1,4 +1,4 @@
-import { Impl } from "../lib/MSJApp";
+import { Impl } from "../../lib/MSJApp";
 
 export interface IOverrideAppImplInit {
     setState(data: any): void;
@@ -21,7 +21,7 @@ export class AppImpl<M, P> extends Impl<M, P> {
         return this.appState || {};
     }
     public setData(data: any): void {
-        this.appState = data;console.error(data, "----Update---");
+        this.appState = data;
         if(typeof this.opt?.setState !== "function") {
             this.appInitState = data;
         } else {

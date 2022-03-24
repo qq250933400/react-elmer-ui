@@ -20,7 +20,12 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "baseUrl": "./",
+    "paths": {
+      "MSJApp": ["./src/lib/MSJApp"],
+      "MSJApp/*": ["./src/lib/MSJApp/*"]
+    }
   },
   "include": [
     "src"

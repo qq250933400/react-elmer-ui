@@ -1,4 +1,5 @@
-import { utils, Observe } from "elmer-common";
+import { Observe } from "elmer-common/lib/BaseModule/Observe";
+import { utils } from "elmer-common/lib/utils";
 import { loaderFlag, TypeLoaderResult } from "./MLoader";
 import { Model, ModelFlag } from "./Model";
 import { getAppState } from "./ApiExport";
@@ -169,7 +170,31 @@ export class Api<UseModel={}> extends Observe<IEventHandlers> {
     getStoreData(): any {
         return this.impl.getData();
     }
+    /**
+     * 获取页面信息
+     * @param pageId - 页面ID
+     * @returns 
+     */
     getPageById<T={}>(pageId: string): (IPageInfo & T) | null {
         return getPageById<T>(pageId);
+    }
+    /**
+     * 保存数据
+     * @param key - 指定key 
+     * @param data - 保存数据
+     */
+    setData<T={}>(key: string, data: T): void {
+        const allData:any = { ...(this.impl.getData() || {}) };
+        allData[key] = data;
+        this.impl.setData(allData); 
+    }
+    /**
+     * 获取数据
+     * @param key - 指定数据ID
+     * @returns 
+     */
+    getData<T={}>(key: string): T {
+        const allData: any = this.impl.getData() || {};
+        return allData[key];
     }
 }

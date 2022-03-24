@@ -6,18 +6,23 @@ import styles from "./App.module.scss";
 const MSJApp = () => {
     const [ asynData, setAsynData ] = useState({});
     const [ appState, setAppState ] = useState({});
+    const [ implUpdate, setImplUpdate ] = useState(true);
     useEffect(()=>{
         app.run({
             implInit: {
-                setState: setAppState
+                setState: (state: any) => {
+                    setImplUpdate(true);console.log("newState---", state);
+                    setAppState(state);
+                }
             }
         });
         console.log(app);
         return () => app.destory();
-    },[]);
+    },[setAppState]);
     useEffect(()=>{
-        app.refreshStoreData(appState);
-    },[appState]);
+        !implUpdate && app.refreshStoreData(appState);
+    },[appState, implUpdate]);
+    console.log(appState, "---");
     return (<div className={styles.exampleApp}>
         <span>Hello world</span>
         <button onClick={() => {

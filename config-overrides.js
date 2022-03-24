@@ -3,6 +3,13 @@ const DefinePlugin = require("webpack").DefinePlugin;
 module.exports = function override(config, env) {
     //do stuff with the webpack config...
     const envValue = getCommand(process.argv, "ENV");
+    const overrideAlias = {
+        ...(config.resolve?.alias || {}),
+        "MSJApp": "./src/lib/MSJApp",
+        "MSJApp/*": "./src/lib/MSJApp/*"
+    };
+    console.log(config);
+    console.log(overrideAlias);
     return {
         ...config,
         plugins: [
@@ -13,6 +20,10 @@ module.exports = function override(config, env) {
         ],
         devServer: {
             port: "3001"
+        },
+        resolve: {
+            ...config.resolve,
+            alias: overrideAlias
         }
     };
 };

@@ -30,4 +30,13 @@ export const app = createInstance<ModelData, AttachApi>(AppImpl, {
     }
 });
 
-app.hello()
+
+app.createMenu("AdminLeftMenu", [
+    {
+        pageId: "test",
+        title: "app"
+    }
+]);
+
+
+console.log(app.getMenu("AdminLeftMenu"))
