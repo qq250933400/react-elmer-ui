@@ -1,0 +1,37 @@
+.admin_layout {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+}
+.admin_layout_logo {
+    display: block;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 15px;
+    line-height: 30px;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    [class*="dark"] {
+        color: #fff;
+    }
+}
+.admin_layout_header {
+    background: #fff !important;
+}
+.admin_menu_taggle {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    position: absolute;
+    left: 5px;
+    border: none !important;
+    box-shadow:  none !important;
+    &:active {
+        box-shadow:  none !important;
+    }
+}
+.admin_layout_content {
+    background: #fff;
+}

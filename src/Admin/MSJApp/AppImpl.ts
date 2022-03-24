@@ -2,10 +2,11 @@ import { Impl, IPageInfo } from "@MSJApp";
 
 export interface IOverrideAppImplInit {
     setState(data: any): void;
-    navigateTo(pageInfo: IPageInfo): void;
+    navigateTo(pageInfo: IPageInfo, ...args: any[]): void;
 }
 
 export class AppImpl<M, P> extends Impl<M, P> {
+    
     private opt!: IOverrideAppImplInit;
     private appState: any = {};
     private appInitState: any;
@@ -13,10 +14,10 @@ export class AppImpl<M, P> extends Impl<M, P> {
         this.opt = opt;
         if(this.appInitState && typeof opt.setState === "function") {
             opt.setState(this.appInitState);
-        }console.log(opt,"____Init___", this.appInitState);
+        }
     }
-    public nativateTo(to: string, args: any[]): void {
-        throw new Error("Method not implemented.");
+    public nativateTo<T = {}>(info: IPageInfo & T, ...args: any[]) {
+        return this.opt.navigateTo(info, ...args);
     }
     public getData(): any {
         return {

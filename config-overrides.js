@@ -7,7 +7,9 @@ module.exports = function override(config, env) {
     const overrideAlias = {
         ...(config.resolve?.alias || {}),
         "@MSJApp": path.resolve(process.cwd(), "./src/lib/MSJApp"),
-        "@MSJApp/*": path.resolve(process.cwd(), "./src/lib/MSJApp/*")
+        "@MSJApp/*": path.resolve(process.cwd(), "./src/lib/MSJApp/*"),
+        "@Admin": path.resolve(process.cwd(), "./src/Admin"),
+        "@Admin/*": path.resolve(process.cwd(), "./src/Admin/*")
     };
     return {
         ...config,

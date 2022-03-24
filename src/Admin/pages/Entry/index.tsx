@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Routes, Route } from "react-router-dom";
+import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { msjApi } from "../../MSJApp";
 import { IPageInfo } from "@MSJApp";
 import { utils } from "elmer-common/lib/utils";
@@ -10,9 +10,13 @@ const Entry = () => {
     const [ appState, setAppState ] = useState({});
     const [ implUpdate, setImplUpdate ] = useState(true);
     const navigateTo = useNavigate();
+    const location = useLocation();
+    const [ routePrefix ] = useState("/admin/");
+    const [ initPathName ] = useState(location.pathname);
     useEffect(()=>{
         msjApi.run({
             workspace: "admin",
+            location: initPathName,
             implInit: {
                 setAppState: (state: any) => {
                     setImplUpdate(true);console.log(state);
@@ -46,9 +50,9 @@ const Entry = () => {
                     });
                 }
             }
-        });
+        });console.log("---Init--", initPathName);
         return () => msjApi.destory();
-    },[navigateTo]);
+    },[navigateTo, initPathName]);
     useEffect(()=>{
         !implUpdate && msjApi.refreshStoreData(appState);
     },[ implUpdate, appState]);
@@ -58,7 +62,8 @@ const Entry = () => {
                 {
                     RoutePages.map((info, index) => {
                         const RComponent = info.component;
-                        return <Route key={`subRoute_${index}`} path={info.path} element={<RComponent />}/>
+                        const routePath = [routePrefix, info.path].join("/").replace(/[/]{2,}/,"/"); console.log(routePath);
+                        return <Route key={`subRoute_${index}`} path={routePath} element={<RComponent />}/>
                     })
                 }
             </Routes>

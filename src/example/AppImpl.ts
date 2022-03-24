@@ -1,10 +1,11 @@
-import { Impl } from "../lib/MSJApp";
+import { Impl, IPageInfo } from "../lib/MSJApp";
 
 export interface IOverrideAppImplInit {
     setState(data: any): void;
 }
 
 export class AppImpl<M, P> extends Impl<M, P> {
+    
     private opt!: IOverrideAppImplInit;
     private appState: any = {};
     private appInitState: any;
@@ -14,7 +15,7 @@ export class AppImpl<M, P> extends Impl<M, P> {
             opt.setState(this.appInitState);
         } 
     }
-    public nativateTo(to: string, args: any[]): void {
+    public nativateTo<T = {}>(info: IPageInfo & T, ...args: any[]) {
         throw new Error("Method not implemented.");
     }
     public getData(): any {

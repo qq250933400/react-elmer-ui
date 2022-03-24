@@ -15,6 +15,7 @@ type TypeApiOptions = {
 
 export class Api<UseModel={}> extends Observe<IEventHandlers> {
     public impl!: Impl<UseModel>;
+    public urlPrefix!: string;
     private useModels: UseModel;
     private useModelObjs: any;
     constructor(option: TypeApiOptions) {
@@ -188,7 +189,9 @@ export class Api<UseModel={}> extends Observe<IEventHandlers> {
      * @returns 
      */
     getPageById<T={}>(pageId: string): (IPageInfo & T) | null {
-        return getPageById<T>(pageId);
+        const workspaceName = this.getWorkspaceName();
+        const gotoPageId = /\./.test(pageId) ? pageId : [workspaceName, pageId].join(".");
+        return getPageById<T>(gotoPageId);
     }
     /**
      * 保存数据
@@ -208,5 +211,19 @@ export class Api<UseModel={}> extends Observe<IEventHandlers> {
     getData<T={}>(key: string): T {
         const allData: any = this.impl.getData() || {};
         return allData[key];
+    }
+    /**
+     * 显示错误信息
+     * @param err 
+     */
+    showException(err: any): void {
+        const errMsg = err?.exception?.exception?.stack || err?.exception?.stack || err?.stack || err?.message || err;
+        console.error(errMsg);
+    }
+    navigateTo<T={}>(pageInfo: IPageInfo & T, ...args: any[]): Promise<any> {
+        return this.impl.nativateTo(pageInfo, ...args);
+    }
+    private getWorkspaceName(): string {
+        return (this as any).workspace;
     }
 }

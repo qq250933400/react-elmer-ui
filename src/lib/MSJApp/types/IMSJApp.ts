@@ -12,4 +12,8 @@ export interface IMSJAppRunOpt<T={}> {
     /** 传递到impl.init方法参数 */
     implInit?: T;
     workspace: string;
+    /**
+     * 路由前缀
+     */
+    urlPrefix?: string;
 }

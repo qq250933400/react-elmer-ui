@@ -18,7 +18,7 @@ export const CONSTPAGEDATAKEY = "MSJApp_Page_storage_202203341951";
  * @returns 
  */
 export const getPageById = <T={}>(pageId: string): (IPageInfo & T) | null => {
-    const idRegExp = /^([a-z0-9_]{1,})\.([a-z0-9_])$/i;
+    const idRegExp = /^([a-z0-9_]{1,})\.([a-z0-9_]{1,})$/i;
     const idM = idRegExp.exec(pageId);
     if(idM) {
         const workspace = idM[1];

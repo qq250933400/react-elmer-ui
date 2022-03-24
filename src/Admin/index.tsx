@@ -3,6 +3,7 @@ import I18nApp from "./i18n";
 import ValidationProvider from "../components/Validation";
 import AdminRouters from "./router";
 import "./data";
+import "./styles/index.module.scss";
 
 const App = () => {
     return (

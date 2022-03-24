@@ -1,10 +1,11 @@
 import { Api } from "./Api";
 import { TypeModel } from "../model";
 import { IFormDataSchema } from "../types/ISchema";
-import { IMenuList, TypeCreateMenuResult } from "../types/IAdmin";
+import { CONST_ENTRY_CONFIG_KEY, IMenuList, TypeCreateMenuResult, TypeEntryRule } from "../types/IAdmin";
 
 type TypeAttachApiExcludeN<T, PN> = { [K in Exclude<keyof T, PN>]: T[K] };
 type TypeAttachApiFunc<T={}> = { [ P in keyof T]: (api: Api<TypeModel> & { [K in keyof TypeAttachApiExcludeN<T, P>]: T[K] }) => T[P] };
+
 
 export type TypeAttachApi = {
     /**
@@ -18,6 +19,11 @@ export type TypeAttachApi = {
      * @param config - 配置详细参数
      */
     registeConfig<T={}>(name: string, config:T): void;
+    /**
+     * 注册入口校验规则
+     * @param rules 
+     */
+    registeEntryRules<T={}>(rules: (TypeEntryRule & T)[]): void;
     /**
      * 创建菜单列表数据
      * @param menuName - 菜单名称
@@ -34,6 +40,7 @@ export type TypeAttachApi = {
      * @param name - 配置名称
      */
     getConfig<T={}>(name: string): Promise<T>;
+
 };
 
 export const attachApi: TypeAttachApiFunc<TypeAttachApi> = {
@@ -44,4 +51,5 @@ export const attachApi: TypeAttachApiFunc<TypeAttachApi> = {
         return api.callApi("MSJApp_FormData_202203241448", "registeFormSchame", schema);
     },
     registeConfig: (api) => <T={}>(config: T) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", config),
+    registeEntryRules: (api) => <T={}>(rules: (TypeEntryRule & T)[]) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", CONST_ENTRY_CONFIG_KEY, rules)
 };
