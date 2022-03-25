@@ -10,5 +10,10 @@ export const adminWorkspace = createWorkspace("admin")
         path: "/admin/main"
     });
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {};
+export type TypeDefinePage = {
+    id: string;
+    path: string;
+    title?: string;
+    description?: string;
+    component: any;
+};

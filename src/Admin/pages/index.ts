@@ -1,4 +1,5 @@
 import Loadable from "../../components/Loadable";
+import { TypeDefinePage } from "../data/page";
 
 const Login = Loadable({
     loader: () => import("./Login")
@@ -16,8 +17,9 @@ export const Entry = Loadable({
     loader: () => import("./Entry")
 });
 
-export const AdminPages = [
+export const AdminPages:TypeDefinePage[] = [
     {
+        id: "main",
         path: "/main",
         component: Main
     }

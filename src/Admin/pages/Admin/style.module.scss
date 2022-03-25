@@ -17,6 +17,13 @@
         color: #fff;
     }
 }
+.collaspedLogo {
+    text-align: center;
+    span {
+        display:block;
+        overflow: hidden;
+    }
+}
 .admin_layout_header {
     background: #fff !important;
 }
@@ -34,4 +41,62 @@
 }
 .admin_layout_content {
     background: #fff;
+    margin: 10px !important;
+    padding: 20px !important;
+    min-height: 280px !important;
 }
+
+.adminTopButton {
+    display: block;
+    float: right;
+    border: none;
+    background: transparent;
+    padding: 0 20px;
+    position: relative;
+    >span>svg {
+        transform: scale(1.8,1.8);
+        path {
+            fill: #6d6a6a;
+        }
+    }
+    [class*="ant-menu-root"] {
+        position: relative;
+        right: 0;
+        top: 100%;
+    }
+}
+.adminTopButton_profile {
+    margin-right: 10px;
+}
+.adminTopButton_notify {
+    padding-right: 26px;
+    &::after {
+        content: attr(title);
+        display: block;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 8px;
+        border-radius: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: absolute;
+        right: 2px;
+        top: 4px;
+        background: rgb(202, 21, 21);
+        color: #fff;
+    }
+    &:hover {
+        background: rgba(57, 171, 224, 0.349);
+        path {
+            fill:#1a90ff;
+        }
+    }
+    &:active {
+        background: rgba(42, 133, 175, 0.349);
+        path {
+            fill:#1a90ff;
+        }
+    }
+}
+

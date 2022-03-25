@@ -4,7 +4,8 @@ import { msjApi } from "../../MSJApp";
 import { IPageInfo } from "@MSJApp";
 import { utils } from "elmer-common/lib/utils";
 import { queueCallFunc } from "elmer-common/lib/BaseModule/QueueCallFun";
-import RoutePages from "../index";
+import RoutePages, { AdminPages } from "../index";
+import { adminWorkspace } from "@Admin/data/page";
 
 const Entry = () => {
     const [ appState, setAppState ] = useState({});
@@ -13,6 +14,16 @@ const Entry = () => {
     const location = useLocation();
     const [ routePrefix ] = useState("/admin/");
     const [ initPathName ] = useState(location.pathname);
+    useEffect(() => {
+        AdminPages.forEach((page) => {
+            const pagePath = [routePrefix, page.path].join("/").replace(/([\/]{2,})/, "/");
+            adminWorkspace.createPage({
+                id: page.id,
+                path: pagePath,
+                title: page.title
+            });
+        });
+    }, [routePrefix]);
     useEffect(()=>{
         msjApi.run({
             workspace: "admin",
@@ -50,7 +61,7 @@ const Entry = () => {
                     });
                 }
             }
-        });console.log("---Init--", initPathName);
+        });
         return () => msjApi.destory();
     },[navigateTo, initPathName]);
     useEffect(()=>{
