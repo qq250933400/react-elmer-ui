@@ -10,6 +10,13 @@ export default class Admin extends BaseModel {
             }, {
                 id: "sysInfo",
                 fn: () => this.api.getConfig("sysInfo")
+            }, {
+                id: "timeout",
+                fn: () => {
+                    return new Promise((resolve) => {
+                        setTimeout(() => resolve({}), 5000);
+                    })
+                }
             }
         ], undefined, {
             throwException: true

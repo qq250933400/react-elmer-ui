@@ -83,19 +83,7 @@ const Entry = () => {
         });
     }, [routePrefix]);
     useEffect(()=>{
-        queueCallFunc([
-            {
-                id: "sysInfo",
-                fn: () => msjApi.getConfig("sysInfo")
-            }
-        ], undefined, {
-            throwException: true
-        }).then((data)=>{
-            console.log("data", data);
-            runApi();
-        }).catch((err) => {
-            msjApi.showException(err);
-        });
+        runApi();
         const unBindEvent = msjApi.on("onShowLoading", ((visible:any) => {
             setLoading(visible);
         }) as any);

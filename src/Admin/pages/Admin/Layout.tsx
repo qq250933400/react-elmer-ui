@@ -13,6 +13,11 @@ import UserProfile from "./UserProfile";
 import NotifyBtn from "./Notify";
 import { msjApi } from "@Admin/MSJApp";
 import { queueCallFunc } from "elmer-common";
+import LoadableComponent from "../../../components/Loadable";
+
+const LandingPage = LoadableComponent({
+    loader: () => import("../Landing")
+});
 
 const { Sider, Header, Content } = Layout;
 
@@ -26,6 +31,7 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
     const [ collasped, setCollasped ] = useState(false);
     const [ theme ] = useState<"light"|"dark">("dark");
     const [ smallMode, setSmalMode ] = useState(false);
+    const [ showLoading, setShowLoading ] = useState(false);
     const [ title, setTitle ] = useState({
         text: props.title,
         shortText: props.shortTitle || (props.title || "").substring(0,2)
@@ -60,47 +66,43 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
         });
     }, [props.title, props.shortTitle]);
     useEffect(()=>{
-        msjApi.showLoading();
-        queueCallFunc([
-            {
-                id: "sysInfo",
-                fn: () => msjApi.getConfig("sysInfo")
-            }
-        ], undefined, {
-            throwException: true
-        }).then((data)=>{
-            console.log(data);
-            msjApi.hideLoading();
-        }).catch((err) => {
-            msjApi.hideLoading();
-            message.error(msjApi.showException(err));
+        setShowLoading(true);
+        msjApi.callApi("admin", "initLoad").then(()=>{
+            setShowLoading(false);
+        }).catch((err)=>{
+            setShowLoading(false);
+            msjApi.showException(err);
         });
     }, []);
-    return (
-        <Layout className={styles.admin_layout}>
-            <Sider theme={theme} trigger={null} collapsible collapsed={collasped}>
-                <div className={utils.cn(styles.admin_layout_logo, collasped && styles.collaspedLogo)}>
-                    <span className={theme}>{!collasped ? title.text : title.shortText}</span>
-                </div>
-                <Menu theme={theme} mode="inline" defaultSelectedKeys={["1"]}>
-                    <Menu.Item key="1" icon={<UserOutlined />}>Nav1</Menu.Item>
-                    <Menu.Item key="2" icon={<VideoCameraOutlined />}>Nav2</Menu.Item>
-                    <Menu.Item key="3" icon={<UploadOutlined />}>Nav3</Menu.Item>
-                </Menu>
-            </Sider>
-            <Layout className="site-layout">
-                <Header className={styles.admin_layout_header} style={{padding: 0}}>
-                    <Button className={styles.admin_menu_taggle} onClick={onToggle}>
-                        { collasped ? <MenuUnfoldOutlined /> : <MenuFoldOutlined/> }
-                    </Button>
-                    <UserProfile />
-                    <NotifyBtn />
-                </Header>
-                <Content className={styles.admin_layout_content}>
-                    {props.children}
-                </Content>
-            </Layout>
-        </Layout>
+    return (<>
+            { !showLoading && (
+                <Layout className={styles.admin_layout}>
+                    <Sider theme={theme} trigger={null} collapsible collapsed={collasped}>
+                        <div className={utils.cn(styles.admin_layout_logo, collasped && styles.collaspedLogo)}>
+                            <span className={theme}>{!collasped ? title.text : title.shortText}</span>
+                        </div>
+                        <Menu theme={theme} mode="inline" defaultSelectedKeys={["1"]}>
+                            <Menu.Item key="1" icon={<UserOutlined />}>Nav1</Menu.Item>
+                            <Menu.Item key="2" icon={<VideoCameraOutlined />}>Nav2</Menu.Item>
+                            <Menu.Item key="3" icon={<UploadOutlined />}>Nav3</Menu.Item>
+                        </Menu>
+                    </Sider>
+                    <Layout className="site-layout">
+                        <Header className={styles.admin_layout_header} style={{padding: 0}}>
+                            <Button className={styles.admin_menu_taggle} onClick={onToggle}>
+                                { collasped ? <MenuUnfoldOutlined /> : <MenuFoldOutlined/> }
+                            </Button>
+                            <UserProfile />
+                            <NotifyBtn />
+                        </Header>
+                        <Content className={styles.admin_layout_content}>
+                            {props.children}
+                        </Content>
+                    </Layout>
+                </Layout>
+            )}
+            {showLoading && <LandingPage />}
+        </>
     );
 }
 
