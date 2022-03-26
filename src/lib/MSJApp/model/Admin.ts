@@ -3,6 +3,7 @@ import { IMenuItem, IMenuList } from "../types/IAdmin";
 
 const CONSTADMINDATAKEY = "MSJApp_Admin_Menu_202203241437";
 const CONSTADMINREGISTCONFIG = "MSJApp_Admin_Config_202203241839";
+const CONATADMINCONFIG = "MSJApp_Config_202203261237_";
 
 export default class Admin extends Model {
 
@@ -29,16 +30,18 @@ export default class Admin extends Model {
     }
     registeConfig<T={}>(name: string, config: T): void {
         const configData:any = this.api.getData(CONSTADMINREGISTCONFIG) || {};
-        if(!configData[name]) {
-            configData[name] = config;
+        const nameKey = !/^MSJApp_/.test(name) ? CONATADMINCONFIG + name : name;
+        if(!configData[nameKey]) {
+            configData[nameKey] = config;
             this.api.setData(CONSTADMINREGISTCONFIG, configData);
         } else {
             throw new Error(`注册配置key冲突，请重新设置。(${name})`);
         }
     }
     getConfig<T={}>(name: string): T | null {
+        const nameKey = !/^MSJApp_/.test(name) ? CONATADMINCONFIG + name : name;
         const configData:any = this.api.getData(CONSTADMINREGISTCONFIG) || {};
-        return configData[name];
+        return configData[nameKey];
     }
     private getMenuStoreData():any {
         return this.api.getData(CONSTADMINDATAKEY) || {};

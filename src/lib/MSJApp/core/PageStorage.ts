@@ -27,14 +27,15 @@ export const getPageById = <T={}>(pageId: string): (IPageInfo & T) | null => {
             if(pageState[workspace][myPageId]) {
                 return pageState[workspace][myPageId];
             } else {
-                throw new Error(`指定页面ID在workspace(${workspace})下不存在。`);
+                console.error(`指定页面ID在workspace(${workspace})下不存在。`);
             }
         } else {
-            throw new Error(`指定workspace(${workspace})不存在。`);
+            console.error(`指定workspace(${workspace})不存在。`);
         }
     } else {
-        throw new Error("请指定workspace名称。");
+        console.error("请指定workspace名称。");
     }
+    return null;
 };
 /**
  * 创建workspace

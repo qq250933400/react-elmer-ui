@@ -25,7 +25,7 @@ export class AppImpl<M, P> extends Impl<M, P> {
         };
     }
     public setData(data: any): void {
-        this.appState = data;console.log("data: ", data);
+        this.appState = data;
         if(typeof this.opt?.setState !== "function") {
             this.appInitState = data;
         } else {

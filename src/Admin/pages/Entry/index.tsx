@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { msjApi } from "../../MSJApp";
 import { IPageInfo } from "@MSJApp";
@@ -6,25 +6,23 @@ import { utils } from "elmer-common/lib/utils";
 import { queueCallFunc } from "elmer-common/lib/BaseModule/QueueCallFun";
 import RoutePages, { AdminPages } from "../index";
 import { adminWorkspace } from "@Admin/data/page";
+import Loading from "./Loading";
+import styles from "./style.module.scss";
+import CardLoading from "../../../components/CarLoading";
+
+type TypeAdminPageExtAttr = {
+    redirect?: boolean;
+};
 
 const Entry = () => {
     const [ appState, setAppState ] = useState({});
     const [ implUpdate, setImplUpdate ] = useState(true);
+    const [ loading, setLoading ] = useState(false);
     const navigateTo = useNavigate();
     const location = useLocation();
-    const [ routePrefix ] = useState("/admin/");
+    const [ routePrefix ] = useState("/");
     const [ initPathName ] = useState(location.pathname);
-    useEffect(() => {
-        AdminPages.forEach((page) => {
-            const pagePath = [routePrefix, page.path].join("/").replace(/([\/]{2,})/, "/");
-            adminWorkspace.createPage({
-                id: page.id,
-                path: pagePath,
-                title: page.title
-            });
-        });
-    }, [routePrefix]);
-    useEffect(()=>{
+    const runApi = useCallback(()=>{
         msjApi.run({
             workspace: "admin",
             location: initPathName,
@@ -33,16 +31,27 @@ const Entry = () => {
                     setImplUpdate(true);console.log(state);
                     setAppState(state);
                 },
-                navigateTo: (pageInfo: IPageInfo) => {
+                navigateTo: (pageInfo: IPageInfo & TypeAdminPageExtAttr) => {
                     return queueCallFunc([
                         {
                             id: "onBeforeAction",
                             fn: () => {
                                 return new Promise((resolve, reject) => {
                                     if(pageInfo.onBeforeEnter && !utils.isEmpty(pageInfo.onBeforeEnter)) {
-                                        msjApi.callApiEx(pageInfo.onBeforeEnter)
-                                            .then(resolve)
-                                            .catch(reject);
+                                        if(!pageInfo.redirect) {
+                                            const landingPage: any = msjApi.getPageById("landing") || {};
+                                            navigateTo(landingPage.path, {
+                                                state: {
+                                                    navTo: {
+                                                        ...pageInfo,
+                                                        redirect: true
+                                                    }
+                                                }
+                                            });
+                                            resolve({});
+                                        } else {
+                                            resolve({});
+                                        }
                                     } else {
                                         resolve({});
                                     }
@@ -62,8 +71,39 @@ const Entry = () => {
                 }
             }
         });
-        return () => msjApi.destory();
     },[navigateTo, initPathName]);
+    useEffect(() => {
+        AdminPages.forEach((page) => {
+            const pagePath = [routePrefix, page.path].join("/").replace(/([\/]{2,})/, "/");
+            adminWorkspace.createPage({
+                id: page.id,
+                path: pagePath,
+                title: page.title
+            });
+        });
+    }, [routePrefix]);
+    useEffect(()=>{
+        queueCallFunc([
+            {
+                id: "sysInfo",
+                fn: () => msjApi.getConfig("sysInfo")
+            }
+        ], undefined, {
+            throwException: true
+        }).then((data)=>{
+            console.log("data", data);
+            runApi();
+        }).catch((err) => {
+            msjApi.showException(err);
+        });
+        const unBindEvent = msjApi.on("onShowLoading", ((visible:any) => {
+            setLoading(visible);
+        }) as any);
+        return () => {
+            msjApi.destory();
+            unBindEvent();
+        };
+    },[navigateTo, runApi, initPathName]);
     useEffect(()=>{
         !implUpdate && msjApi.refreshStoreData(appState);
     },[ implUpdate, appState]);
@@ -73,11 +113,14 @@ const Entry = () => {
                 {
                     RoutePages.map((info, index) => {
                         const RComponent = info.component;
-                        const routePath = [routePrefix, info.path].join("/").replace(/[/]{2,}/,"/"); console.log(routePath);
+                        const routePath = [routePrefix, info.path].join("/").replace(/[/]{2,}/,"/");
                         return <Route key={`subRoute_${index}`} path={routePath} element={<RComponent />}/>
                     })
                 }
             </Routes>
+            <Loading visible={loading}>
+                <CardLoading className={styles.cardLoading}/>
+            </Loading>
         </>
     );
 };

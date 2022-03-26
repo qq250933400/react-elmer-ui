@@ -9,6 +9,7 @@ export interface IMenuItem<T={}> {
 export type TypeEntryRule = {
     test: RegExp | string;
     page: string;
+    default?: boolean;
 };
 
 export type IMenuList<T={}>  = (IMenuItem<T> & T)[];

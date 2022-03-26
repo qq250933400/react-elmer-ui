@@ -1,7 +1,7 @@
 import Admin from "./Admin";
 
 export type TypeModel = {
-    admin: typeof Admin;
+    admin: Admin;
 };
 
 export const UseModel = {

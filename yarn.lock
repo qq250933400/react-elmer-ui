@@ -3156,11 +3156,6 @@
   "resolved" "https://registry.npmmirror.com/@types/color-name/-/color-name-1.1.1.tgz"
   "version" "1.1.1"
 
-"@types/core-js@^2.5.0":
-  "integrity" "sha512-C4vwOHrhsvxn7UFyk4NDQNUpgNKdWsT/bL39UWyD75KSEOObZSKa9mYDOCM5FGeJG2qtbG0XiEbUKND2+j0WOg=="
-  "resolved" "https://registry.npmmirror.com/@types/core-js/-/core-js-2.5.5.tgz"
-  "version" "2.5.5"
-
 "@types/cssnano@^4.0.1":
   "integrity" "sha512-hGOroxRTBkYl5gSBRJOffhV4+io+Y2bFX1VP7LgKEVHJt/LPPJaWUIuDAz74Vlp7l7hCDZfaDi7iPxwNwuVA4Q=="
   "resolved" "https://registry.npmjs.org/@types/cssnano/-/cssnano-4.0.1.tgz"
@@ -4111,14 +4106,6 @@
     "json-schema-traverse" "^1.0.0"
     "require-from-string" "^2.0.2"
     "uri-js" "^4.2.2"
-
-"ajv@5.0.0":
-  "integrity" "sha512-Ox7i7Qi/ypfWtCqYDWr40p2W1NKCFpDHy8C6SkEDY+h+t1nYjbtnbx7iw0iVuVtaHwpK7ephvWIRi1iMZvP8xQ=="
-  "resolved" "https://registry.npmmirror.com/ajv/-/ajv-5.0.0.tgz"
-  "version" "5.0.0"
-  dependencies:
-    "co" "^4.6.0"
-    "json-stable-stringify" "^1.0.1"
 
 "alphanum-sort@^1.0.2":
   "integrity" "sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM="
@@ -6165,11 +6152,6 @@
   "resolved" "https://registry.npmmirror.com/core-js/-/core-js-1.2.7.tgz"
   "version" "1.2.7"
 
-"core-js@^2.5.7":
-  "integrity" "sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ=="
-  "resolved" "https://registry.npmmirror.com/core-js/-/core-js-2.6.12.tgz"
-  "version" "2.6.12"
-
 "core-js@^3.0.1", "core-js@^3.0.4", "core-js@^3.19.2", "core-js@^3.6.5", "core-js@^3.8.2":
   "integrity" "sha512-LeLBMgEGSsG7giquSzvgBrTS7V5UL6ks3eQlUSbN8dJStlLFiRzUm5iqsRyzUB8carhfKjkJ2vzKqE6z1Vga9g=="
   "resolved" "https://registry.npmjs.org/core-js/-/core-js-3.19.3.tgz"
@@ -7155,10 +7137,9 @@
     "minimalistic-assert" "^1.0.1"
     "minimalistic-crypto-utils" "^1.0.1"
 
-"elmer-common@^3.1.7":
-  "integrity" "sha512-tRjOcPeucCynSWCHzA7Ag1ysT5m5huvZgSq9Z7q2/LXb7z/x8+n9js9Rhstfb/UX2KFAMUhh7WDFdKDnjIrEdg=="
-  "resolved" "https://registry.npmmirror.com/elmer-common/-/elmer-common-3.1.7.tgz"
-  "version" "3.1.7"
+"elmer-common@file:../../elmerApp/elmer-common":
+  "resolved" "file:../../elmerApp/elmer-common"
+  "version" "3.1.9"
   dependencies:
     "@types/core-js" "^2.5.0"
     "ajv" "5.0.0"
@@ -10467,13 +10448,6 @@
   "resolved" "https://registry.npmjs.org/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz"
   "version" "1.0.1"
 
-"json-stable-stringify@^1.0.1":
-  "integrity" "sha512-i/J297TW6xyj7sDFa7AmBPkQvLIxWr2kKPWI26tXydnZrzVAocNqn5DMNT1Mzk0vit1V5UkRM7C1KdVNp7Lmcg=="
-  "resolved" "https://registry.npmmirror.com/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz"
-  "version" "1.0.1"
-  dependencies:
-    "jsonify" "~0.0.0"
-
 "json2mq@^0.2.0":
   "integrity" "sha512-SzoRg7ux5DWTII9J2qkrZrqV1gt+rTaoufMxEzXbS26Uid0NwaJd123HcoB80TgubEppxxIGdNxCx50fEoEWQA=="
   "resolved" "https://registry.npmmirror.com/json2mq/-/json2mq-0.2.0.tgz"
@@ -10522,11 +10496,6 @@
     "universalify" "^2.0.0"
   optionalDependencies:
     "graceful-fs" "^4.1.6"
-
-"jsonify@~0.0.0":
-  "integrity" "sha512-trvBk1ki43VZptdBI5rIlG4YOzyeH/WefQt5rj1grasPn4iiZWKet8nkgc4GlsAylaztn0qZfUYOiTsASJFdNA=="
-  "resolved" "https://registry.npmmirror.com/jsonify/-/jsonify-0.0.0.tgz"
-  "version" "0.0.0"
 
 "jsonpointer@^5.0.0":
   "integrity" "sha512-PNYZIdMjVIvVgDSYKTT63Y+KZ6IZvGRNNWcxwD+GNnUz1MKPfv30J8ueCjdwcN0nDx2SlshgyB7Oy0epAzVRRg=="
@@ -11275,7 +11244,7 @@
   "resolved" "https://registry.npmmirror.com/mkdirp/-/mkdirp-1.0.4.tgz"
   "version" "1.0.4"
 
-"moment@^2.24.0", "moment@^2.25.3", "moment@^2.27.0":
+"moment@^2.24.0", "moment@^2.25.3", "moment@^2.27.0", "moment@^2.29.1":
   "integrity" "sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ=="
   "resolved" "https://registry.npmmirror.com/moment/-/moment-2.29.1.tgz"
   "version" "2.29.1"
@@ -17272,11 +17241,6 @@
   "integrity" "sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q=="
   "resolved" "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   "version" "0.1.0"
-
-"zone.js@^0.8.26":
-  "integrity" "sha512-mla2acNCMkWXBD+c+yeUrBUrzOxYMNFdQ6FGfigGGtEVBPJx07BQeJekjt9DmH1FtZek4E9rE1eRR9qQpxACOQ=="
-  "resolved" "https://registry.npmmirror.com/zone.js/-/zone.js-0.8.29.tgz"
-  "version" "0.8.29"
 
 "zwitch@^1.0.0":
   "integrity" "sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw=="

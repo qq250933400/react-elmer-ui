@@ -1,0 +1,55 @@
+.loading {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, .5);
+    >div {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@keyframes frameFadeIn {
+    0% {
+        opacity: .2;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes frameZoomout {
+    0% {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+    10% {
+        opacity: .9;
+        transform: scale(1.1,1.1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(.4,.4);
+    }
+}
+
+.animationFadeIn {
+    animation: frameFadeIn .8s ease;
+}
+.animationZoomout {
+    animation: frameZoomout .6s ease;
+}
+
+.cardLoading {
+    background: transparent !important;
+    position: absolute;
+    left: 50%;
+    margin-left: - 300px;
+    top: 50%;
+    margin-top: -65px;
+}

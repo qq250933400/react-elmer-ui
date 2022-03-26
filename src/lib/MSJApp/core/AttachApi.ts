@@ -4,7 +4,8 @@ import { IFormDataSchema } from "../types/ISchema";
 import { CONST_ENTRY_CONFIG_KEY, IMenuList, TypeCreateMenuResult, TypeEntryRule } from "../types/IAdmin";
 
 type TypeAttachApiExcludeN<T, PN> = { [K in Exclude<keyof T, PN>]: T[K] };
-type TypeAttachApiFunc<T={}> = { [ P in keyof T]: (api: Api<TypeModel> & { [K in keyof TypeAttachApiExcludeN<T, P>]: T[K] }) => T[P] };
+
+export type TypeAttachApiFunc<T={}, ApiEvent={}> = { [ P in keyof T]: (api: Api<TypeModel, ApiEvent> & { [K in keyof TypeAttachApiExcludeN<T, P>]: T[K] }) => T[P] };
 
 
 export type TypeAttachApi = {
@@ -50,6 +51,6 @@ export const attachApi: TypeAttachApiFunc<TypeAttachApi> = {
     registeFormSchema: (api) => (schema) => {
         return api.callApi("MSJApp_FormData_202203241448", "registeFormSchame", schema);
     },
-    registeConfig: (api) => <T={}>(config: T) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", config),
+    registeConfig: (api) => <T={}>(name: string, config: T) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", name, config),
     registeEntryRules: (api) => <T={}>(rules: (TypeEntryRule & T)[]) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", CONST_ENTRY_CONFIG_KEY, rules)
 };

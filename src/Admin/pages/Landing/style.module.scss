@@ -1,0 +1,14 @@
+.landing {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background: #403c3c;
+    position: relative;
+    .spin {
+        position: absolute;
+        left: 50%;
+        margin-left: -300px;
+        top: 50%;
+        margin-top: -67px;
+    }
+}

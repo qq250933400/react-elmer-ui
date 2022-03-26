@@ -4,6 +4,7 @@ import { Api } from "../core/Api";
 export interface IMSJAppOptions<M={}, TP={}> {
     attachApi?: {[P in keyof TP]: (api: Api) => Function };
     models?: {[P in keyof M]: Model};
+    debug?: boolean;
 }
 
 export interface IMSJAppRunOpt<T={}> {

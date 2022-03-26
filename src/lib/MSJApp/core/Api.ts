@@ -6,16 +6,18 @@ import { getAppState } from "./ApiExport";
 import { Impl } from "./Impl";
 import { getPageById } from "./PageStorage";
 import { IPageInfo } from "../types/IPage";
-import { IEventHandlers } from "../types/IEventHandler";
+import { IEventHandlers, TypeLogType } from "../types/IEventHandler";
+import moment from "moment";
 
 type TypeApiOptions = {
     useModels?: any;
     attachApis?: any;
 };
 
-export class Api<UseModel={}> extends Observe<IEventHandlers> {
+export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & DefineEvent> {
     public impl!: Impl<UseModel>;
     public urlPrefix!: string;
+    public debug!: boolean;
     private useModels: UseModel;
     private useModelObjs: any;
     constructor(option: TypeApiOptions) {
@@ -71,7 +73,7 @@ export class Api<UseModel={}> extends Observe<IEventHandlers> {
      * @returns 
      */
     callApiEx(target: string, ...args: any[]): Promise<any> {
-        const NM = /^[a-z0-9_]{1,}\.[a-z0-9_]{1,}$/i.exec(target);
+        const NM = /^([a-z0-9_]{1,})\.([a-z0-9_]{1,})$/i.exec(target);
         const model = NM ? NM[1] : "";
         const method = NM ? NM[2] : "";
         return this.callApi(model as any, method as any, ...args);
@@ -216,12 +218,42 @@ export class Api<UseModel={}> extends Observe<IEventHandlers> {
      * 显示错误信息
      * @param err 
      */
-    showException(err: any): void {
+    showException(err: any): string {
         const errMsg = err?.exception?.exception?.stack || err?.exception?.stack || err?.stack || err?.message || err;
         console.error(errMsg);
+        return errMsg;
     }
     navigateTo<T={}>(pageInfo: IPageInfo & T, ...args: any[]): Promise<any> {
         return this.impl.nativateTo(pageInfo, ...args);
+    }
+    log(msg: any, type: TypeLogType): void {
+        const logType = type || "Info";
+        const now = "[" + moment().format("YYYY-MM-DD H:mm:ss") + "]";
+        const prefix = `[${logType}]  `;
+        const fillSpace = " ".repeat(5 - logType.length);
+        const msgText = [prefix, fillSpace, now].join(" ");
+        switch(logType) {
+            case "Debug": {
+                this.debug && console.debug(msgText, msg);
+                break;
+            }
+            case "Error": {
+                console.error(msgText, msg);
+                break;
+            }
+            case "Info": {
+                console.log(msgText, msg);
+                break;
+            }
+            case "Warn": {
+                console.warn(msgText, msg);
+                break;
+            }
+            default: {
+                console.log(msgText, msg);
+                break;
+            }
+        }
     }
     private getWorkspaceName(): string {
         return (this as any).workspace;

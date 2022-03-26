@@ -12,6 +12,9 @@ const Main = Loadable({
 const Admin = Loadable({
     loader: () => import("./Admin")
 });
+const Landing = Loadable({
+    loader: () => import("./Landing")
+});
 
 export const Entry = Loadable({
     loader: () => import("./Entry")
@@ -22,6 +25,10 @@ export const AdminPages:TypeDefinePage[] = [
         id: "main",
         path: "/main",
         component: Main
+    }, {
+        id: "admin_landing",
+        path: "/landing",
+        component: Landing
     }
 ];
 
@@ -31,7 +38,13 @@ export default [
         path: "/login",
         component: Login
     }, {
-        path: "/*",
+        path: "/landing",
+        component: Landing
+    },{
+        path: "/admin/*",
         component: Admin
+    },{
+        path: "/*",
+        component: Landing
     }
 ];

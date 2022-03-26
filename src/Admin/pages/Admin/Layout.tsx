@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Layout, Menu, Button } from "antd";
+import { Layout, Menu, Button, message } from "antd";
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
@@ -11,6 +11,8 @@ import utils from "../../../utils";
 import styles from "./style.module.scss";
 import UserProfile from "./UserProfile";
 import NotifyBtn from "./Notify";
+import { msjApi } from "@Admin/MSJApp";
+import { queueCallFunc } from "elmer-common";
 
 const { Sider, Header, Content } = Layout;
 
@@ -57,6 +59,23 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
             shortText: props.shortTitle || (props.title || "").substring(0,2)
         });
     }, [props.title, props.shortTitle]);
+    useEffect(()=>{
+        msjApi.showLoading();
+        queueCallFunc([
+            {
+                id: "sysInfo",
+                fn: () => msjApi.getConfig("sysInfo")
+            }
+        ], undefined, {
+            throwException: true
+        }).then((data)=>{
+            console.log(data);
+            msjApi.hideLoading();
+        }).catch((err) => {
+            msjApi.hideLoading();
+            message.error(msjApi.showException(err));
+        });
+    }, []);
     return (
         <Layout className={styles.admin_layout}>
             <Sider theme={theme} trigger={null} collapsible collapsed={collasped}>

@@ -34,9 +34,9 @@ const appState: TypeAppState = {
  * @param options - 自定义模块以及API配置
  * @returns 
  */
-export const createInstance = <UseModel={}, AttachApi={}>(
+export const createInstance = <UseModel={}, AttachApi={}, DefineEvent={}>(
     ImplApi: typeof Impl,
-    options: IMSJAppOptions):Api<UseModel & TypeModel> & TypeInstanceApi & AttachApi => {
+    options: IMSJAppOptions):Api<UseModel & TypeModel, DefineEvent> & TypeInstanceApi & AttachApi => {
     if(options.attachApi) {
         const limitName: string[] = [];
         Object.keys(options.attachApi).forEach((name) => {

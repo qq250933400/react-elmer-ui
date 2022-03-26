@@ -22,6 +22,7 @@ export class MSJApp<UseModel={}, AllApi={}> {
         }) as any;
         this.impl = new (ImplApi as any)(this.api);
         this.api.impl = this.impl as any;
+        this.api.debug = options.debug || false;
         Object.defineProperty(this.api, "app", {
             value: this,
             enumerable: false,
@@ -50,18 +51,27 @@ export class MSJApp<UseModel={}, AllApi={}> {
     }
     private gotoHome(pathName?: string) {
         this.api.getConfig<TypeEntryRule[]>(CONST_ENTRY_CONFIG_KEY).then((config) => {
+            let defaultEntry = null;
+            let matchEntry = false;
             for(const entry of config) {
                 const page = this.api.getPageById(entry.page);
+                if(entry.default) {
+                    defaultEntry = entry;
+                }
                 if(page) {
                     if(utils.isRegExp(entry.test)) {
                         if(entry.test.test(pathName || "")) {
                             this.api.navigateTo(page);
+                            matchEntry = true;
+                            this.api.log(`RegExp: ${JSON.stringify(entry, null, 4)}`, "Debug");
                             return;
                         }
                     } else {
                         const prefixPath = (pathName || "").substring(0, page.path.length);
                         if(prefixPath === page.path || ((utils.isEmpty(pathName) || pathName === "/") && entry.test === "/")) {
+                            matchEntry = true;
                             this.api.navigateTo(page);
+                            this.api.log(`String: ${JSON.stringify(entry, null, 4)}`, "Debug");
                             return;
                         }
                     }
@@ -69,6 +79,16 @@ export class MSJApp<UseModel={}, AllApi={}> {
                     throw new Error(`entry配置错误页面不存在。${entry.page}`);
                 }
             }
+            if(!matchEntry && defaultEntry) {
+                const page = this.api.getPageById(defaultEntry.page);
+                if(page) {
+                    this.api.log(`MatchDefault: ${JSON.stringify(defaultEntry, null, 4)}`, "Debug");
+                    this.api.navigateTo(page);
+                } else {
+                    console.error(`the default entry get a wrong page id.${defaultEntry.page}`);
+                }
+            }
+            this.api.emit("onAfterRun");
         }).catch((err) => {
             this.api.showException(err);
         });

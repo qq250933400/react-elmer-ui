@@ -1,11 +1,14 @@
 import "./page";
+import "./config";
+import "./menu";
 import { msjApi } from "../MSJApp";
 
 msjApi.registeEntryRules([
     {
         test: /\/admin\/main$/,
-        page: "adminMain"
-    }, {
+        page: "adminMain",
+        default: true
+    },{
         test: "/",
         page: "adminMain"
     }

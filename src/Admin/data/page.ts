@@ -8,6 +8,14 @@ export const adminWorkspace = createWorkspace("admin")
     .createPage({
         id: "adminMain",
         path: "/admin/main"
+    })
+    .createPage({
+        id: "landing",
+        path: "/landing"
+    })
+    .createPageFrom("landing", {
+        id: "homeLanding",
+        onBeforeEnter: "admin.initLoad"
     });
 
 export type TypeDefinePage = {
