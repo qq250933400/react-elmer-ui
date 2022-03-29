@@ -1,5 +1,6 @@
 import BaseModel from "./Base";
 import { queueCallFunc } from "elmer-common";
+import { IMenuItem, IMenuList } from "@MSJApp/types/IAdmin";
 
 export default class Admin extends BaseModel {
     initLoad(): Promise<any> {
@@ -14,12 +15,15 @@ export default class Admin extends BaseModel {
                 id: "timeout",
                 fn: () => {
                     return new Promise((resolve) => {
-                        setTimeout(() => resolve({}), 5000);
+                        setTimeout(() => resolve({}), 2000);
                     })
                 }
             }
         ], undefined, {
             throwException: true
         });
+    }
+    onLeftMenuChange(menuItem: IMenuItem, menuList: IMenuList): void {
+        console.log(menuItem, menuList);
     }
 }

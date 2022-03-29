@@ -4,6 +4,7 @@ export interface IMenuItem<T={}> {
     description?: string;
     visible?: boolean;
     subMenu?: (IMenuItem & T)[];
+    icon?: any;
 };
 
 export type TypeEntryRule = {

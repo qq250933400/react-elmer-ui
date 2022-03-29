@@ -3,7 +3,8 @@ import { msjApi } from "../MSJApp";
 
 
 msjApi.registeConfig("sysInfo", {
-    sysName: "sysName"
+    sysName: "sysName",
+    sysShortName: "sysNameSH"
 });
 
 // eslint-disable-next-line import/no-anonymous-default-export
