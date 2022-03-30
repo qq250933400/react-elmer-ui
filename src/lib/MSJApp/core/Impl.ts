@@ -13,4 +13,9 @@ export abstract class Impl<UseMode={}, AttachApi={}> {
     public abstract setData(data: any): void;
     public abstract getData<T={}>(): T;
     public abstract init(opt: any): void;
+    /**
+     * Send an http request
+     * @param opt - configuration
+     */
+    public abstract ajax<T={}, R={}>(opt: R): Promise<T>;
 }

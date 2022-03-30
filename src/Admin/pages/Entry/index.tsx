@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { msjApi } from "../../MSJApp";
 import { IPageInfo } from "@MSJApp";
@@ -9,12 +9,18 @@ import { adminWorkspace } from "@Admin/data/page";
 import Loading from "./Loading";
 import styles from "./style.module.scss";
 import CardLoading from "../../../components/CarLoading";
+import withService from "../../../HOC/withService";
+import { ElmerService } from "../../../HOC/withService/ElmerService";
+import { I18nContext } from "../../i18n";
 
 type TypeAdminPageExtAttr = {
     redirect?: boolean;
 };
+type TypeEntryProps = {
+    service: ElmerService
+};
 
-const Entry = () => {
+const Entry = (props: TypeEntryProps) => {
     const [ appState, setAppState ] = useState({});
     const [ implUpdate, setImplUpdate ] = useState(true);
     const [ loading, setLoading ] = useState(false);
@@ -22,6 +28,7 @@ const Entry = () => {
     const location = useLocation();
     const [ routePrefix ] = useState("/");
     const [ initPathName ] = useState(location.pathname);
+    const i18n = useContext(I18nContext);
     const runApi = useCallback(()=>{
         msjApi.run({
             workspace: "admin",
@@ -68,10 +75,14 @@ const Entry = () => {
                     ], undefined, {
                         throwException: true
                     });
-                }
+                },
+                service: props.service,
+                setLocale: (locale: string) => i18n.setLocale(locale),
+                getLocale: () => i18n.getLocale()
             }
         });
-    },[navigateTo, initPathName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[navigateTo,props, initPathName]);
     useEffect(() => {
         AdminPages.forEach((page) => {
             const pagePath = [routePrefix, page.path].join("/").replace(/([\/]{2,})/, "/");
@@ -91,7 +102,7 @@ const Entry = () => {
             msjApi.destory();
             unBindEvent();
         };
-    },[navigateTo, runApi, initPathName]);
+    },[]);
     useEffect(()=>{
         !implUpdate && msjApi.refreshStoreData(appState);
     },[ implUpdate, appState]);
@@ -113,4 +124,4 @@ const Entry = () => {
     );
 };
 
-export default Entry;
+export default withService()(Entry);

@@ -45,6 +45,7 @@ export type TypeServiceSendOptions = {
     header?: any;
     cookie?: any;
     withCredentials?: boolean;
+    throwException?: boolean;
 };
 
 // const [serviceState, withServiceContext,] = createContext("ElmerServiceContext", {

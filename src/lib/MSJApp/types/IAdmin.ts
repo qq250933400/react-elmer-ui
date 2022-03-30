@@ -1,10 +1,11 @@
 export interface IMenuItem<T={}> {
-    pageId: string;
     title: string;
+    value: string;
     description?: string;
     visible?: boolean;
     subMenu?: (IMenuItem & T)[];
     icon?: any;
+    type?: "Page"|"Api";
 };
 
 export type TypeEntryRule = {

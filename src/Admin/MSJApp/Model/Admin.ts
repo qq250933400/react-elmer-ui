@@ -12,18 +12,31 @@ export default class Admin extends BaseModel {
                 id: "sysInfo",
                 fn: () => this.api.getConfig("sysInfo")
             }, {
-                id: "timeout",
-                fn: () => {
-                    return new Promise((resolve) => {
-                        setTimeout(() => resolve({}), 2000);
-                    })
-                }
+                id: "adminProfileMenu",
+                fn: () => this.api.getMenu("adminProfileMenu")
             }
         ], undefined, {
             throwException: true
         });
     }
     onLeftMenuChange(menuItem: IMenuItem, menuList: IMenuList): void {
-        console.log(menuItem, menuList);
+        if(menuItem.type === "Api") {
+            this.api.callApiEx(menuItem.value, menuItem, menuList);
+        }
+    }
+    getNotifyList(endPoint: string) {
+        return this.api.ajax({
+            endPoint: endPoint,
+            throwException: true
+        });
+    }
+    switchLang(): void {
+        const locale = this.api.getLocale();
+        console.log("change locale: ", locale);
+        if(locale === "en") {
+            this.api.setLocale("zh");
+        } else {
+            this.api.setLocale("en");
+        }
     }
 }

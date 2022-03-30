@@ -45,7 +45,7 @@ const withService = () => {
                 return new Promise((resolve, reject) => {
                     const token = sessionStorage.getItem("token");
                     const handleEvent:any = {
-                        throwException: opt?.throwException
+                        throwException: opt?.throwException || option.throwException
                     };
                     serviceObj.send({
                         ...option,
@@ -74,6 +74,7 @@ const withService = () => {
                                 navigateTo("/login");
                             }
                         }).catch((err) => {
+                            console.log(handleEvent, "----", option);
                             handleEvent.onError = (errx:any) => {
                                 reject({
                                     ...err,

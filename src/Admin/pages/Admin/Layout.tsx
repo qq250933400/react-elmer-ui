@@ -1,22 +1,18 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Layout, Menu, Button, message } from "antd";
+import { Layout, Menu, Button } from "antd";
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    UserOutlined,
     UnorderedListOutlined
 } from "@ant-design/icons";
 import utils from "../../../utils";
 import styles from "./style.module.scss";
-import UserProfile from "./UserProfile";
+import UserProfile, { renderMenuList } from "./UserProfile";
 import NotifyBtn from "./Notify";
 import { msjApi } from "@Admin/MSJApp";
-import { queueCallFunc } from "elmer-common";
 import LoadableComponent from "../../../components/Loadable";
 import { FormattedMessage } from "react-intl";
-import { IMenuItem, IMenuList } from "@MSJApp/types/IAdmin";
-
-const { SubMenu } = Menu;
+import { utils as utilsObj } from "elmer-common";
 
 const LandingPage = LoadableComponent({
     loader: () => import("../Landing")
@@ -39,31 +35,19 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
         text: props.title,
         shortText: props.shortTitle || (props.title || "").substring(0,2)
     });
+    const [ staticState ] = useState({
+        notifyTimeHandler: null,
+        notifyInterval: 3000
+    });
     const [ leftMenu, setLeftMenu ] = useState([]);
+    const [ topRightMenu, setTopRightMenu ] = useState([]);
+    const [ notifyApi, setNotifyApi ] = useState(null);
     const onToggle = useCallback(()=>{
         setCollasped(!collasped);
     }, [collasped]);
     const onMenuClick = useCallback((item: any) => {
         msjApi.callApi("admin", "onLeftMenuChange", item, leftMenu);
     },[leftMenu]);
-    const renderLeftMenu = useCallback((menuList: IMenuList, parentKey: string) => {
-        return (
-            menuList.map((item, mIndex):any => {
-                if(null === item.visible || undefined === item.visible || (typeof item.visible === "boolean" && item.visible)) {
-                    const Icon = item.icon || UnorderedListOutlined;
-                    const itemKey = [parentKey, mIndex].join("_");
-                    (item as any).key = itemKey;
-                    if(item.subMenu && item.subMenu.length > 0) {
-                        return <SubMenu key={itemKey} icon={<Icon />} title={item.title}>{renderLeftMenu(item.subMenu, [parentKey, mIndex].join("_"))}</SubMenu>
-                    } else {
-                        return  <Menu.Item onClick={() => onMenuClick(item)} key={itemKey} icon={<Icon />}>{item.title}</Menu.Item>;
-                    }
-                } else {
-                    return <></>
-                }
-            })
-        );
-    }, [onMenuClick]);
     useEffect(()=>{
         const onResize = () => {
             const width = document.body.clientWidth;
@@ -93,19 +77,44 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
     useEffect(()=>{
         setShowLoading(true);
         msjApi.callApi("admin", "initLoad").then((data)=>{
-            const { sysInfo, leftMenu } = data;
+            const { sysInfo, leftMenu, adminProfileMenu } = data;
             setTitle({
                 text: (<FormattedMessage id={sysInfo.sysName}/>) as any,
                 shortText: (<FormattedMessage id={sysInfo.sysShortName || sysInfo.sysName}/>) as any,
             });
+            staticState.notifyInterval = sysInfo.notifyInterval || 3000;
             setLeftMenu(leftMenu || []);
-            console.log(data);
+            setTopRightMenu(adminProfileMenu || []);
+            setNotifyApi(sysInfo.notifyApi);
             setShowLoading(false);
         }).catch((err)=>{
             setShowLoading(false);
             msjApi.showException(err);
         });
     }, []);
+    useEffect(()=>{
+        if(!utilsObj.isEmpty(notifyApi)) {
+            if(staticState.notifyTimeHandler) {
+                clearInterval(staticState.notifyTimeHandler);
+                staticState.notifyTimeHandler = null;
+            } else {
+                staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler);
+                staticState.notifyTimeHandler = setInterval(() => {
+                    msjApi.callApi("admin", "getNotifyList", notifyApi).then((resp) => {
+                        console.log(resp);
+                    });
+                }, staticState.notifyInterval) as any;
+            }
+        } else {
+            staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler);
+            staticState.notifyTimeHandler = null;
+        }
+        return () => {
+            staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler);
+            staticState.notifyTimeHandler = null;
+        }
+    }, [notifyApi, staticState]);
+
     return (<>
             { !showLoading && (
                 <Layout className={styles.admin_layout}>
@@ -115,7 +124,7 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
                         </div>
                         <Menu theme={theme} mode="inline" >
                         {
-                            renderLeftMenu(leftMenu, "topMenu")
+                            renderMenuList(leftMenu, "topMenu", onMenuClick)
                         }
                         </Menu>
                     </Sider>
@@ -124,7 +133,7 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
                             <Button className={styles.admin_menu_taggle} onClick={onToggle}>
                                 { collasped ? <MenuUnfoldOutlined /> : <MenuFoldOutlined/> }
                             </Button>
-                            <UserProfile />
+                            <UserProfile theme={theme} menuList={topRightMenu} onMenuChange={onMenuClick}/>
                             <NotifyBtn />
                         </Header>
                         <Content className={styles.admin_layout_content}>

@@ -2,5 +2,11 @@
 export default {
     sysName: "Admin",
     sysNameSH: "AD",
-    hello: "Hello"
+    userInfo: "Profile",
+    logout: "Logout",
+    homePage: "Home",
+    setting: "Setting",
+    accessRight: "Access Right",
+    sysMenu: "System Menu",
+    language: "Language"
 };

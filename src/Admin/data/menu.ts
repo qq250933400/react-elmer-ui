@@ -1,22 +1,49 @@
 import { msjApi } from "../MSJApp";
+import {
+    UserOutlined, PoweroffOutlined, HomeOutlined,
+    SettingOutlined, ToolOutlined, UnorderedListOutlined,
+    FlagOutlined
+} from "@ant-design/icons";
 
 msjApi.createMenu("adminLeftMenu", [
     {
-        pageId: "adminMain",
-        title: "首页"
+        value: "adminMain",
+        title: "homePage",
+        icon: HomeOutlined
     },
     {
-        pageId: "#",
-        title: "设置",
+        value: "#",
+        title: "setting",
+        icon: SettingOutlined,
         subMenu: [
             {
-                pageId: "admin_landing",
-                title: "权限管理"
+                value: "admin_landing",
+                title: "accessRight",
+                icon: ToolOutlined
             }, {
-                pageId: "adminMenu",
-                title: "系统菜单"
+                value: "adminMenu",
+                title: "sysMenu",
+                icon: UnorderedListOutlined
             }
         ]
+    }
+]);
+
+msjApi.createMenu("adminProfileMenu", [
+    {
+        title: "userInfo",
+        value: "adminUserProfile",
+        icon: UserOutlined
+    }, {
+        title: "language",
+        value: "admin.switchLang",
+        icon: FlagOutlined,
+        type: "Api"
+    },{
+        title: "logout",
+        type: "Api",
+        value: "admin.logout",
+        icon: PoweroffOutlined
     }
 ]);
 
