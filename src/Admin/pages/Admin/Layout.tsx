@@ -2,8 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Layout, Menu, Button } from "antd";
 import {
     MenuUnfoldOutlined,
-    MenuFoldOutlined,
-    UnorderedListOutlined
+    MenuFoldOutlined
 } from "@ant-design/icons";
 import utils from "../../../utils";
 import styles from "./style.module.scss";
@@ -75,7 +74,7 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
         });
     }, [props.title, props.shortTitle]);
     useEffect(()=>{
-        setShowLoading(true);
+        setShowLoading(true);console.log("run_init_load");
         msjApi.callApi("admin", "initLoad").then((data)=>{
             const { sysInfo, leftMenu, adminProfileMenu } = data;
             setTitle({

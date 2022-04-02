@@ -17,7 +17,7 @@ msjApi.createMenu("adminLeftMenu", [
         icon: SettingOutlined,
         subMenu: [
             {
-                value: "admin_landing",
+                value: "admin_rights",
                 title: "accessRight",
                 icon: ToolOutlined
             }, {

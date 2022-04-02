@@ -1,6 +1,7 @@
 import BaseModel from "./Base";
 import { queueCallFunc } from "elmer-common";
 import { IMenuItem, IMenuList } from "@MSJApp/types/IAdmin";
+import { message } from "antd";
 
 export default class Admin extends BaseModel {
     initLoad(): Promise<any> {
@@ -22,6 +23,14 @@ export default class Admin extends BaseModel {
     onLeftMenuChange(menuItem: IMenuItem, menuList: IMenuList): void {
         if(menuItem.type === "Api") {
             this.api.callApiEx(menuItem.value, menuItem, menuList);
+        } else {
+            // goto new page
+            const page = this.api.getPageById(menuItem.value);
+            if(page) {
+                this.api.navigateTo(page);
+            } else {
+                message.error(`定义参数错误，PageId不存在。${menuItem.value}`);
+            }
         }
     }
     getNotifyList(endPoint: string) {

@@ -15,6 +15,9 @@ const Admin = Loadable({
 const Landing = Loadable({
     loader: () => import("./Landing")
 });
+const Right = Loadable({
+    loader: () => import(/** webpackChunkName: Right */"./Right")
+})
 
 export const Entry = Loadable({
     loader: () => import("./Entry")
@@ -29,6 +32,10 @@ export const AdminPages:TypeDefinePage[] = [
         id: "admin_landing",
         path: "/landing",
         component: Landing
+    }, {
+        id: "admin_rights",
+        path: "/rights",
+        component: Right
     }
 ];
 

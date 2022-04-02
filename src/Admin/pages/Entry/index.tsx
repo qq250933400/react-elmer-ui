@@ -12,6 +12,7 @@ import CardLoading from "../../../components/CarLoading";
 import withService from "../../../HOC/withService";
 import { ElmerService } from "../../../HOC/withService/ElmerService";
 import { I18nContext } from "../../i18n";
+import { useConfig } from "../../hooks";
 
 type TypeAdminPageExtAttr = {
     redirect?: boolean;
@@ -26,13 +27,15 @@ const Entry = (props: TypeEntryProps) => {
     const [ loading, setLoading ] = useState(false);
     const navigateTo = useNavigate();
     const location = useLocation();
-    const [ routePrefix ] = useState("/");
     const [ initPathName ] = useState(location.pathname);
     const i18n = useContext(I18nContext);
+    const overrideConfig = useConfig();
+    const [ routePrefix ] = useState(overrideConfig.urlPrefix || "/");
     const runApi = useCallback(()=>{
         msjApi.run({
             workspace: "admin",
             location: initPathName,
+            urlPrefix: overrideConfig.urlPrefix || "/",
             implInit: {
                 setAppState: (state: any) => {
                     setImplUpdate(true);console.log(state);
@@ -43,7 +46,7 @@ const Entry = (props: TypeEntryProps) => {
                         {
                             id: "onBeforeAction",
                             fn: () => {
-                                return new Promise((resolve, reject) => {
+                                return new Promise((resolve) => {
                                     if(pageInfo.onBeforeEnter && !utils.isEmpty(pageInfo.onBeforeEnter)) {
                                         if(!pageInfo.redirect) {
                                             const landingPage: any = msjApi.getPageById("landing") || {};
@@ -55,7 +58,7 @@ const Entry = (props: TypeEntryProps) => {
                                                     }
                                                 }
                                             });
-                                            resolve({});
+                                            resolve({});console.log("----Redirect--To-Landing---");
                                         } else {
                                             resolve({});
                                         }
@@ -83,16 +86,6 @@ const Entry = (props: TypeEntryProps) => {
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[navigateTo,props, initPathName]);
-    useEffect(() => {
-        AdminPages.forEach((page) => {
-            const pagePath = [routePrefix, page.path].join("/").replace(/([\/]{2,})/, "/");
-            adminWorkspace.createPage({
-                id: page.id,
-                path: pagePath,
-                title: page.title
-            });
-        });
-    }, [routePrefix]);
     useEffect(()=>{
         runApi();
         const unBindEvent = msjApi.on("onShowLoading", ((visible:any) => {

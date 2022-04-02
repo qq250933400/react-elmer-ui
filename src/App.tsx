@@ -6,7 +6,7 @@ import App from "./Admin";
 // import App from './App';
 
 
-ReactDOM.render(<App />,
+ReactDOM.render(<App urlPrefix='/'/>,
   document.getElementById('root')
 );
 
