@@ -9,9 +9,7 @@ const Main = Loadable({
     loader: () => import("./Main")
 });
 
-const Admin = Loadable({
-    loader: () => import("./Admin")
-});
+
 const Landing = Loadable({
     loader: () => import("./Landing")
 });
@@ -20,7 +18,10 @@ const Right = Loadable({
 })
 
 export const Entry = Loadable({
-    loader: () => import("./Entry")
+    loader: () => import(/** webpackChunkName: Entry */"./Entry")
+});
+export const Admin = Loadable({
+    loader: () => import(/** webpackChunkName: Admin */"./Admin")
 });
 
 export const AdminPages:TypeDefinePage[] = [
@@ -35,6 +36,7 @@ export const AdminPages:TypeDefinePage[] = [
     }, {
         id: "admin_rights",
         path: "/rights",
+        onBeforeEnter: "admin.initRightConfig",
         component: Right
     }
 ];
@@ -47,9 +49,6 @@ export default [
     }, {
         path: "/landing",
         component: Landing
-    },{
-        path: "/admin/*",
-        component: Admin
     },{
         path: "/*",
         component: Landing

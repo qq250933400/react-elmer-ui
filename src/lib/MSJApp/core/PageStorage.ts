@@ -89,3 +89,9 @@ export const createWorkspace = (name: string): TypeCreateWorkspaceResult => {
 export const getWorkspace = (name: string): any => {
     return pageState[name];
 };
+
+export const clearAllPages = () => {
+    Object.keys(pageState).forEach((name: string) => {
+        delete pageState[name];
+    });
+};

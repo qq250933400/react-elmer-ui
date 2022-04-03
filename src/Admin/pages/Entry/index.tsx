@@ -4,8 +4,7 @@ import { msjApi } from "../../MSJApp";
 import { IPageInfo } from "@MSJApp";
 import { utils } from "elmer-common/lib/utils";
 import { queueCallFunc } from "elmer-common/lib/BaseModule/QueueCallFun";
-import RoutePages, { AdminPages } from "../index";
-import { adminWorkspace } from "@Admin/data/page";
+import RoutePages, { Admin } from "../index";
 import Loading from "./Loading";
 import styles from "./style.module.scss";
 import CardLoading from "../../../components/CarLoading";
@@ -16,6 +15,7 @@ import { useConfig } from "../../hooks";
 
 type TypeAdminPageExtAttr = {
     redirect?: boolean;
+    isAdminPage?: boolean;
 };
 type TypeEntryProps = {
     service: ElmerService
@@ -31,6 +31,7 @@ const Entry = (props: TypeEntryProps) => {
     const i18n = useContext(I18nContext);
     const overrideConfig = useConfig();
     const [ routePrefix ] = useState(overrideConfig.urlPrefix || "/");
+    const [ contentPagePath ] = useState([overrideConfig.urlPrefix, overrideConfig.adminUrlPrefix, "*"].join("/").replace(/[/]{2,}/g,"/"));
     const runApi = useCallback(()=>{
         msjApi.run({
             workspace: "admin",
@@ -49,16 +50,21 @@ const Entry = (props: TypeEntryProps) => {
                                 return new Promise((resolve) => {
                                     if(pageInfo.onBeforeEnter && !utils.isEmpty(pageInfo.onBeforeEnter)) {
                                         if(!pageInfo.redirect) {
-                                            const landingPage: any = msjApi.getPageById("landing") || {};
-                                            navigateTo(landingPage.path, {
+                                            let landingPage: any = msjApi.getPageById("landing") || {};
+                                            if(pageInfo.isAdminPage) {
+                                                landingPage = msjApi.getPageById("admin_landing") || {};
+                                            }
+                                            const redirectPath = landingPage.navigateTo || landingPage.path;
+                                            navigateTo(redirectPath, {
                                                 state: {
                                                     navTo: {
-                                                        ...pageInfo,
-                                                        redirect: true
+                                                        ...pageInfo
                                                     }
                                                 }
                                             });
-                                            resolve({});console.log("----Redirect--To-Landing---");
+                                            resolve({
+                                                gotoLanding: true
+                                            });
                                         } else {
                                             resolve({});
                                         }
@@ -70,7 +76,7 @@ const Entry = (props: TypeEntryProps) => {
                         }, {
                             id: "naviageTo",
                             fn: (opt): any => {
-                                navigateTo(pageInfo.path, {
+                                !opt.lastResult.gotoLanding && navigateTo(pageInfo.path, {
                                     state: opt.lastResult
                                 });
                             }
@@ -102,6 +108,7 @@ const Entry = (props: TypeEntryProps) => {
     return (
         <>
             <Routes>
+                <Route path={contentPagePath} element={<Admin />}/>
                 {
                     RoutePages.map((info, index) => {
                         const RComponent = info.component;

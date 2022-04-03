@@ -39,11 +39,23 @@
         box-shadow:  none !important;
     }
 }
+.admin_layout_content_pt {
+    position: relative;
+    height: calc(100% - 64px);
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+}
 .admin_layout_content {
     background: #fff;
     margin: 10px !important;
     padding: 20px !important;
     min-height: 280px !important;
+    >div {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
 }
 
 .adminTopButton {

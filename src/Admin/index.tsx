@@ -8,11 +8,15 @@ import { TypeAdminConfig, ConfigContext } from "./hooks";
 import "./data";
 import "./styles/index.module.scss";
 
-const App = (props: TypeAdminConfig) => {
+type TypeAppProps<T={}> = {[ P in Exclude<keyof T, "initConfig">]?: T[P]};
+
+const App = (props: TypeAppProps<TypeAdminConfig>) => {
     const config = useMemo<TypeAdminConfig>(() => ({
         apiConfig: props.apiConfig,
         i18n: props.i18n || {},
-        urlPrefix: props.urlPrefix || ""
+        urlPrefix: props.urlPrefix || "/",
+        adminUrlPrefix: props.adminUrlPrefix || "/admin/",
+        initConfig: false
     }), [props]);
     return (
         <ConfigContext.Provider value={config}>

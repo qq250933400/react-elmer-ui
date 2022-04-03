@@ -2,7 +2,7 @@ import { Impl, ImplFlag } from "./Impl";
 import { utils } from "elmer-common";
 import { Api } from "./Api";
 import { IMSJAppOptions, IMSJAppRunOpt } from "../types/IMSJApp";
-import { getWorkspace, CONSTPAGEDATAKEY } from "./PageStorage";
+import { getWorkspace, CONSTPAGEDATAKEY, clearAllPages } from "./PageStorage";
 import { TypeAttachApi } from "./AttachApi";
 import { CONST_ENTRY_CONFIG_KEY, TypeEntryRule } from "../types/IAdmin";
 
@@ -47,7 +47,7 @@ export class MSJApp<UseModel={}, AllApi={}> {
         this.gotoHome(opt.location);
     }
     destory(): void {
-        console.log("release all resource");
+        clearAllPages();
     }
     private gotoHome(pathName?: string) {
         this.api.getConfig<TypeEntryRule[]>(CONST_ENTRY_CONFIG_KEY).then((config) => {

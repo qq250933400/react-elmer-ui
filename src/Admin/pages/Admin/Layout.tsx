@@ -135,9 +135,11 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
                             <UserProfile theme={theme} menuList={topRightMenu} onMenuChange={onMenuClick}/>
                             <NotifyBtn />
                         </Header>
-                        <Content className={styles.admin_layout_content}>
-                            {props.children}
-                        </Content>
+                        <div className={styles.admin_layout_content_pt}>
+                            <Content className={styles.admin_layout_content}>
+                                {props.children}
+                            </Content>
+                        </div>
                     </Layout>
                 </Layout>
             )}

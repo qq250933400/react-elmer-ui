@@ -26,8 +26,12 @@ export default class Admin extends BaseModel {
         } else {
             // goto new page
             const page = this.api.getPageById(menuItem.value);
+            const newPath = (page as any).navigateTo || page?.path;
             if(page) {
-                this.api.navigateTo(page);
+                this.api.navigateTo({
+                    ...page,
+                    path: newPath
+                });
             } else {
                 message.error(`定义参数错误，PageId不存在。${menuItem.value}`);
             }
@@ -47,5 +51,17 @@ export default class Admin extends BaseModel {
         } else {
             this.api.setLocale("en");
         }
+    }
+    initRightConfig() {
+        return queueCallFunc([
+            {
+                id: "delay",
+                fn: () => {
+                    return new Promise((resolve) => {
+                        setTimeout(() => resolve({}), 5000);
+                    });
+                }
+            }
+        ]);
     }
 }

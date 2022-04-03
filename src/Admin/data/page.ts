@@ -1,4 +1,4 @@
-import { createWorkspace } from "@MSJApp";
+import { createWorkspace, IPageInfo } from "@MSJApp";
 
 export const adminWorkspace = createWorkspace("admin")
     .createPage({
@@ -18,10 +18,9 @@ export const adminWorkspace = createWorkspace("admin")
         onBeforeEnter: "admin.initLoad"
     });
 
-export type TypeDefinePage = {
-    id: string;
-    path: string;
+export type TypeDefinePage = IPageInfo & {
     title?: string;
     description?: string;
     component: any;
+    isAdminPage?: boolean;
 };
