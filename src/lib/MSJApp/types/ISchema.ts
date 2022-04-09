@@ -19,6 +19,7 @@ export interface IFormDataSchema<T={}, FormatCallbacks={}, GlobalForamtCallbacks
     formCode: string;
     properties: ISchemaProperties<T, FormatCallbacks & GlobalForamtCallbacks>,
     formatCallbacks?: FormatCallbacks;
+    dataType?: ISchemaProperties<any, FormatCallbacks & GlobalForamtCallbacks>;
 };
 
 export interface IGlobalDataSchema<T={}, FormatCallbacks={}, CommonFormatCallbacks={}> {

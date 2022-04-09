@@ -115,6 +115,7 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                             if(((fn as unknown) as typeof Model).flag === ModelFlag) {
                                 // 调用模块必须继承至/core/Model
                                 instance = new (fn as any)(this);
+                                this.useModelObjs[model] = instance;
                                 if(typeof instance[method] === "function") {
                                     this.invoke(instance[method] as Function, instance, ...args).then(resolve).catch(reject);
                                 } else {
@@ -137,6 +138,7 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                         })
                 } else if(((ModelFn as unknown) as typeof Model).flag === ModelFlag) {
                     instance = new ModelFn(this);
+                    this.useModelObjs[model] = instance;
                     if(typeof instance[method] === "function") {
                         this.invoke(instance[method] as Function, instance, ...args).then(resolve).catch(reject);
                     } else {

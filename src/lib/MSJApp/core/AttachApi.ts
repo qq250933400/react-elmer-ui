@@ -52,17 +52,40 @@ export type TypeAttachApi = {
      * @param data - 保存数据
      */
     save(key: string, data: any):void;
+    /**
+     * 保存数据到指定formData
+     * @param key - 字段名称
+     * @param data - 保存数据
+     * @param formCode - 指定formCode
+     */
+    saveFormDataByCode(key: string, data: any, formCode: string): void;
+    /**
+     * 获取数据
+     * @param key - 指定字段名称
+     */
+    get<T={}>(key: string): Promise<T>;
+     /**
+     * 获取指定form 部分数据，设置key获取指定字段值，key为null或undefined或空字符串将返回整个formData
+     * @param formCode - 指定formCode
+     * @param key - [可选参数]指定字段
+     * @param isSrc - [可选参数]是否获取原始保存数据，不经过Format格式化的数据
+     * @returns 
+     */
+    getFormDataByCode<T={}>(formCode: string, key?: string, isSrc?: boolean): Promise<T>
 };
 
 export const attachApi: TypeAttachApiFunc<TypeAttachApi> = {
     createMenu: (api) => (name, menuListData) => api.callApi("MAJApp_Admin_202203241748", "createMenu", name, menuListData) as any,
     getMenu: (api) => (name) => api.callApi("MAJApp_Admin_202203241748","getMenu", name),
     getConfig: (api) => (name) => api.callApi("MAJApp_Admin_202203241748", "getConfig", name),
+    get: (api) => (key) => api.callApi("MSJApp_FormData_202203241448","get", key),
+    getFormDataByCode: (api) => <T={}>(formCode: string, key?: string, isSrc?: boolean) => api.callApi("MSJApp_FormData_202203241448","getFormData", formCode, key, isSrc),
     registeFormSchema: (api) => (schema) => {
         return api.callApi("MSJApp_FormData_202203241448", "registeFormSchame", schema);
     },
     registeConfig: (api) => <T={}>(name: string, config: T) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", name, config),
     registeEntryRules: (api) => <T={}>(rules: (TypeEntryRule & T)[]) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", CONST_ENTRY_CONFIG_KEY, rules),
     registGlobalSchema: (api) => <T={},FormatCallbacks={}>(schema: IGlobalDataSchema<T,FormatCallbacks>) => api.callApi("MSJApp_FormData_202203241448","registGlobalSchema", schema),
-    save: (api) => (key: string, data: any) => api.callApi("MSJApp_FormData_202203241448", "save", key, data)
+    save: (api) => (key: string, data: any) => api.callApi("MSJApp_FormData_202203241448", "save", key, data),
+    saveFormDataByCode: (api) => (key: string, data: any, formCode: string) => api.callApi("MSJApp_FormData_202203241448", "saveFormData", key, data, formCode)
 };

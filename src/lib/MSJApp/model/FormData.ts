@@ -24,6 +24,7 @@ export default class FormData extends Model {
     private globalSchemaConfig: IGlobalDataSchema = {} as any;
     private commonFormatCallbacks: any = {};
     private globalData: any = {};
+    private formData: any = {};
 
     constructor(api: any) {
         super(api);
@@ -48,19 +49,25 @@ export default class FormData extends Model {
     }
     registGlobalSchema(schema: IGlobalDataSchema): void {
         this.globalSchemaConfig = schema;
-        console.log(this.schema);
     }
     save(key: string, data: any): void {
         const validateProperties:any = this.globalSchemaConfig.properties || {};
         const attrProperty = validateProperties[key] || {};
         if(validateProperties[key]) {
             const validateData:any = {};
-            const formatFN = attrProperty.format && !utils.isEmpty(attrProperty?.format) ? ((this.globalSchemaConfig.formatCallbacks || {}) as any)[attrProperty.format] : null;
-            const newData = typeof formatFN === "function" ? formatFN(data, this.globalData) : data;
-            validateData[key] = data;
-            if(this.schema.validate(newData, {
-                properties: validateProperties,
-            })) {
+            const validateSchema:any = {};
+            validateData[key] = this.formatData({
+                data,
+                dataType: this.globalSchemaConfig.dataType || {},
+                sourceData: this.globalData,
+                formatCallbacks: this.globalSchemaConfig.formatCallbacks,
+                validateSchema: attrProperty
+            });
+            validateSchema[key] = attrProperty;
+            if(this.schema.validate(validateData, {
+                properties: validateSchema,
+                dataType: (this.globalSchemaConfig.dataType || {} as any)
+            }, "GlobalData")) {
                 this.globalData[key] = data;
                 this.api.setData(CONST_GLOBAL_DATA_KEY, this.globalData);
             } else {
@@ -70,16 +77,116 @@ export default class FormData extends Model {
             throw new Error(`保存数据未定义schema.(${key})`);
         }
     }
-    get(key: string, isSrc?: boolean): any {
-        const srcData = this.globalData[key];
-        const srcValidate = ((this.globalSchemaConfig.properties || {}) as any)[key];
-        return isSrc ? srcData : this.formatData({
-            data: srcData,
-            validateSchema: srcValidate,
-            dataType: this.globalSchemaConfig.dataType || {},
-            sourceData: this.globalData,
-            formatCallbacks: this.globalSchemaConfig.formatCallbacks
-        });
+    get(key?: string, isSrc?: boolean): any {
+        if(key && !utils.isEmpty(key)) {
+            const srcData = this.globalData[key];
+            const srcValidate = ((this.globalSchemaConfig.properties || {}) as any)[key];
+            return isSrc ? srcData : this.formatData({
+                data: srcData,
+                validateSchema: srcValidate,
+                dataType: this.globalSchemaConfig.dataType || {},
+                sourceData: this.globalData,
+                formatCallbacks: this.globalSchemaConfig.formatCallbacks
+            });
+        } else {
+            return isSrc ? this.globalData : this.formatData({
+                data: this.globalData,
+                validateSchema: ({
+                    type: "Object",
+                    properties: this.globalSchemaConfig.properties
+                }) as any,
+                dataType: this.globalSchemaConfig.dataType,
+                sourceData: this.globalData,
+                formatCallbacks: this.globalSchemaConfig.formatCallbacks
+            });
+        }
+    }
+    /**
+     * 保存数据到指定formData
+     * @param key - 字段名称
+     * @param data - 保存数据
+     * @param formCode - 指定formCode
+     */
+    saveFormData(key: string, data: any, formCode: string): void {
+        const formSchema:IFormDataSchema = this.formSchemaConfig[formCode];
+        if(!formSchema) {
+            throw new Error(`保存FormData失败，指定formCode: ${formCode},未定义formSchema。`);
+        } else {
+            const attrProperty = (formSchema.properties as any)[key];
+            const validateSchema:any = {};
+            const validateData: any = {};
+            const srcFormData = this.formData[formCode] || {};
+            validateSchema[key] = attrProperty;
+            validateData[key] = this.formatData({
+                data,
+                validateSchema: attrProperty,
+                dataType: formSchema.dataType || {} as any,
+                sourceData: srcFormData,
+                formatCallbacks: {
+                    ...(this.globalSchemaConfig.formatCallbacks || {}),
+                    ...(formSchema.formatCallbacks || {})
+                }
+            });
+            if(this.schema.validate(validateData, validateSchema, `FormData_${formCode}`)) {
+                srcFormData[key] = data;
+                const allFormData = {
+                    ...this.formData
+                };
+                allFormData[formCode] = srcFormData;
+                this.formData = allFormData;
+                this.api.setData(CONST_FORM_DATA_KEY, allFormData);
+            } else {
+                throw new Error(`保存formData失败，${this.schema.message}。`);
+            }
+        }
+    }
+    /**
+     * 获取指定form 部分数据，设置key获取指定字段值，key为null或undefined或空字符串将返回整个formData
+     * @param formCode - 指定formCode
+     * @param key - [可选参数]指定字段
+     * @param isSrc - [可选参数]是否获取原始保存数据，不经过Format格式化的数据
+     * @returns 
+     */
+    getFormData<T={}>(formCode: string, key?: string, isSrc?: boolean):T {
+        const formData = this.formData[formCode] || {};
+        const formSchema:IFormDataSchema = this.formSchemaConfig[formCode];
+        if(!formSchema) {
+            throw new Error(`获取formData不存在，请确定是否已经保存。(formCode: ${formCode})`);
+        }
+        if(key && !utils.isEmpty(key)) {
+            const fieldData = formData[key];
+            const attrProperty = (formSchema.properties as any)[key];
+            return isSrc ? fieldData : this.formatData({
+                data: fieldData,
+                validateSchema: attrProperty,
+                dataType: {
+                    ...(this.globalSchemaConfig.dataType || {}),
+                    ...(formSchema.dataType || {})
+                },
+                sourceData: formData,
+                formatCallbacks: {
+                    ...(this.globalSchemaConfig.formatCallbacks || {}),
+                    ...(formSchema.formatCallbacks || {})
+                }
+            });
+        } else {
+            return isSrc ? formData : this.formatData({
+                data: formData,
+                validateSchema: ({
+                    type: "Object",
+                    properties: formSchema.properties
+                }) as any,
+                dataType: {
+                    ...(this.globalSchemaConfig.dataType || {}),
+                    ...(formSchema.dataType || {})
+                },
+                sourceData: formData,
+                formatCallbacks: {
+                    ...(this.globalSchemaConfig.formatCallbacks || {}),
+                    ...(formSchema.formatCallbacks || {})
+                }
+            });
+        }
     }
     private formatData(opt: TypeFormatParams): any{
         const {data, validateSchema, dataType, formatCallbacks, sourceData} = opt;
