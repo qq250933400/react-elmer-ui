@@ -46,7 +46,12 @@ export type TypeAttachApi = {
      * @param name - 配置名称
      */
     getConfig<T={}>(name: string): Promise<T>;
-
+    /**
+     * 保存数据
+     * @param key - 字段名
+     * @param data - 保存数据
+     */
+    save(key: string, data: any):void;
 };
 
 export const attachApi: TypeAttachApiFunc<TypeAttachApi> = {
@@ -58,5 +63,6 @@ export const attachApi: TypeAttachApiFunc<TypeAttachApi> = {
     },
     registeConfig: (api) => <T={}>(name: string, config: T) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", name, config),
     registeEntryRules: (api) => <T={}>(rules: (TypeEntryRule & T)[]) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", CONST_ENTRY_CONFIG_KEY, rules),
-    registGlobalSchema: (api) => <T={},FormatCallbacks={}>(schema: IGlobalDataSchema<T,FormatCallbacks>) => api.callApi("MSJApp_FormData_202203241448","registGlobalSchema", schema)
+    registGlobalSchema: (api) => <T={},FormatCallbacks={}>(schema: IGlobalDataSchema<T,FormatCallbacks>) => api.callApi("MSJApp_FormData_202203241448","registGlobalSchema", schema),
+    save: (api) => (key: string, data: any) => api.callApi("MSJApp_FormData_202203241448", "save", key, data)
 };

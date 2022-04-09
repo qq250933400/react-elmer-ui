@@ -1,6 +1,7 @@
 import "./page";
 import "./config";
 import "./menu";
+import "./globalSchema";
 import { msjApi } from "../MSJApp";
 
 msjApi.registeEntryRules([

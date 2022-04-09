@@ -32,6 +32,7 @@ export default class Admin extends BaseModel {
                     ...page,
                     path: newPath
                 });
+                this.api.save("currentMenu", menuItem);
             } else {
                 message.error(`定义参数错误，PageId不存在。${menuItem.value}`);
             }
