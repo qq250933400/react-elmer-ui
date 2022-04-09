@@ -2,9 +2,18 @@ import { Model } from "../core/Model";
 import { IFormDataSchema, IGlobalDataSchema } from "../types/ISchema";
 import { Schema, utils } from "elmer-common";
 import { Autowired } from "../core/Autowired";
+import { ISchemaProperty } from "../types/ISchema";
 
 const CONST_GLOBAL_DATA_KEY = "MSJApp_GlobalData_202204091244";
 const CONST_FORM_DATA_KEY = "MSJApp_FormData_202204091244";
+
+type TypeFormatParams = {
+    data: any;
+    dataType: any;
+    validateSchema: ISchemaProperty;
+    formatCallbacks: any;
+    sourceData: any;
+};
 
 export default class FormData extends Model {
 
@@ -59,6 +68,127 @@ export default class FormData extends Model {
             }
         } else {
             throw new Error(`保存数据未定义schema.(${key})`);
+        }
+    }
+    get(key: string, isSrc?: boolean): any {
+        const srcData = this.globalData[key];
+        const srcValidate = ((this.globalSchemaConfig.properties || {}) as any)[key];
+        return isSrc ? srcData : this.formatData({
+            data: srcData,
+            validateSchema: srcValidate,
+            dataType: this.globalSchemaConfig.dataType || {},
+            sourceData: this.globalData,
+            formatCallbacks: this.globalSchemaConfig.formatCallbacks
+        });
+    }
+    private formatData(opt: TypeFormatParams): any{
+        const {data, validateSchema, dataType, formatCallbacks, sourceData} = opt;
+        if(!validateSchema) {
+            return data;
+        } else {
+            const formatFnKey = validateSchema.format;
+            const formatFn = formatFnKey && !utils.isEmpty(formatFnKey) ? formatCallbacks[formatFnKey] : null;
+            const includeData:any = {};
+            if(validateSchema.include) {
+                Object.keys(validateSchema.include).forEach((includeKey) => {
+                    includeData[includeKey] = utils.getValue(sourceData, includeKey);
+                });
+            }
+            if(validateSchema.type === "String" || validateSchema.type === "Number" || validateSchema.type === "Any" || validateSchema.type === "Boolean" || validateSchema.type === "Array") {
+                const defaultValue = validateSchema.defaultValue;
+                return typeof formatFn === "function" ? formatFn(data, includeData) || defaultValue : data || defaultValue;
+            } else if(validateSchema.type === "Object") {
+                if((validateSchema as any).properties) {
+                    const objResult:any = {};
+                    Object.keys((validateSchema as any).properties).forEach((attrKey: string) => {
+                        const nextData = typeof data === "object" ? data[attrKey] : null;
+                        const nextSchema = (validateSchema as any).properties[attrKey];
+                        const nextResult = this.formatData({
+                            data: nextData || validateSchema.defaultValue,
+                            validateSchema:nextSchema,
+                            dataType,
+                            formatCallbacks,
+                            sourceData
+                        });
+                        objResult[attrKey] = nextResult;
+                    });
+                    return objResult;
+                } else {
+                    return typeof formatFn === "function" ? formatFn(data) : data;
+                }
+            } else if(utils.isRegExp(validateSchema.type)){
+                // RegExp type data
+                const vResult = validateSchema.type.test(data) ? data : null;
+                return typeof formatFn === "function" ? formatFn(vResult, includeData) || validateSchema.defaultValue : vResult || validateSchema.defaultValue;
+            } else if(utils.isArray(validateSchema.type)) {
+                const vResult = validateSchema.type.indexOf(data) >= 0 ? data : validateSchema.defaultValue;
+                return typeof formatFn === "function" ? formatFn(vResult, includeData) : vResult;
+            } else if(typeof validateSchema.type === "string" && /^#[a-z0-9_]{1,}$/i.test(validateSchema.type)) {
+                const useDataTypeKey = validateSchema.type.replace(/^#/,"");
+                const useDataValidateSchema = dataType[useDataTypeKey] || (this.globalSchemaConfig.dataType ? this.globalSchemaConfig.dataType[useDataTypeKey] : null);
+                if(useDataValidateSchema) {
+                    return this.formatData({
+                        data,
+                        dataType,
+                        validateSchema: useDataValidateSchema,
+                        formatCallbacks,
+                        sourceData
+                    });
+                }
+            } else if(typeof validateSchema.type === "string" && /^Array<#{0,1}[a-zA-Z0-9_]{1,}>/.test(validateSchema.type)) {
+                if(utils.isArray(data) && data.length > 0) {
+                    const useKeyM = /^Array<#([a-zA-Z0-9_]{1,})>/.exec(validateSchema.type);
+                    if(useKeyM) {
+                        const useKey = useKeyM[1];
+                        const useDataSchema = dataType[useKey] || (this.globalSchemaConfig.dataType ? (this.globalSchemaConfig.dataType as any)[useKey] : null);
+                        if(useDataSchema) {
+                            const arrResult:any[] = []
+                            for(let i=0;i<data.length;i++) {
+                                const nextData = data[i];
+                                const nextResult = this.formatData({
+                                    data: nextData,
+                                    validateSchema: useDataSchema,
+                                    dataType,
+                                    sourceData,
+                                    formatCallbacks
+                                });
+                                arrResult.push(nextResult);
+                            }
+                            return typeof formatFn === "function" ? formatFn(arrResult, includeData) || validateSchema.defaultValue : arrResult || validateSchema.defaultValue;
+                        } else {
+                            return [];
+                        }
+                    } else {
+                        const useTypeM = /^Array<([a-zA-Z0-9_]{1,})>/.exec(validateSchema.type);
+                        if(useTypeM) {
+                            const arrResult: any[] = [];
+                            const useType = useTypeM[1];
+                            data.forEach((item) => {
+                                if(useType === "String") {
+                                    typeof item === "string" && arrResult.push(item);
+                                    typeof item !== "string" && arrResult.push(null);
+                                } else if(useType === "Number") {
+                                    typeof item === "number" && arrResult.push(item);
+                                    typeof item !== "number" && arrResult.push(null);
+                                } else if(useType === "Boolean") {
+                                    typeof item === "boolean" && arrResult.push(item);
+                                    typeof item !== "boolean" && arrResult.push(null);
+                                } else if(useType === "Object") {
+                                    typeof item === "object" && arrResult.push(item);
+                                    typeof item !== "object" && arrResult.push(null);
+                                } else {
+                                    arrResult.push(item);
+                                }
+                            });
+                            return typeof formatFn === "function" ? formatFn(arrResult, includeData) || validateSchema.defaultValue : arrResult;
+                        } else {
+                            return [];
+                        }
+                    }
+                } else {
+                    return [];
+                }
+            }
         }
     }
 }
