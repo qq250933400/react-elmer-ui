@@ -8,5 +8,8 @@ export default {
     setting: "Setting",
     accessRight: "Access Right",
     sysMenu: "System Menu",
-    language: "Language"
+    language: "Language",
+    resource: "Resource",
+    resource_page_mg: "Pages",
+    resource_lang: "Languages",
 };

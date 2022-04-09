@@ -2,6 +2,12 @@ import React, { useMemo, useState, createContext, useCallback } from "react";
 import { IntlProvider } from "react-intl";
 import messages from "./data";
 
+const getDefaultLocale = () => {
+    let locale = localStorage.getItem("locale");
+    locale = navigator.language || "zh-CN";
+    return locale;
+}
+
 export const I18nContext = createContext({
     locale: "en",
     setLocale: (locale: string) => {},
@@ -9,12 +15,12 @@ export const I18nContext = createContext({
 });
 
 const I18nApp = (props: any) => {
-    const [ locale, setLocale ] = useState("en");
+    const [ locale, setLocale ] = useState(getDefaultLocale());
     const [ i18nState ] = useState({
-        locale: "en"
+        locale: locale
     });
     const message = useMemo(() => {
-        return (messages as any)[locale] || messages.en;
+        return (messages as any)[locale] || messages["zh-CN"];
     }, [locale]);
     const getLocale = useCallback(() => {
         return i18nState.locale;
@@ -23,6 +29,7 @@ const I18nApp = (props: any) => {
         <I18nContext.Provider value={{
             locale,
             setLocale: (vLocale: string) => {
+                localStorage.setItem("locale", vLocale);
                 setLocale(vLocale);
                 i18nState.locale = vLocale;
             },

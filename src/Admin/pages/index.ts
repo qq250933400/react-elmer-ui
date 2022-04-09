@@ -15,6 +15,9 @@ const Landing = Loadable({
 });
 const Right = Loadable({
     loader: () => import(/** webpackChunkName: Right */"./Right")
+});
+const Lang = Loadable({
+    loader: () => import(/** webpackChunkName: Lang */"./Lang")
 })
 
 export const Entry = Loadable({
@@ -38,6 +41,10 @@ export const AdminPages:TypeDefinePage[] = [
         path: "/rights",
         onBeforeEnter: "admin.initRightConfig",
         component: Right
+    }, {
+        id: "admin_lang",
+        path: "/language",
+        component: Lang
     }
 ];
 

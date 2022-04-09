@@ -8,5 +8,8 @@ export default {
     setting: "设置",
     accessRight: "权限管理",
     sysMenu: "系统菜单",
-    language: "语言"
+    language: "语言",
+    resource: "资源管理",
+    resource_page_mg: "页面管理",
+    resource_lang: "多语言管理",
 }

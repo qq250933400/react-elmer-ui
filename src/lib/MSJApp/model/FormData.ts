@@ -1,5 +1,5 @@
 import { Model } from "../core/Model";
-import { IFormDataSchema } from "../types/ISchema";
+import { IFormDataSchema, IGlobalDataSchema } from "../types/ISchema";
 
 export default class FormData extends Model {
     private formSchemaConfig: any = {};
@@ -21,5 +21,8 @@ export default class FormData extends Model {
                 throw new Error(`the callback of ${name} already exists in format storage.`);
             }
         });
+    }
+    registGlobalSchema(schema: IGlobalDataSchema): void {
+        this.globalSchemaConfig = schema;
     }
 }

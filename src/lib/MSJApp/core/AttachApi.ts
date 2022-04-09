@@ -1,6 +1,6 @@
 import { Api } from "./Api";
 import { TypeModel } from "../model";
-import { IFormDataSchema } from "../types/ISchema";
+import { IFormDataSchema, IGlobalDataSchema } from "../types/ISchema";
 import { CONST_ENTRY_CONFIG_KEY, IMenuList, TypeCreateMenuResult, TypeEntryRule } from "../types/IAdmin";
 
 type TypeAttachApiExcludeN<T, PN> = { [K in Exclude<keyof T, PN>]: T[K] };
@@ -14,6 +14,11 @@ export type TypeAttachApi = {
      * @param schema - form字段定义
      */
     registeFormSchema<T={}, TypeFormatCallbacks={}, TypeCommonCallbacks={}>(schema: IFormDataSchema<T, TypeFormatCallbacks, TypeCommonCallbacks>): Promise<boolean>;
+    /**
+     * 注册全局数据保存字段配置
+     * @param schema - 全局存储字段配置
+     */
+    registGlobalSchema<T={}, TypeFormatCallbacks={}>(schema: IGlobalDataSchema<T, TypeFormatCallbacks>): void;
     /**
      * 注册配置信息
      * @param name - 配置节点名称
@@ -52,5 +57,6 @@ export const attachApi: TypeAttachApiFunc<TypeAttachApi> = {
         return api.callApi("MSJApp_FormData_202203241448", "registeFormSchame", schema);
     },
     registeConfig: (api) => <T={}>(name: string, config: T) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", name, config),
-    registeEntryRules: (api) => <T={}>(rules: (TypeEntryRule & T)[]) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", CONST_ENTRY_CONFIG_KEY, rules)
+    registeEntryRules: (api) => <T={}>(rules: (TypeEntryRule & T)[]) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", CONST_ENTRY_CONFIG_KEY, rules),
+    registGlobalSchema: (api) => <T={},FormatCallbacks={}>(schema: IGlobalDataSchema<T,FormatCallbacks>) => api.callApi("MSJApp_FormData_202203241448","registGlobalSchema", schema)
 };

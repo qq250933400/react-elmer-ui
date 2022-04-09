@@ -74,7 +74,7 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
         });
     }, [props.title, props.shortTitle]);
     useEffect(()=>{
-        setShowLoading(true);console.log("run_init_load");
+        setShowLoading(true);
         msjApi.callApi("admin", "initLoad").then((data)=>{
             const { sysInfo, leftMenu, adminProfileMenu } = data;
             setTitle({

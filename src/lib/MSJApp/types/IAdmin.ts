@@ -5,6 +5,7 @@ export interface IMenuItem<T={}> {
     visible?: boolean;
     subMenu?: (IMenuItem & T)[];
     icon?: any;
+    id?: string;
     type?: "Page"|"Api";
 };
 

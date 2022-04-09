@@ -2,7 +2,7 @@ import { msjApi } from "../MSJApp";
 import {
     UserOutlined, PoweroffOutlined, HomeOutlined,
     SettingOutlined, ToolOutlined, UnorderedListOutlined,
-    FlagOutlined
+    FlagOutlined, HddOutlined, FundViewOutlined, FileTextOutlined
 } from "@ant-design/icons";
 
 msjApi.createMenu("adminLeftMenu", [
@@ -24,6 +24,21 @@ msjApi.createMenu("adminLeftMenu", [
                 value: "adminMenu",
                 title: "sysMenu",
                 icon: UnorderedListOutlined
+            }
+        ]
+    }, {
+        value: "#",
+        title: "resource",
+        icon: HddOutlined,
+        subMenu: [
+            {
+                value: "adminPages",
+                title: "resource_page_mg",
+                icon: FundViewOutlined
+            }, {
+                value: "admin_lang",
+                title: "resource_lang",
+                icon: FileTextOutlined
             }
         ]
     }
