@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import React, { useEffect, useState, useCallback, useContext, useMemo } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
 import { msjApi } from "../../MSJApp";
 import { IPageInfo } from "@MSJApp";
 import { utils } from "elmer-common/lib/utils";
 import { queueCallFunc } from "elmer-common/lib/BaseModule/QueueCallFun";
-import RoutePages, { Admin } from "../index";
+import RoutePages, { Admin, AdminPages } from "../index";
 import Loading from "./Loading";
 import styles from "./style.module.scss";
 import CardLoading from "../../../components/CarLoading";
@@ -12,6 +12,7 @@ import withService from "../../../HOC/withService";
 import { ElmerService } from "../../../HOC/withService/ElmerService";
 import { I18nContext } from "../../i18n";
 import { useConfig } from "../../hooks";
+import { adminWorkspace } from "../../data/page";
 
 type TypeAdminPageExtAttr = {
     redirect?: boolean;
@@ -32,6 +33,9 @@ const Entry = (props: TypeEntryProps) => {
     const overrideConfig = useConfig();
     const [ routePrefix ] = useState(overrideConfig.urlPrefix || "/");
     const [ contentPagePath ] = useState([overrideConfig.urlPrefix, overrideConfig.adminUrlPrefix, "*"].join("/").replace(/[/]{2,}/g,"/"));
+    const urlPrefix = useMemo(() => {
+        return (overrideConfig.urlPrefix || "/") + "admin/";
+    }, [overrideConfig]);
     const runApi = useCallback(()=>{
         msjApi.run({
             workspace: "admin",
@@ -76,7 +80,7 @@ const Entry = (props: TypeEntryProps) => {
                         }, {
                             id: "naviageTo",
                             fn: (opt): any => {
-                                !opt.lastResult.gotoLanding && navigateTo(pageInfo.path, {
+                                !opt.lastResult.gotoLanding && navigateTo((pageInfo as any).navigateTo || pageInfo.path, {
                                     state: opt.lastResult
                                 });
                             }
@@ -101,10 +105,32 @@ const Entry = (props: TypeEntryProps) => {
             msjApi.destory();
             unBindEvent();
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
     useEffect(()=>{
         !implUpdate && msjApi.refreshStoreData(appState);
     },[ implUpdate, appState]);
+    useEffect(() => {
+        const destoryOnHomeChange = msjApi.on("onHomeChange", (page) => {
+            msjApi.callApi("admin","setMainPage", page);
+        });
+        return () => destoryOnHomeChange();
+    }, []);
+    useEffect(() => {
+        if(!overrideConfig.initConfig) {
+            overrideConfig.initConfig = true;
+            AdminPages.forEach((page) => {
+                const pagePath = [urlPrefix, page.path].join("/").replace(/([\/]{2,})/, "/");
+                const newPage = {...page};
+                delete newPage.component;
+                adminWorkspace.createPage({
+                    ...newPage,
+                    navigateTo: pagePath,
+                    isAdminPage: true
+                });
+            });
+        }
+    }, [overrideConfig, urlPrefix]);
     return (
         <>
             <Routes>

@@ -29,8 +29,9 @@ export const Admin = Loadable({
 
 export const AdminPages:TypeDefinePage[] = [
     {
-        id: "main",
+        id: "adminMain",
         path: "/main",
+        title: "homePage",
         component: Main
     }, {
         id: "admin_landing",

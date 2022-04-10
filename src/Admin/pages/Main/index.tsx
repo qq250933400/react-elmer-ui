@@ -3,21 +3,7 @@ import Loading from "../../../components/CarLoading";
 import { msjApi } from "@Admin/MSJApp";
 const Main = () => {
     useEffect(()=>{
-        msjApi.save("arr", [{
-            name: "test",
-            age: 12
-        }, {
-            name: "elmer",
-            age: 32
-        }]);
-        msjApi.get("arr").then((data) => {
-            console.log("---SaveData--", data);
-        });
-        msjApi.getFormDataByCode("aa", "bb").then((data) => {
-            console.log("formData: ", data);
-        }).catch((err) => {
-            console.error(err);
-        })
+        // log
     },[]);
     return <div>
         <button onClick={() => {

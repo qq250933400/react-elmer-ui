@@ -26,13 +26,15 @@
 }
 .admin_layout_header {
     background: #fff !important;
+    position: relative;
 }
 .admin_menu_taggle {
-    width: 40px !important;
-    height: 40px !important;
+    width: 26px !important;
+    height: 26px !important;
     padding: 0 !important;
-    position: absolute;
+    position: absolute !important;
     left: 5px;
+    top: 5px;
     border: none !important;
     box-shadow:  none !important;
     &:active {
@@ -111,4 +113,8 @@
         }
     }
 }
-
+.admin_layout_breadcrumb {
+    position: absolute;
+    bottom: 4px !important;
+    left: 12px;
+}

@@ -1,2 +1,2 @@
-export * from "./useModel/useInitData";
+export * from "./useInitState";
 export * from "./useConfig";

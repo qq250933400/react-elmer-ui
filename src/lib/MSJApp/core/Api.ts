@@ -4,7 +4,7 @@ import { loaderFlag, TypeLoaderResult } from "./MLoader";
 import { Model, ModelFlag } from "./Model";
 import { getAppState } from "./ApiExport";
 import { Impl } from "./Impl";
-import { getPageById } from "./PageStorage";
+import { getPageById, getWorkspace } from "./PageStorage";
 import { IPageInfo } from "../types/IPage";
 import { IEventHandlers, TypeLogType } from "../types/IEventHandler";
 import moment from "moment";
@@ -18,6 +18,8 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
     public impl!: Impl<UseModel>;
     public urlPrefix!: string;
     public debug!: boolean;
+    public workspace!: string;
+    public appId!: string;
     private useModels: UseModel;
     private useModelObjs: any;
     constructor(option: TypeApiOptions) {
@@ -215,6 +217,12 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
     getData<T={}>(key: string): T {
         const allData: any = this.impl.getData() || {};
         return allData[key];
+    }
+    /**
+     * 获取所有页面数据
+     */
+    getAllPages<T={}>(): {[P in keyof T]: IPageInfo} {
+        return getWorkspace(this.workspace);
     }
     /**
      * 显示错误信息

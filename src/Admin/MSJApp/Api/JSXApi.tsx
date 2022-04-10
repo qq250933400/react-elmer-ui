@@ -5,7 +5,7 @@ type TypeApiState = {
     showLoading: boolean;
 };
 
-type TypeLang = "en" | "zh";
+type TypeLang = "en-GB" | "zh-CN";
 
 const apiState: TypeApiState = {
     showLoading: false
@@ -13,6 +13,7 @@ const apiState: TypeApiState = {
 
 export type TypeApiEvent = {
     onShowLoading(visible: boolean): void;
+    onAdminPageLoading(loading: boolean): void;
 };
 
 export type TypeJSXApi = {

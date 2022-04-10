@@ -6,10 +6,6 @@ export const adminWorkspace = createWorkspace("admin")
         path: "/admin/login"
     })
     .createPage({
-        id: "adminMain",
-        path: "/admin/main"
-    })
-    .createPage({
         id: "landing",
         path: "/landing"
     })

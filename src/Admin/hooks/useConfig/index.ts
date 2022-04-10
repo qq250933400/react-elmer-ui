@@ -1,12 +1,13 @@
+import { IPageInfo } from "@MSJApp";
 import { createContext, useContext } from "react";
 import { TypeServiceConfig } from "../../../HOC/withService/ElmerService";
 
 export type TypeAdminConfig = {
+    adminUrlPrefix?: string;
     apiConfig?: TypeServiceConfig;
     i18n?: {};
-    urlPrefix?: string;
-    adminUrlPrefix?: string;
     initConfig: boolean;
+    urlPrefix?: string;
 };
 
 export const ConfigContext = createContext<TypeAdminConfig>({

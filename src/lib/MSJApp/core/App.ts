@@ -38,6 +38,8 @@ export class MSJApp<UseModel={}, AllApi={}> {
         this.workspace = opt.workspace;
         this.impl.init(opt?.implInit);
         this.api.urlPrefix = opt.urlPrefix || "";
+        this.api.appId = this.appId;
+        this.api.workspace = opt.workspace;
         (this.api as any).workspace = opt.workspace;
         
         // -------- save data
@@ -64,6 +66,7 @@ export class MSJApp<UseModel={}, AllApi={}> {
                             this.api.navigateTo(page);
                             matchEntry = true;
                             this.api.log(`RegExp: ${JSON.stringify(entry, null, 4)}`, "Debug");
+                            this.api.emit("onHomeChange", page);
                             return;
                         }
                     } else {
@@ -72,6 +75,7 @@ export class MSJApp<UseModel={}, AllApi={}> {
                             matchEntry = true;
                             this.api.navigateTo(page);
                             this.api.log(`String: ${JSON.stringify(entry, null, 4)}`, "Debug");
+                            this.api.emit("onHomeChange", page);
                             return;
                         }
                     }
@@ -84,6 +88,7 @@ export class MSJApp<UseModel={}, AllApi={}> {
                 if(page) {
                     this.api.log(`MatchDefault: ${JSON.stringify(defaultEntry, null, 4)}`, "Debug");
                     this.api.navigateTo(page);
+                    this.api.emit("onHomeChange", page);
                 } else {
                     console.error(`the default entry get a wrong page id.${defaultEntry.page}`);
                 }
