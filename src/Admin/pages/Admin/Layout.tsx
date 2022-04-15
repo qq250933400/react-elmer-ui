@@ -9,8 +9,9 @@ import utils from "../../../utils";
 import styles from "./style.module.scss";
 import UserProfile from "./UserProfile";
 import NotifyBtn from "./Notify";
-import { msjApi } from "@Admin/MSJApp";
 import LoadableComponent from "../../../components/Loadable";
+import PageContainer from "./PageContainer";
+import { msjApi } from "@Admin/MSJApp";
 import { FormattedMessage } from "react-intl";
 import { utils as utilsObj } from "elmer-common";
 import { renderMenuList } from "./RenderMenus";
@@ -49,40 +50,22 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
     const [ breadCrumbList, setBreadCrumbList ] = useState<IBreadCrumbList>([]);
     const [ menuSelectKey, setMenuSelectKey ] = useState<string[]>([]);
     const [ menuOpenKey, setMenuOpenKey ] = useState<string[]>([]);
+    const [ currentPage, setCurrentPage ] = useState<IPageInfoEx>();
     const onToggle = useCallback(()=>{
         setCollasped(!collasped);
     }, [collasped]);
     const onMenuClick = useCallback((item: any) => {
-        // const openKeys: string[] = [];
-        // const ptRegExp = /^[a-z]{1,}_[\d]{1,}_[\d]{1,}/i;
-        // const replaceRegExp = /_[\d]{1,}$/;
-        // let curKey: string = item.key || "";
         msjApi.callApi("admin", "onLeftMenuChange", item, leftMenu).then((page) => {
             page && msjApi.callApi("admin", "calcBreadCrumb", page, leftMenu).then(async (breadList) => {
                 const selectedKey:any = await msjApi.callApi("admin", "getLeftMenuSelectKey", page, leftMenu);
                 setMenuSelectKey(selectedKey ? [selectedKey] : []);
                 setBreadCrumbList(breadList);
+                setCurrentPage(page)
             });
             !page && setMenuSelectKey([item.key]);
         });
-        // while(ptRegExp.test(curKey)) {
-        //     const newKey = curKey.replace(replaceRegExp, "");
-        //     openKeys.push(newKey);
-        //     curKey = newKey;
-        // }
-        // setMenuOpenKey(openKeys);
     },[leftMenu]);
     const onSubMenuClick = useCallback((item: any) => {
-        // const openKeys: string[] = [];
-        // const ptRegExp = /^[a-z]{1,}_[\d]{1,}_[\d]{1,}/i;
-        // const replaceRegExp = /_[\d]{1,}$/;
-        // let curKey: string = item.key || "";
-        // while(ptRegExp.test(curKey)) {
-        //     const newKey = curKey.replace(replaceRegExp, "");
-        //     openKeys.push(newKey);
-        //     curKey = newKey;
-        // }
-        // setMenuOpenKey([item.key, ...openKeys]);
         const newKeys = [...menuOpenKey];
         const keyIndex = newKeys.indexOf(item.key);
         if(keyIndex >= 0) {
@@ -94,11 +77,13 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
         }
     }, [menuOpenKey]);
     const onBreadCrumbClick = useCallback((item) => {
+        // item => page information
         if(item) {
             msjApi.callApi("admin", "calcBreadCrumb", item, leftMenu).then(async (breadList) => {
                 const selectedKey:any = await msjApi.callApi("admin", "getLeftMenuSelectKey", item, leftMenu);
                 setMenuSelectKey(selectedKey ? [selectedKey] : []);
                 setBreadCrumbList(breadList);
+                setCurrentPage(item);
             });
             msjApi.navigateTo(item);
         } else {
@@ -178,6 +163,7 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
                 setMenuSelectKey(selectedKey ? [selectedKey] : []);
                 setMainPage(pageInfo);
                 setBreadCrumbList(breadList);
+                setCurrentPage(pageInfo);
             });
         });
     }, [leftMenu]);
@@ -222,11 +208,7 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
                                 }
                             </Breadcrumb>
                         </Header>
-                        <div className={styles.admin_layout_content_pt}>
-                            <Content className={styles.admin_layout_content}>
-                                {props.children}
-                            </Content>
-                        </div>
+                        <PageContainer currentPage={currentPage}>{props.children}</PageContainer>
                     </Layout>
                 </Layout>
             )}

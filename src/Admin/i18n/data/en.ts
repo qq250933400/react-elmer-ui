@@ -12,4 +12,7 @@ export default {
     resource: "Resource",
     resource_page_mg: "Pages",
     resource_lang: "Languages",
+    btnAdd: "Add",
+    btnEdit: "Edit",
+    btnSave: "Save"
 };

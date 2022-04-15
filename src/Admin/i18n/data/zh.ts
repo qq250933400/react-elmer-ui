@@ -12,4 +12,7 @@ export default {
     resource: "资源管理",
     resource_page_mg: "页面管理",
     resource_lang: "多语言管理",
+    btnAdd: "新增",
+    btnEdit: "编辑",
+    btnSave: "保存"
 }

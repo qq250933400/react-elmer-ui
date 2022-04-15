@@ -32,6 +32,7 @@ export const AdminPages:TypeDefinePage[] = [
         id: "adminMain",
         path: "/main",
         title: "homePage",
+        fullPage: true,
         component: Main
     }, {
         id: "admin_landing",
@@ -41,10 +42,19 @@ export const AdminPages:TypeDefinePage[] = [
         id: "admin_rights",
         path: "/rights",
         onBeforeEnter: "admin.initRightConfig",
+        title: "accessRight",
         component: Right
     }, {
         id: "admin_lang",
         path: "/language",
+        title: "language",
+        buttons: [
+            {
+                title: "btnAdd",
+                type: "Api",
+                value: "admin.onBtnAdd"
+            }
+        ],
         component: Lang
     }
 ];
