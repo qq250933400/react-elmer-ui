@@ -9,7 +9,9 @@ module.exports = function override(config, env) {
         "@MSJApp": path.resolve(process.cwd(), "./src/lib/MSJApp"),
         "@MSJApp/*": path.resolve(process.cwd(), "./src/lib/MSJApp/*"),
         "@Admin": path.resolve(process.cwd(), "./src/Admin"),
-        "@Admin/*": path.resolve(process.cwd(), "./src/Admin/*")
+        "@Admin/*": path.resolve(process.cwd(), "./src/Admin/*"),
+        "@Component": path.resolve(process.cwd(), "./src/components"),
+        "@Component/*": path.resolve(process.cwd(), "./src/components/*")
     };
     return {
         ...config,

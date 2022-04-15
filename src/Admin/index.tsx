@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import I18nApp from "./i18n";
-import ValidationProvider from "../components/Validation";
 import AdminRouters from "./router";
 import ServiceConfig from "./data/serviceConfig";
 import { ServiceProvider } from "../HOC/withService";
 import { TypeAdminConfig, ConfigContext } from "./hooks";
+import { ValidationProvider } from "../components/Validation";
 import "./data";
 import "./styles/index.module.scss";
 

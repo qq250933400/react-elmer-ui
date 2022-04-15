@@ -50,3 +50,29 @@
         }
     }
 }
+
+.validation {
+    .validated_message {
+        display: flex;
+        color: red;
+        [class*="icon"] {
+            display: inline-block;
+            vertical-align: text-top;
+            flex: 0 0 18px;
+            padding-top: 4px;
+            font-size: 14px;
+            text-align: left;
+        }
+        >span {
+            flex: auto;
+            font-size: 10px;
+            line-height: 20px;
+            padding-top: 2px;
+        }
+    }
+}
+.validateFailed {
+    [class*="validated"] {
+        border-color: red;
+    }   
+}
