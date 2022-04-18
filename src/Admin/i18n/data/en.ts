@@ -14,5 +14,8 @@ export default {
     resource_lang: "Languages",
     btnAdd: "Add",
     btnEdit: "Edit",
-    btnSave: "Save"
+    btnSave: "Save",
+    "en-GB": "English",
+    "zh-CN": "Chinese",
+    "lng_id": "Text ID"
 };

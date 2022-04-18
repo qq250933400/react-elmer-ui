@@ -11,7 +11,7 @@ const getDefaultLocale = () => {
 
 export const I18nContext = createContext({
     locale: "en",
-    getLocale: () => {},
+    getLocale: (): string => { return "en-GB"},
     setLocale: (locale: string) => {},
     setMessages: (msgData:any) => {}
 });

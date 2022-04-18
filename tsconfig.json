@@ -28,7 +28,9 @@
       "@Admin": ["src/Admin"],
       "@Admin/*": ["src/Admin/*"],
       "@Component": ["src/components"],
-      "@Component/*": ["src/components/*"]
+      "@Component/*": ["src/components/*"],
+      "@HOC": ["src/HOC"],
+      "@HOC/*": ["src/HOC/*"]
     }
   },
   "include": [

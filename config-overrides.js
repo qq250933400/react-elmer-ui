@@ -11,7 +11,9 @@ module.exports = function override(config, env) {
         "@Admin": path.resolve(process.cwd(), "./src/Admin"),
         "@Admin/*": path.resolve(process.cwd(), "./src/Admin/*"),
         "@Component": path.resolve(process.cwd(), "./src/components"),
-        "@Component/*": path.resolve(process.cwd(), "./src/components/*")
+        "@Component/*": path.resolve(process.cwd(), "./src/components/*"),
+        "@HOC": path.resolve(process.cwd(), "./src/HOC"),
+        "@HOC/*": path.resolve(process.cwd(), "./src/HOC/*"),
     };
     return {
         ...config,

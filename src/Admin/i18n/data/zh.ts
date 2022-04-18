@@ -14,5 +14,8 @@ export default {
     resource_lang: "多语言管理",
     btnAdd: "新增",
     btnEdit: "编辑",
-    btnSave: "保存"
+    btnSave: "保存",
+    "en-GB": "英文",
+    "zh-CN": "中文",
+    "lng_id": "文本ID"
 }
