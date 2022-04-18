@@ -74,7 +74,7 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
      * @param args - 传递参数
      * @returns 
      */
-    callApiEx(target: string, ...args: any[]): Promise<any> {
+    callApiEx<T={}>(target: string, ...args: any[]): Promise<T> {
         const NM = /^([a-z0-9_]{1,})\.([a-z0-9_]{1,})$/i.exec(target);
         const model = NM ? NM[1] : "";
         const method = NM ? NM[2] : "";

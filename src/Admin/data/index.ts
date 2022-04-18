@@ -7,7 +7,7 @@ import { msjApi } from "../MSJApp";
 msjApi.registeEntryRules([
     {
         test: /\/admin\/main$/,
-        page: "adminMain",
+        page: "admin_lang",
         default: true
     },{
         test: "/",

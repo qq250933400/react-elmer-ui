@@ -5,6 +5,10 @@ type TypeApiState = {
     showLoading: boolean;
 };
 
+type TypePHBClickEvent = {
+    name: string;
+};
+
 type TypeLang = "en-GB" | "zh-CN";
 
 const apiState: TypeApiState = {
@@ -14,6 +18,11 @@ const apiState: TypeApiState = {
 export type TypeApiEvent = {
     onShowLoading(visible: boolean): void;
     onAdminPageLoading(loading: boolean): void;
+    /**
+     * 页面顶部按钮单击事件
+     * @param event - 单击事件参数
+     */
+    onPHBClickEvent(event: TypePHBClickEvent): void;
 };
 
 export type TypeJSXApi = {

@@ -55,6 +55,7 @@ export const AdminPages:TypeDefinePage[] = [
                 value: "admin.onBtnAdd"
             }
         ],
+        onBeforeEnter: "lang.init",
         component: Lang
     }
 ];

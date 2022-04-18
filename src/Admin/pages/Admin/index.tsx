@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route} from "react-router-dom";
 import styles from "./style.module.scss";
 
 import "antd/dist/antd.css";
@@ -8,7 +8,7 @@ import { AdminPages } from "../index";
 
 
 const Admin = () => {
-    
+
     return (
         <div className={styles.admin_layout}>
             <AdminLayout>

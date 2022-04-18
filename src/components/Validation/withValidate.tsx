@@ -1,22 +1,22 @@
-import React, { useCallback, useContext, useState } from "react";
-import { ValidationContext } from "./Context";
-import { Observe } from "elmer-common";
+import React, { useCallback, useContext } from "react";
+import { TypeWithValidateEvent, ValidationContext } from "./Context";
+import { Validator } from "./Validator";
 
-type TypeWithValidateEvent = {
-    onValidateByTag: (opt: any) => void;
-    onValidateById: (opt: any) => void;
+type TypeWithValidateProps<T={}> = Omit<T, "validateApi">;
+type TypeWithValidateOption<V={}> = {
+    validators?: { [P in keyof V]: Validator }
 };
-type TypeWithValidateProps<T={}> = Omit<T, "validateApi"> //; {[P in Exclude<keyof T, "validateApi">]: T[P]};
 
 export interface IValidateApi {
     validateById(id: string, value: any, opt?: any): boolean;
     validateByTag(tag: string, opt?: any): boolean;
+    on<Name extends keyof TypeWithValidateEvent>(eventName: Name, callback: TypeWithValidateEvent[Name]): Function;
 };
 
-export const withValidate = <P extends {}>(opt?: any) => (TargetComponent:React.ComponentType<any>): React.ComponentType<TypeWithValidateProps<P>> => {
+export const withValidate = <P extends {}>(opt?: TypeWithValidateOption) => (TargetComponent:React.ComponentType<any>): React.ComponentType<TypeWithValidateProps<P>> => {
     return (props: TypeWithValidateProps<P>) => {
         const contextObj = useContext(ValidationContext);
-        const [ observeObj ] = useState(() => new Observe<TypeWithValidateEvent>())
+        const observeObj = contextObj.observeObj;
         const validateById = useCallback((id: string, value:any, opt: any) => {
             const validate = contextObj.getValidateById(id);
             if(validate) {
@@ -75,7 +75,8 @@ export const withValidate = <P extends {}>(opt?: any) => (TargetComponent:React.
         }, [contextObj, observeObj]);
         return <TargetComponent {...props} validateApi={{
             validateById,
-            validateByTag
-        }}/>
+            validateByTag,
+            on: (evtName: string, callback: Function) => observeObj.on(evtName as any, callback)
+        } as IValidateApi}/>
     }
 };

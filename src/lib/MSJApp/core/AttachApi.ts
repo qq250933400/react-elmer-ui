@@ -4,8 +4,9 @@ import { IFormDataSchema, IGlobalDataSchema } from "../types/ISchema";
 import { CONST_ENTRY_CONFIG_KEY, IMenuList, TypeCreateMenuResult, TypeEntryRule } from "../types/IAdmin";
 
 type TypeAttachApiExcludeN<T, PN> = { [K in Exclude<keyof T, PN>]: T[K] };
+type TypeUseModel<MN extends keyof TypeModel> = {[P in Exclude<MN,"MAJApp_Admin_202203241748"|"MSJApp_FormData_202203241448">]: TypeModel[MN]};
 
-export type TypeAttachApiFunc<T={}, ApiEvent={}> = { [ P in keyof T]: (api: Api<TypeModel, ApiEvent> & { [K in keyof TypeAttachApiExcludeN<T, P>]: T[K] }) => T[P] };
+export type TypeAttachApiFunc<T={}, ApiEvent={}> = { [ P in keyof T]: (api: Api<TypeUseModel<keyof TypeModel>, ApiEvent> & { [K in keyof TypeAttachApiExcludeN<T, P>]: T[K] }) => T[P] };
 
 
 export type TypeAttachApi = {
@@ -75,17 +76,17 @@ export type TypeAttachApi = {
 };
 
 export const attachApi: TypeAttachApiFunc<TypeAttachApi> = {
-    createMenu: (api) => (name, menuListData) => api.callApi("MAJApp_Admin_202203241748", "createMenu", name, menuListData) as any,
-    getMenu: (api) => (name) => api.callApi("MAJApp_Admin_202203241748","getMenu", name),
-    getConfig: (api) => (name) => api.callApi("MAJApp_Admin_202203241748", "getConfig", name),
-    get: (api) => (key) => api.callApi("MSJApp_FormData_202203241448","get", key),
-    getFormDataByCode: (api) => <T={}>(formCode: string, key?: string, isSrc?: boolean) => api.callApi("MSJApp_FormData_202203241448","getFormData", formCode, key, isSrc),
+    createMenu: (api) => (name, menuListData) => api.callApiEx("MAJApp_Admin_202203241748.createMenu", name, menuListData) as any,
+    getMenu: (api) => (name) => api.callApiEx("MAJApp_Admin_202203241748.getMenu", name),
+    getConfig: (api) => (name) => api.callApiEx("MAJApp_Admin_202203241748.getConfig", name),
+    get: (api) => (key) => api.callApiEx("MSJApp_FormData_202203241448.get", key),
+    getFormDataByCode: (api) => <T={}>(formCode: string, key?: string, isSrc?: boolean) => api.callApiEx<T>("MSJApp_FormData_202203241448.getFormData", formCode, key, isSrc),
     registeFormSchema: (api) => (schema) => {
-        return api.callApi("MSJApp_FormData_202203241448", "registeFormSchame", schema);
+        return api.callApiEx("MSJApp_FormData_202203241448.registeFormSchame", schema);
     },
-    registeConfig: (api) => <T={}>(name: string, config: T) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", name, config),
-    registeEntryRules: (api) => <T={}>(rules: (TypeEntryRule & T)[]) => api.callApi("MAJApp_Admin_202203241748", "registeConfig", CONST_ENTRY_CONFIG_KEY, rules),
-    registGlobalSchema: (api) => <T={},FormatCallbacks={}>(schema: IGlobalDataSchema<T,FormatCallbacks>) => api.callApi("MSJApp_FormData_202203241448","registGlobalSchema", schema),
-    save: (api) => (key: string, data: any) => api.callApi("MSJApp_FormData_202203241448", "save", key, data),
-    saveFormDataByCode: (api) => (key: string, data: any, formCode: string) => api.callApi("MSJApp_FormData_202203241448", "saveFormData", key, data, formCode)
+    registeConfig: (api) => <T={}>(name: string, config: T) => api.callApiEx("MAJApp_Admin_202203241748.registeConfig", name, config),
+    registeEntryRules: (api) => <T={}>(rules: (TypeEntryRule & T)[]) => api.callApiEx("MAJApp_Admin_202203241748.registeConfig", CONST_ENTRY_CONFIG_KEY, rules),
+    registGlobalSchema: (api) => <T={},FormatCallbacks={}>(schema: IGlobalDataSchema<T,FormatCallbacks>) => api.callApiEx("MSJApp_FormData_202203241448.registGlobalSchema", schema),
+    save: (api) => (key: string, data: any) => api.callApiEx("MSJApp_FormData_202203241448.save", key, data),
+    saveFormDataByCode: (api) => (key: string, data: any, formCode: string) => api.callApiEx("MSJApp_FormData_202203241448.saveFormData", key, data, formCode)
 };

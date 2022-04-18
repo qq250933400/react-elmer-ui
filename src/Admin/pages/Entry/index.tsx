@@ -46,7 +46,7 @@ const Entry = (props: TypeEntryProps) => {
                     setImplUpdate(true);console.log(state);
                     setAppState(state);
                 },
-                navigateTo: (pageInfo: IPageInfo & TypeAdminPageExtAttr) => {
+                navigateTo: (pageInfo: IPageInfo & TypeAdminPageExtAttr, state?: any) => {
                     return queueCallFunc([
                         {
                             id: "onBeforeAction",
@@ -81,7 +81,10 @@ const Entry = (props: TypeEntryProps) => {
                             id: "naviageTo",
                             fn: (opt): any => {
                                 !opt.lastResult.gotoLanding && navigateTo((pageInfo as any).navigateTo || pageInfo.path, {
-                                    state: opt.lastResult
+                                    state: {
+                                        ...opt.lastResult,
+                                        ...state
+                                    }
                                 });
                             }
                         }

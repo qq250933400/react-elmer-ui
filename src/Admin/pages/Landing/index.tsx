@@ -13,11 +13,16 @@ const Landing = () => {
         if(typeof navTo.onBeforeEnter === "string" && navTo.onBeforeEnter.length > 0) {
             navTo.isAdminPage && msjApi.emit("onAdminPageLoading", true);
             navTo.isAdminPage && msjApi.callApi("admin", "setAdminPageLoading", true);
-            msjApi.callApiEx(navTo.onBeforeEnter).then(() => {
+            msjApi.callApiEx(navTo.onBeforeEnter).then((initData) => {
+                const navData = {
+                    ...data,
+                    ...initData
+                };
+                delete navData.navTo;
                 msjApi.navigateTo({
                     ...navTo,
                     redirect: true
-                });
+                }, navData);
                 navTo.isAdminPage && msjApi.emit("onAdminPageLoading", false);
                 navTo.isAdminPage && msjApi.callApi("admin", "setAdminPageLoading", false);
             });

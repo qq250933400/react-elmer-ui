@@ -1,5 +1,6 @@
+import { Observe } from "elmer-common";
 import React, { useState } from "react";
-import { ValidationContext } from "./Context";
+import { TypeWithValidateEvent, ValidationContext } from "./Context";
 import { Validator } from "./Validator";
 import Validators from "./validators";
 
@@ -9,6 +10,7 @@ const ValidationProvider = (props: any) => {
         validators: {
             ...Validators
         },
+        observeObj: new Observe<TypeWithValidateEvent>(),
         registe: (id: string, validateObj:any) => {
             if(!validates[id]) {
                 validates[id] = validateObj

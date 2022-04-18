@@ -110,6 +110,7 @@ export default class Admin extends BaseModel {
     setAdminPageLoading(loadingStatus: boolean): void {
         this.isAdminPageLoading = loadingStatus;
     }
+
     private findMenuByPage(page: IPageInfoEx, menuList: IMenuListEx, breadCrumbList: IBreadCrumbList): boolean {
         const allPageData:any = this.api.getAllPages();
         for(const menuItem of menuList) {

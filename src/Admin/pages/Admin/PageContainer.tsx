@@ -6,6 +6,7 @@ import { PageHeader } from "antd";
 import { FormattedMessage } from "react-intl";
 import { ReadOutlined, LeftOutlined } from "@ant-design/icons";
 import { Button } from "antd";
+import { msjApi } from "@Admin/MSJApp";
 
 type TypePageContainerProps = {
     children: any;
@@ -27,7 +28,7 @@ const PageContainer = (props: TypePageContainerProps) => {
             });
         }
         return buttons;
-    }, [page ]);
+    }, [ page ]);
     useEffect(()=>{
         setPage(props.currentPage);
     },[props.currentPage]);

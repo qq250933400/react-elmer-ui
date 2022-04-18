@@ -22,7 +22,7 @@ const LandingPage = LoadableComponent({
     loader: () => import("../Landing")
 });
 
-const { Sider, Header, Content } = Layout;
+const { Sider, Header } = Layout;
 
 type TypeAdminLayoutProps = {
     children?: any;
