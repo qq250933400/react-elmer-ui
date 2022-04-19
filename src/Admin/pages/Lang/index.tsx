@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { withTable } from "@HOC/withTable";
 import { I18nContext } from "@Admin/i18n";
 import { FormattedMessage } from "react-intl";
+import SearchBox from "./Search";
 
 const Lang = withTable({
     column: [
@@ -15,12 +16,13 @@ const Lang = withTable({
     pagination: {
         position: ["none","bottomLeft"],
         showSizeChanger: true,
-        pageSize: 15
+        pageSize: 20
     }
 })((props) => {
     const data = useInitData();
     const i18n = useContext(I18nContext);
     const [ locale ] = useState(i18n.getLocale());
+    const [ searchData, setSearchData ] = useState({});
     const sourceData = useMemo(() => {
         return data.data || {};
     }, [data]);
@@ -56,14 +58,12 @@ const Lang = withTable({
                 listData[index][lng] = lngData[keyData.key];
             });
         });
+        console.log(searchData);
         props.tableApi.setData(listData);
-    }, [listData,lngList, data, props.tableApi]);
-   
-    console.log(lngList, "----");
+    }, [listData,lngList,searchData, data, props.tableApi]);
+
     return <>
-        <button onClick={() => props.tableApi.showLoading()}>显示loading</button>
-        <button onClick={() => props.tableApi.hideLoading()}>隐藏loading</button>
-        <span>Hello</span>
+        <SearchBox onSearch={(data:any) => setSearchData(data)}/>
         {props.children}
     </>;
 });

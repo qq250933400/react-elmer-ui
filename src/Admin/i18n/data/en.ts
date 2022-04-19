@@ -15,7 +15,10 @@ export default {
     btnAdd: "Add",
     btnEdit: "Edit",
     btnSave: "Save",
+    btnSearch: "Search",
+    btnClear: "Clear",
     "en-GB": "English",
     "zh-CN": "Chinese",
-    "lng_id": "Text ID"
+    "lng_id": "Text ID",
+    "lng_text": "Copy Text"
 };

@@ -15,7 +15,10 @@ export default {
     btnAdd: "新增",
     btnEdit: "编辑",
     btnSave: "保存",
+    btnSearch: "搜索",
+    btnClear: "清空",
     "en-GB": "英文",
     "zh-CN": "中文",
-    "lng_id": "文本ID"
+    "lng_id": "文本ID",
+    "lng_text": "文本内容"
 }
