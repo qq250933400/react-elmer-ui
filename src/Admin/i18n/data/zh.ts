@@ -17,8 +17,13 @@ export default {
     btnSave: "保存",
     btnSearch: "搜索",
     btnClear: "清空",
+    btnDel: "删除",
+    lngPlaceHolder: "请输入文本内容",
     "en-GB": "英文",
     "zh-CN": "中文",
     "lng_id": "文本ID",
-    "lng_text": "文本内容"
+    "lng_text": "文本内容",
+    "lng_operate": "操作",
+    "lng_btn_lang": "语言管理",
+    "lng_btn_search": "数据查询"
 }

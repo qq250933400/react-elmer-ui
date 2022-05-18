@@ -2,12 +2,23 @@ import { msjApi } from "@Admin/MSJApp";
 import React, { useMemo, useState, createContext, useCallback, useEffect } from "react";
 import { IntlProvider } from "react-intl";
 import messages from "./data";
+import { ConfigProvider } from "antd";
+import en_GB from "antd/es/locale-provider/en_GB";
+import zh_CN from "antd/es/locale-provider/zh_CN";
+import zh_HK from "antd/es/locale-provider/zh_HK";
+import zh_TW from "antd/es/locale-provider/zh_TW";
 
 const getDefaultLocale = () => {
     let locale = localStorage.getItem("locale");
-    locale = navigator.language || "zh-CN";
+    locale = !locale || locale.length <=0 ? (navigator.language || "zh-CN") : locale;
     return locale;
-}
+};
+const antdMessages = {
+    en_GB,
+    zh_CN,
+    zh_HK,
+    zh_TW
+};
 
 export const I18nContext = createContext({
     locale: "en",
@@ -36,6 +47,10 @@ const I18nApp = (props: any) => {
     const getLocale = useCallback(() => {
         return i18nState.locale;
     }, [ i18nState ]);
+    const antdLocale = useMemo(()=>{
+        const vLocale = locale.replace(/-/g,"_");
+        return (antdMessages as any)[vLocale] || zh_CN;
+    },[locale]);
     useEffect(()=>{
         msjApi.callApi("lang", "updateNotAllowDeleteKeys", notAllowDeleteKeys);
         msjApi.callApi("lang","updateData", i18nMsg);
@@ -56,7 +71,9 @@ const I18nApp = (props: any) => {
             },
             getLocale
         }}>
-            {props.children}
+            <ConfigProvider locale={antdLocale}>
+                {props.children}
+            </ConfigProvider>
         </I18nContext.Provider>
     </IntlProvider>);
 };

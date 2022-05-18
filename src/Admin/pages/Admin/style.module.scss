@@ -27,19 +27,29 @@
 .admin_layout_header {
     background: #fff !important;
     position: relative;
+    [class="ant-page-header-heading-extra"] {
+        padding-top: 4px;
+    }
 }
 .admin_menu_taggle {
-    width: 26px !important;
-    height: 26px !important;
+    width: 32px !important;
+    height: 32px !important;
     padding: 0 !important;
     position: absolute !important;
     left: 5px;
-    top: 5px;
-    border: none !important;
-    box-shadow:  none !important;
-    &:active {
-        box-shadow:  none !important;
-    }
+    top: 50%;
+    margin-top: -16px;
+    // border: none !important;
+    // box-shadow:  none !important;
+    // &:active {
+    //     box-shadow:  none !important;
+    // }
+}
+.admin_layout_breadcrumb {
+    position: absolute;
+    left: 44px;
+    top: 50%;
+    margin-top: -11px !important;
 }
 .admin_layout_content_pt {
     position: relative;
@@ -127,8 +137,4 @@
         }
     }
 }
-.admin_layout_breadcrumb {
-    position: absolute;
-    bottom: 4px !important;
-    left: 12px;
-}
+

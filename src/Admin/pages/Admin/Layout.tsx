@@ -187,9 +187,9 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
                             <UserProfile theme={theme} menuList={topRightMenu} onMenuChange={onMenuClick}/>
                             <NotifyBtn />
                             <Breadcrumb className={styles.admin_layout_breadcrumb}>
-                                <Breadcrumb.Item href="#" onClick={() => onBreadCrumbClick(mainPage)}>
+                                {/* <Breadcrumb.Item href="#" onClick={() => onBreadCrumbClick(mainPage)}>
                                     <HomeOutlined />
-                                </Breadcrumb.Item>
+                                </Breadcrumb.Item> */}
                                 {
                                     breadCrumbList.length > 0 && breadCrumbList.map((item, index) => {
                                         return (

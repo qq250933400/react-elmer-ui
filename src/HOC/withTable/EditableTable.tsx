@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Table, Input, InputNumber, Form } from 'antd';
 import styles from "./style.module.scss";
 import { IDataItem, TypeEditableInputType } from './IWithTable';
 
@@ -11,12 +11,16 @@ interface IEditableCellProps<T={}> extends React.HTMLAttributes<HTMLElement> {
     record: T & IDataItem;
     index: number;
     children: React.ReactNode;
+    onEditChange(key: string, value?: any): void;
 }
 interface IEditableProps<T={}> {
     dataSource: (T & IDataItem)[];
     loading?: boolean;
     column: any[];
     pagination?: any;
+    editKey?: string|number;
+    uid?: string;
+    onChange(key: string, value?: any): void;
 };
 
 const EditableCell: React.FC<IEditableCellProps> = ({
@@ -27,25 +31,20 @@ const EditableCell: React.FC<IEditableCellProps> = ({
     record,
     index,
     children,
+    onEditChange,
     ...restProps
 }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-
+    const defaultValue = editing ? (((record || {}) as any)[(dataIndex || "")]) : "";
+    const onInputChange = useCallback((value: string) => {
+        typeof onEditChange === "function" && onEditChange(dataIndex, value);
+    },[dataIndex, onEditChange]);
     return (
         <td {...restProps}>
             {editing ? (
-                <Form.Item
-                    name={dataIndex}
-                    style={{ margin: 0 }}
-                    rules={[
-                        {
-                            required: true,
-                            message: `Please Input ${title}!`,
-                        },
-                    ]}
-                >
-                    {inputNode}
-                </Form.Item>
+                 <>
+                    { inputType === 'number' && <InputNumber defaultValue={defaultValue} onChange={(evt) => onInputChange(evt.target.value)}/> }
+                    { ['number'].indexOf(inputType) < 0 && <Input defaultValue={defaultValue} onChange={(evt) => onInputChange(evt.target.value)}/> }
+                 </>
             ) : (
                 children
             )}
@@ -54,87 +53,17 @@ const EditableCell: React.FC<IEditableCellProps> = ({
 };
 
 const EditableTable = <T extends { key: string|number}>(props: IEditableProps<T>) => {
-    const [form] = Form.useForm();
-    const [data, setData] = useState(props.dataSource || []);
-    const [editingKey, setEditingKey] = useState<string|number>('');
+    const [data, setData] = useState<any[]>(props.dataSource || []);
+    const [editingKey, setEditingKey] = useState<string|number>(props.editKey || "");
 
-    const isEditing = (record: T) => record.key === editingKey;
-
-    const edit = (record: Partial<T> & { key: React.Key }) => {
-        form.setFieldsValue({ name: '', age: '', address: '', ...record });
-        setEditingKey(record.key);
-    };
+    const isEditing = useCallback((record: any) => {
+        const key = props.uid || "key";
+        return record[key] === editingKey;
+    }, [editingKey, props.uid]);
 
     const cancel = () => {
         setEditingKey('');
     };
-
-    const save = async (key: React.Key) => {
-        try {
-            const row = (await form.validateFields()) as any;
-
-            const newData = [...data];
-            const index = newData.findIndex(item => key === item.key);
-            if (index > -1) {
-                const item = newData[index];
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
-                });
-                setData(newData);
-                setEditingKey('');
-            } else {
-                newData.push(row);
-                setData(newData);
-                setEditingKey('');
-            }
-        } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
-        }
-    };
-    const [ columns ] = useState(props.column || []);
-    // const columns = [
-    //     {
-    //         title: 'name',
-    //         dataIndex: 'name',
-    //         width: '25%',
-    //         editable: true,
-    //     },
-    //     {
-    //         title: 'age',
-    //         dataIndex: 'age',
-    //         width: '15%',
-    //         editable: true,
-    //     },
-    //     {
-    //         title: 'address',
-    //         dataIndex: 'address',
-    //         width: '40%',
-    //         editable: true,
-    //     },
-    //     {
-    //         title: 'operation',
-    //         dataIndex: 'operation',
-    //         render: (_: any, record: T) => {
-    //             const editable = isEditing(record);
-    //             return editable ? (
-    //                 <span>
-    //                     <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-    //                         Save
-    //                     </Typography.Link>
-    //                     <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-    //                         <a>Cancel</a>
-    //                     </Popconfirm>
-    //                 </span>
-    //             ) : (
-    //                 <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-    //                     Edit
-    //                 </Typography.Link>
-    //             );
-    //         },
-    //     },
-    // ];
-
     const mergedColumns = useMemo(()=>{
         return (props.column || []).map(col => {
             if (!col.editable) {
@@ -147,33 +76,37 @@ const EditableTable = <T extends { key: string|number}>(props: IEditableProps<T>
                     dataIndex: col.dataIndex,
                     title: col.title,
                     editing: isEditing(record),
-                }),
+                    onEditChange: props.onChange
+                })
             };
         });
-    }, [ props.column, isEditing ]);
+    }, [ props.column, isEditing, props.onChange ]);
+    
     useEffect(() => {
         setData(props.dataSource || []);
     }, [props.dataSource]);
+    useEffect(()=>{
+        setEditingKey(props.editKey || "");
+    },[props.editKey]);
+
     return (
-        <Form form={form} component={false}>
-            <Table
-                components={{
-                    body: {
-                        cell: EditableCell,
-                    },
-                }}
-                bordered
-                dataSource={data}
-                columns={mergedColumns}
-                rowClassName={styles["editable-row"]}
-                loading={props.loading}
-                pagination={{
-                    onChange: cancel,
-                    ...(props.pagination || {})
-                }}
-                sticky
-            />
-        </Form>
+        <Table
+            components={{
+                body: {
+                    cell: EditableCell,
+                },
+            }}
+            bordered
+            dataSource={data}
+            columns={mergedColumns}
+            rowClassName={styles["editable-row"]}
+            loading={props.loading}
+            pagination={{
+                onChange: cancel,
+                ...(props.pagination || {})
+            }}
+            sticky
+        />
     );
 };
 

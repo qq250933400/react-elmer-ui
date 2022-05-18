@@ -1,12 +1,13 @@
 import { IPageInfo } from "@MSJApp/types/IPage";
 
-interface IPageHeadButton {
+export interface IPageHeadButton {
     title: string;
     type: "Api" | "Page";
     value?: any;
     id?: string;
     name?: string;
     className?: string;
+    attrs?: any;
 }
 
 export interface IPageInfoEx extends IPageInfo {

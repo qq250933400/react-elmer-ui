@@ -50,9 +50,19 @@ export const AdminPages:TypeDefinePage[] = [
         title: "language",
         buttons: [
             {
-                title: "btnAdd",
+                title: "lng_btn_search",
                 type: "Api",
-                value: "admin.onBtnAdd"
+                value: "lang.onBtnSearchClick",
+                name: "search",
+                attrs: {
+                    type: "primary"
+                }
+            },
+            {
+                title: "lng_btn_lang",
+                type: "Api",
+                value: "lang.onLangClick",
+                name: "lang"
             }
         ],
         onBeforeEnter: "lang.init",

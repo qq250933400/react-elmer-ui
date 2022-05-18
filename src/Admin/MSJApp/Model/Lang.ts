@@ -1,4 +1,5 @@
 import { queueCallFunc } from "elmer-common";
+import { IPageHeadButton } from "../Types/IPageInfoEx";
 import Base from "./Base";
 
 export default class Lang extends Base {
@@ -32,6 +33,41 @@ export default class Lang extends Base {
             data: newData,
             srcData: this.i18nData,
             lngList
+        };
+    }
+    onBtnSearchClick(buttons: IPageHeadButton[]) {
+        return {
+            buttons: [
+                {
+                    ...buttons[0],
+                    attrs: {
+                        type: "primary"
+                    }
+                }, {
+                    ...buttons[1],
+                    attrs: {
+                        type: "normal"
+                    }
+                }
+            ]
+        };
+    }
+    onLangClick(buttons: IPageHeadButton[]) {
+        return {
+            buttons: [
+                {
+                    ...buttons[0],
+                    attrs: {
+                        type: "normal"
+                    }
+                },
+                {
+                    ...buttons[1],
+                    attrs: {
+                        type: "primary"
+                    }
+                }
+            ]
         };
     }
 }

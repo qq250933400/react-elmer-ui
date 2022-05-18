@@ -34,9 +34,9 @@ const AdvancedSearchFormItem = (props: TypeAdvancedSearchFormItemProps) => {
                 }
             </Select>);
         } else if(props.type === "Number") {
-            return <InputNumber />
+            return <InputNumber autoComplete="off"/>
         } else {
-            return <Input />
+            return <Input autoComplete="off"/>
         }
     }, [props.type, props.data]);
     return (

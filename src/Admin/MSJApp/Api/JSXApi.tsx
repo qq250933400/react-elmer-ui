@@ -1,12 +1,15 @@
 import { TypeAttachApiFunc } from "@MSJApp";
 import { TypeServiceSendOptions } from "src/HOC/withService/ElmerService";
+import { IPageHeadButton } from "../Types/IPageInfoEx";
 
 type TypeApiState = {
     showLoading: boolean;
 };
 
 type TypePHBClickEvent = {
-    name: string;
+    name?: string;
+    id?: string;
+    buttons: IPageHeadButton[];
 };
 
 type TypeLang = "en-GB" | "zh-CN";
@@ -22,7 +25,7 @@ export type TypeApiEvent = {
      * 页面顶部按钮单击事件
      * @param event - 单击事件参数
      */
-    onPHBClickEvent(event: TypePHBClickEvent): void;
+    onPHBClick(event: TypePHBClickEvent): void;
 };
 
 export type TypeJSXApi = {

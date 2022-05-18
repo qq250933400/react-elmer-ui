@@ -17,21 +17,47 @@ type TypePageContainerProps = {
 const PageContainer = (props: TypePageContainerProps) => {
     const [ page, setPage ] = useState(props.currentPage);
     const [ showBack ] = useState(false);
+    const [ buttons, setButtons ] = useState<any[]>([]);
     const BackIcon = useMemo(()=>{
         return showBack ? <LeftOutlined /> : <ReadOutlined />
     },[showBack]);
     const HeaderButtons = useMemo(()=>{
-        const buttons:any[] = [];
-        if(page && page.buttons && page?.buttons?.length > 0) {
-            page.buttons.forEach((btn, index) => {
-                buttons.push(<Button key={`headBtn_${index}`} id={btn.id} name={btn.name} className={btn.className}><FormattedMessage id={btn.title}/></Button>);
+        const buttonsResult:any[] = [];
+        if(buttons && buttons.length > 0) {
+            buttons.forEach((btn, index) => {
+                const attrs = btn.attrs || {};
+                buttonsResult.push((
+                    <Button
+                        {...attrs}
+                        key={`headBtn_${index}`}
+                        id={btn.id}
+                        name={btn.name}
+                        className={btn.className}
+                        onClick={()=>{
+                            msjApi.callApi("admin","onPageHeaderButtonClick", {
+                                evtBtn: btn,
+                                path: page?.path,
+                                buttons: page?.buttons
+                            });
+                        }}
+                    >
+                        <FormattedMessage id={btn.title}/>
+                    </Button>
+                ));
             });
         }
-        return buttons;
-    }, [ page ]);
+        return buttonsResult;
+    }, [ page, buttons ]);
     useEffect(()=>{
+        setButtons((props.currentPage ? props.currentPage.buttons || [] : []) as any[]);
         setPage(props.currentPage);
     },[props.currentPage]);
+    useEffect(()=>{
+        const destoryOnClickEvent = msjApi.on("onPHBClick", (evt)=>{
+            setButtons(evt.buttons || []);
+        });
+        return () => destoryOnClickEvent()
+    },[]);
     return (
         <div className={styles.admin_layout_content_pt}>
             {

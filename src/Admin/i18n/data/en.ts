@@ -17,8 +17,13 @@ export default {
     btnSave: "Save",
     btnSearch: "Search",
     btnClear: "Clear",
+    btnDel: "Delete",
+    lngPlaceHolder: "Please input text.",
     "en-GB": "English",
     "zh-CN": "Chinese",
     "lng_id": "Text ID",
-    "lng_text": "Copy Text"
+    "lng_text": "Copy Text",
+    "lng_operate": "Operate",
+    "lng_btn_lang": "Languages",
+    "lng_btn_search": "Search"
 };

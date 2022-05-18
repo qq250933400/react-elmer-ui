@@ -63,7 +63,6 @@ export default class Admin extends BaseModel {
     }
     switchLang(): void {
         const locale = this.api.getLocale();
-        console.log("change locale: ", locale);
         if(locale === "en-GB") {
             this.api.setLocale("zh-CN");
         } else {
@@ -110,7 +109,21 @@ export default class Admin extends BaseModel {
     setAdminPageLoading(loadingStatus: boolean): void {
         this.isAdminPageLoading = loadingStatus;
     }
-
+    onPageHeaderButtonClick(opt: any): void {
+        const { evtBtn, buttons} = opt;
+        if(evtBtn.type === "Api") {
+            this.api.callApiEx(evtBtn.value, buttons).then((data) => {
+                this.api.emit("onPHBClick", {
+                    name: evtBtn.name,
+                    id: evtBtn.id,
+                    ...(data||{})
+                });
+            });
+        } else {
+            // -- redirect to new page
+            this.api.navigateTo(evtBtn.page);
+        }
+    }
     private findMenuByPage(page: IPageInfoEx, menuList: IMenuListEx, breadCrumbList: IBreadCrumbList): boolean {
         const allPageData:any = this.api.getAllPages();
         for(const menuItem of menuList) {
