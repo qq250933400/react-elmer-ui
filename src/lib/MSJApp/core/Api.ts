@@ -1,5 +1,6 @@
 import { Observe } from "elmer-common/lib/BaseModule/Observe";
 import { utils } from "elmer-common/lib/utils";
+import { queueCallFunc } from "elmer-common/lib/BaseModule/QueueCallFun";
 import { loaderFlag, TypeLoaderResult } from "./MLoader";
 import { Model, ModelFlag } from "./Model";
 import { getAppState } from "./ApiExport";
@@ -20,8 +21,11 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
     public debug!: boolean;
     public workspace!: string;
     public appId!: string;
+
     private useModels: UseModel;
     private useModelObjs: any;
+    private currentPage?: IPageInfo;
+
     constructor(option: TypeApiOptions) {
         super();
         this.useModels = option.useModels || {};
@@ -234,7 +238,43 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
         return errMsg;
     }
     navigateTo<T={}>(pageInfo: IPageInfo & T, ...args: any[]): Promise<any> {
-        return this.impl.nativateTo(pageInfo, ...args);
+        if(this.currentPage && !utils.isEmpty(this.currentPage.onBeforeClose)) {
+            return queueCallFunc([
+                {
+                    id: "onBeforePrevClose",
+                    fn: () => this.callApiEx(this.currentPage?.onBeforeClose as string)
+                },
+                {
+                    id: "onBeforeEnter",
+                    params: {},
+                    fn: ():any => {
+                        if(!this.impl.ignoreBeforeEnter && !utils.isEmpty(pageInfo.onBeforeEnter)) {
+                            return this.callApiEx(pageInfo.onBeforeEnter as string, ...args);
+                        }
+                    }
+                }, {
+                    id: "navigateTo",
+                    params: {},
+                    fn: () => this.impl.nativateTo(pageInfo, ...args)
+                }
+            ]);
+        } else {
+            return queueCallFunc([
+                {
+                    id: "onBeforeEnter",
+                    params: {},
+                    fn: ():any => {
+                        if(!this.impl.ignoreBeforeEnter && !utils.isEmpty(pageInfo.onBeforeEnter)) {
+                            return this.callApiEx(pageInfo.onBeforeEnter as string, ...args);
+                        }
+                    }
+                }, {
+                    id: "navigateTo",
+                    params: {},
+                    fn: () => this.impl.nativateTo(pageInfo, ...args)
+                }
+            ]);
+        }
     }
     log(msg: any, type: TypeLogType): void {
         const logType = type || "Info";

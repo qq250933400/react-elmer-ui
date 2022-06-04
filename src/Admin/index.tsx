@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import I18nApp from "./i18n";
+import I18nProvider from "./i18n";
 import AdminRouters from "./router";
 import ServiceConfig from "./data/serviceConfig";
 import { ServiceProvider } from "../HOC/withService";
@@ -22,9 +22,9 @@ const App = (props: TypeAppProps<TypeAdminConfig>) => {
         <ConfigContext.Provider value={config}>
             <ServiceProvider data={ServiceConfig} env={ENV}>
                 <ValidationProvider>
-                    <I18nApp>
+                    <I18nProvider>
                         <AdminRouters />
-                    </I18nApp>
+                    </I18nProvider>
                 </ValidationProvider>
             </ServiceProvider>
         </ConfigContext.Provider>

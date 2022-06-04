@@ -39,11 +39,8 @@
     left: 5px;
     top: 50%;
     margin-top: -16px;
-    // border: none !important;
-    // box-shadow:  none !important;
-    // &:active {
-    //     box-shadow:  none !important;
-    // }
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 .admin_layout_breadcrumb {
     position: absolute;

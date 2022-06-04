@@ -10,7 +10,7 @@ import styles from "./style.module.scss";
 import CardLoading from "../../../components/CarLoading";
 import withService from "../../../HOC/withService";
 import { ElmerService } from "../../../HOC/withService/ElmerService";
-import { I18nContext } from "../../i18n";
+import { useI18n } from "../../../HOC/withI18n";
 import { useConfig } from "../../hooks";
 import { adminWorkspace } from "../../data/page";
 
@@ -29,7 +29,7 @@ const Entry = (props: TypeEntryProps) => {
     const navigateTo = useNavigate();
     const location = useLocation();
     const [ initPathName ] = useState(location.pathname);
-    const i18n = useContext(I18nContext);
+    const i18n = useI18n();
     const overrideConfig = useConfig();
     const [ routePrefix ] = useState(overrideConfig.urlPrefix || "/");
     const [ contentPagePath ] = useState([overrideConfig.urlPrefix, overrideConfig.adminUrlPrefix, "*"].join("/").replace(/[/]{2,}/g,"/"));

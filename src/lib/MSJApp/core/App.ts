@@ -33,7 +33,7 @@ export class MSJApp<UseModel={}, AllApi={}> {
     run<InitIMPL={}>(opt: IMSJAppRunOpt<InitIMPL>): void {
         const workspaceData = getWorkspace(opt.workspace);
         if(!workspaceData) {
-            throw new Error(`运行参数workspace未定义。(${opt.workspace})`);
+            console.error(`运行参数workspace未定义。(${opt.workspace})`);
         }
         this.workspace = opt.workspace;
         this.impl.init(opt?.implInit);

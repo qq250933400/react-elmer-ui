@@ -2,11 +2,11 @@ import { utils } from "elmer-common";
 import { IPageInfo } from "../types/IPage";
 
 type TypeCreatePageFromInfo<T> =  {[P in Exclude<keyof T, "path">]?: T[P] } & { id: string; };
-type TypeCreatePage = <T={}>(pageInfo: IPageInfo & T) => TypeCreateWorkspaceResult;
-type TypeCreatePageFrom = <T={}>(pageId: string, pageInfo: TypeCreatePageFromInfo<IPageInfo> & T) => TypeCreateWorkspaceResult;
-type TypeCreateWorkspaceResult = {
-    createPage: TypeCreatePage;
-    createPageFrom: TypeCreatePageFrom;
+type TypeCreatePage<T={}> = (pageInfo: IPageInfo & T) => TypeCreateWorkspaceResult<T>;
+type TypeCreatePageFrom<T={}> = (pageId: string, pageInfo: TypeCreatePageFromInfo<IPageInfo> & T) => TypeCreateWorkspaceResult<T>;
+type TypeCreateWorkspaceResult<PageExtAttr> = {
+    createPage: TypeCreatePage<PageExtAttr>;
+    createPageFrom: TypeCreatePageFrom<PageExtAttr>;
 };
 
 const pageState:any = {};
@@ -42,7 +42,7 @@ export const getPageById = <T={}>(pageId: string): (IPageInfo & T) | null => {
  * @param name - workspace name
  * @returns 
  */
-export const createWorkspace = (name: string): TypeCreateWorkspaceResult => {
+export const createWorkspace = <PageExtAttr={}>(name: string): TypeCreateWorkspaceResult<PageExtAttr> => {
 
     if(pageState[name]) {
         throw new Error(`创建Workspace失败名称已存在。(${name})`);

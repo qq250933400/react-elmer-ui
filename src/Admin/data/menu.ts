@@ -32,7 +32,7 @@ msjApi.createMenu("adminLeftMenu", [
         icon: HddOutlined,
         subMenu: [
             {
-                value: "adminPages",
+                value: "admin_edit_page",
                 title: "resource_page_mg",
                 icon: FundViewOutlined
             }, {

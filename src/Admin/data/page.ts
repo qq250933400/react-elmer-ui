@@ -1,7 +1,11 @@
 import { IPageInfoEx } from "@Admin/MSJApp/Types/IPageInfoEx";
 import { createWorkspace } from "@MSJApp";
-
-export const adminWorkspace = createWorkspace("admin")
+type TypePageExtAttr = {
+    navigateTo?: string;
+    component?: any;
+    isAdminPage?: boolean;
+};
+export const adminWorkspace = createWorkspace<TypePageExtAttr>("admin")
     .createPage({
         id: "login",
         path: "/admin/login"

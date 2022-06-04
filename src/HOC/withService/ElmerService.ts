@@ -1,6 +1,18 @@
 import axios, { AxiosBasicCredentials } from "axios";
 import { utils, Service } from "elmer-common";
 import { getServiceObj } from "elmer-common/lib/decorators/Autowired";
+type TypeENV = {
+    host: string;
+};
+type TypeRuningEnv = {
+    DEV: TypeENV;
+    SIT: TypeENV;
+    UAT: TypeENV;
+    PROD: TypeENV;
+    PREPROD: TypeENV;
+    MOCK: TypeENV;
+    LOCAL: TypeENV;
+}
 
 export type TypeServiceMethod = "GET" | "POST" | "DELETE" | "PUT" | "OPTIONS";
 
@@ -27,14 +39,14 @@ export type TypeServiceEndPoint<T={}> = {
 export type TypeServiceNamespace<T={}> = {
     host?: any;
     isDummy?: boolean;
-    endPoints: {[P in keyof T]: TypeServiceEndPoint<any>};
+    endPoints: {[P in keyof T]: TypeServiceEndPoint<T[P]>};
 };
 
-export type TypeServiceConfig<T={}> = {
-    env?: string;
+export type TypeServiceConfig<T={}, ENV = keyof TypeRuningEnv> = {
+    env?: ENV;
     isDummy?: boolean;
-    host: any;
-    config: {[P in keyof T]: TypeServiceNamespace<any>};
+    host: { [H in keyof TypeRuningEnv]?: string };
+    config: {[P in keyof T]: TypeServiceNamespace<T[P]>};
     timeout?: number;
 };
 
@@ -47,10 +59,6 @@ export type TypeServiceSendOptions = {
     withCredentials?: boolean;
     throwException?: boolean;
 };
-
-// const [serviceState, withServiceContext,] = createContext("ElmerServiceContext", {
-//     config: {}
-// });
 
 @Service
 export class ElmerService {
@@ -90,7 +98,7 @@ export class ElmerService {
                 const endPoint = JSON.parse(JSON.stringify(endPointConfig));
                 const isDummy = this.config.isDummy || namespaceData.isDummy || endPoint.isDummy;
                 const env:any = this.config.env || this.env || "PROD";
-                const rootHost = (this.config.host || {})[env];
+                const rootHost = (this.config.host as any || {})[env];
                 const namespaceHost = (namespaceData.host || {})[env];
                 const domainPath = namespaceHost || rootHost;
                 let url = endPoint.url;

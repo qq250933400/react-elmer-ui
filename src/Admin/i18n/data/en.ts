@@ -25,5 +25,6 @@ export default {
     "lng_text": "Copy Text",
     "lng_operate": "Operate",
     "lng_btn_lang": "Languages",
-    "lng_btn_search": "Search"
+    "lng_btn_search": "Search",
+    'page_editor': "Page Editor"
 };

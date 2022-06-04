@@ -25,5 +25,6 @@ export default {
     "lng_text": "文本内容",
     "lng_operate": "操作",
     "lng_btn_lang": "语言管理",
-    "lng_btn_search": "数据查询"
+    "lng_btn_search": "数据查询",
+    'page_editor': "页面编辑"
 }

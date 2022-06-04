@@ -1,5 +1,6 @@
 import Loadable from "../../components/Loadable";
 import { TypeDefinePage } from "../data/page";
+import { HomePage as EditPage } from "../../PageEditor";
 
 const Login = Loadable({
     loader: () => import("./Login")
@@ -67,6 +68,12 @@ export const AdminPages:TypeDefinePage[] = [
         ],
         onBeforeEnter: "lang.init",
         component: Lang
+    }, {
+        id: "admin_edit_page",
+        path: "/page/editor/home",
+        title: "page_editor",
+        fullPage: true,
+        component: EditPage
     }
 ];
 

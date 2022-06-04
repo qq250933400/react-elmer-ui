@@ -1,0 +1,60 @@
+.portal {
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-family: -apple-system,BlinkMacSystemFont,PingFang SC,Hiragino Sans GB,sans-serif;
+    >div {
+        display: block;
+        padding: 2rem;
+        .title {
+            display: block;
+            margin: 0;
+            padding: 2rem 0;
+            font-size: 2.7rem;
+            font-weight: 400;
+        }
+        .actionLayout {
+            display: flex;
+            .actionLayoutLeft {
+                flex: 0 0 24rem;
+            }
+            .actionLayoutSplit {
+                flex: 0 0 4rem;
+            }
+            .actionLayoutRight {
+                flex: auto;
+            }
+        }
+    }
+}
+.action {
+    padding-bottom: 1rem;
+    >h4 {
+        margin: 0;
+        padding: 5px 0;
+        font-size: 1.5rem;
+        font-weight: normal;
+    }
+    ul,ul li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    ul {
+        padding-left: .2rem;
+        li {
+            display: block;
+            cursor: pointer;
+            margin-bottom: .2rem;
+            .actionTitle {
+                padding-left: .4rem;
+            }
+        }
+        .actionLinkButton {
+            display: block;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+}

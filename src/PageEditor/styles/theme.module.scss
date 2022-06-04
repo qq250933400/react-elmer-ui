@@ -1,0 +1,57 @@
+.page_editor {
+    display: block;
+    width: 100%;
+    height: 100%;
+    >div {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    [class*="theme_dark"] {
+        $titleColor: #ccc;
+        $subTitleColor: rgba(204, 204, 204, 0.7);
+        $disableColor: rgba(108, 108, 108, 0.7);
+        [class*="Container"], [class*="ContextMenu"] {
+            background: rgb(30, 30, 30);
+        }
+        [class*="NormalBackColor"] {
+            background-color: rgb(51, 51, 51);
+        }
+        [class*="TitleColor"] {
+            color: $titleColor;
+        }
+        [class*="SubTitleColor"] {
+            color: $subTitleColor;
+        }
+        [class*="FocusTextColor"] {
+            color: #3794ff;
+        }
+        [class*="MenuBarItem"] {
+            &:hover {
+                background:rgb(30, 30, 30);
+                color: #fff;
+            }
+        }
+        [class*="ContextMenu"] {
+            ul {
+                box-shadow: 1px 1px 12px rgba(10,10,10,.6);
+                background:rgb(30, 30, 30);
+            }
+            [class*="MenuItem"] {
+                >label {
+                    color: $titleColor;
+                    i {
+                        color: $disableColor;
+                    }
+                }
+            }
+            [class*="MenuItem"]>label:hover {
+                background-color: rgb(51, 51, 51);
+            }
+            [class*="MenuSplitItem"],
+            [class*="MenuSplitItem"]>label:hover {
+                background-color:rgb(109, 109, 109, .4);
+            }
+        }
+    }
+}

@@ -2,7 +2,7 @@ import { Impl, IPageInfo } from "@MSJApp";
 import { ElmerService } from "../../HOC/withService/ElmerService";
 
 export interface IOverrideAppImplInit {
-    navigateTo(pageInfo: IPageInfo, ...args: any[]): void;
+    navigateTo(pageInfo: IPageInfo, ...args: any[]): Promise<any>;
     setLocale(locale: string): void;
     setState(data: any): void;
     service: ElmerService;
@@ -11,9 +11,12 @@ export interface IOverrideAppImplInit {
 
 export class AppImpl<M, P> extends Impl<M, P> {
 
+    public ignoreBeforeEnter: boolean  = true;
+
     private opt!: IOverrideAppImplInit;
     private appState: any = {};
     private appInitState: any;
+
     public init(opt: IOverrideAppImplInit): void {
         this.opt = opt;
         if (this.appInitState && typeof opt.setState === "function") {

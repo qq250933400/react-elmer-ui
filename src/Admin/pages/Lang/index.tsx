@@ -1,7 +1,7 @@
 import { useInitData } from "@Admin/hooks";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { withTable } from "@HOC/withTable";
-import { I18nContext } from "@Admin/i18n";
+import { useI18n } from "@HOC/withI18n";
 import { FormattedMessage } from "react-intl";
 import SearchBox from "./Search";
 import Langs from "./Langs";
@@ -24,7 +24,7 @@ const Lang = withTable({
     }
 })((props) => {
     const data = useInitData();
-    const i18n = useContext(I18nContext);
+    const i18n = useI18n();
     const [ locale ] = useState(i18n.getLocale());
     const [ searchData, setSearchData ] = useState<any>({});
     const [ evtBtnName, setEvtBtnName ] = useState("search");
