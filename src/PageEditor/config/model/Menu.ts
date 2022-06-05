@@ -31,7 +31,7 @@ export default class Menu extends Base {
     }
     public applicationMenuView(): IMenuList {
         return [
-            { title: "全屏", hotKey: "F11", value: "menu.onFullScreenSwitch" }
+            { title: !this.isFullScreen ? "全屏" : "退出全屏", hotKey: !this.isFullScreen ? "F11" : "ESC", value: "menu.onFullScreenSwitch" }
         ];
     }
     public onFullScreenSwitch(): void {
@@ -42,6 +42,7 @@ export default class Menu extends Base {
             this.api.emit("onFullScreenChange", true);
             this.isFullScreen = true;
         }
+        this.api.emit("onMenuChange", this.applicationMenu());
     }
     public isFullScreenStatus() {
         let isFull = document.fullscreenEnabled ||
@@ -53,9 +54,11 @@ export default class Menu extends Base {
     }
     public onWindowResize() {
         const isFullStatus = this.isFullscreenEnabled();
-        console.log(isFullStatus, "_size_");
-        if(isFullStatus !== this.isFullScreen) {
-            this.isFullScreen = isFullStatus;
+        if(isFullStatus) {
+            if(this.isFullScreen !== document.fullscreen) {
+                this.isFullScreen = document.fullscreen;
+                this.api.emit("onMenuChange", this.applicationMenu());
+            }
         }
     }
     private isFullscreenEnabled() {

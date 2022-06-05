@@ -3,6 +3,7 @@ import { ActionButtonSection, ActionLinkSection } from "./Action";
 import { FormattedMessage } from "@HOC/withI18n";
 import { Info } from "./Info";
 import { cn } from "src/utils";
+import { Window } from "../components/Window";
 
 const Portal = () => {
     return (<div className={cn(styles.portal, "Container")}>
@@ -17,6 +18,12 @@ const Portal = () => {
                 <section className={styles.actionLayoutRight}>
                     <Info />
                 </section>
+                <Window title="Web application" bottom={<button>CloseButton</button>} options={{
+                    hideMax: false,
+                    hideMin: true,
+                }}>
+                    <Info />
+                </Window>
             </div>
         </div>
     </div>);

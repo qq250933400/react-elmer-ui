@@ -35,14 +35,9 @@
         font-size: 1.5rem;
         font-weight: normal;
     }
-    ul,ul li {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    ul {
+    div {
         padding-left: .2rem;
-        li {
+        >label {
             display: block;
             cursor: pointer;
             margin-bottom: .2rem;

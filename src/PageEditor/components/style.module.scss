@@ -92,3 +92,102 @@
         }
     }
 }
+
+.window {
+    display: block;
+    position: fixed;
+    left: 10%;
+    top: 10%;
+    min-width: 200px;
+    min-height: 50px;
+    max-width: 100vw;
+    max-height: 100vh;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    opacity: 0;
+    .header {
+        height: 2rem;
+        display: flex;
+        [class*="Icon"] {
+            flex: 0 0 2rem;
+            position: relative;
+            >span {
+                display: block;
+                font-size: 1.2rem;
+                width: 20px;
+                height: 20px;
+                margin-left: 5px;
+                margin-top: 6px;
+            }
+        }
+        [class*="Title"] {
+            flex: auto;
+            line-height: 2rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: .9rem;
+            padding-left: .2rem;
+            cursor: move;
+        }
+        [class*="Buttons"] {
+            flex: 0 0 6rem;
+            text-align: right;
+            button {
+                border: none;
+                appearance: none;
+                height: 2rem;
+                padding: 0;
+                width: 2rem;
+            }
+        }
+    }
+    .content {
+        display: block;
+        position: relative;
+        overflow: hidden;
+    }
+}
+
+@keyframes frameZoomIn {
+    0% {
+        opacity: 0.1;
+        transform: scale(.1,.1);
+    }
+    80% {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+    90% {
+        opacity: 1;
+        transform: scale(1.1,1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+}
+@keyframes frameZoomOut {
+    0% {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+    10% {
+        opacity: 1;
+        transform: scale(1.1,1.1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.1,0.1);
+    }
+}
+.animationZoomIn {
+    transform-origin: 50% 50%;
+    animation: frameZoomIn .6s ease-in forwards;
+}
+.animationZoomOut {
+    transform-origin: center center;
+    animation: frameZoomOut .6s ease-out forwards;
+}

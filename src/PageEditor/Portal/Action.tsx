@@ -15,18 +15,18 @@ type TypeActionLinkProps = {
 
 const ActionButton = ({ icon, title }: TypeActionButtonProps) => {
     return (
-        <li className="FocusTextColor">
+        <label className="FocusTextColor">
             {icon}
             <span className={styles.actionTitle}>{title}</span>
-        </li>
+        </label>
     );
 };
 const ActionLink = ({title, description}: TypeActionLinkProps) => {
     return (
-        <li className={styles.actionLinkButton}>
+        <label className={styles.actionLinkButton}>
             <span className="FocusTextColor">{title}</span>
             <span className={cn(styles.actionTitle, "TitleColor")}>{description}</span>
-        </li>
+        </label>
     );
 }
 

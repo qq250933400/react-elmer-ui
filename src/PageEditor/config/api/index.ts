@@ -1,7 +1,7 @@
 export type TypeApi = {};
 
 export type TypeApiEvent = {
-    onMenuChange: () => void;
+    onMenuChange: (menuList: any[]) => void;
     onFullScreenChange: (isFullScreen: boolean) => void;
 };
 

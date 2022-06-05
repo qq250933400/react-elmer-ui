@@ -11,11 +11,15 @@
         $titleColor: #ccc;
         $subTitleColor: rgba(204, 204, 204, 0.7);
         $disableColor: rgba(108, 108, 108, 0.7);
+        $focusBackColor: rgb(30, 30, 30);
+        $focusTextColor: #3794ff;
+        $normalBackColor: #333;
+        $alertColor: #b50505;
         [class*="Container"], [class*="ContextMenu"] {
-            background: rgb(30, 30, 30);
+            background: $focusBackColor;
         }
         [class*="NormalBackColor"] {
-            background-color: rgb(51, 51, 51);
+            background-color: $normalBackColor;
         }
         [class*="TitleColor"] {
             color: $titleColor;
@@ -24,18 +28,18 @@
             color: $subTitleColor;
         }
         [class*="FocusTextColor"] {
-            color: #3794ff;
+            color: $focusTextColor;
         }
         [class*="MenuBarItem"] {
             &:hover {
-                background:rgb(30, 30, 30);
+                background:$focusBackColor;
                 color: #fff;
             }
         }
         [class*="ContextMenu"] {
             ul {
                 box-shadow: 1px 1px 12px rgba(10,10,10,.6);
-                background:rgb(30, 30, 30);
+                background:$focusBackColor;
             }
             [class*="MenuItem"] {
                 >label {
@@ -51,6 +55,40 @@
             [class*="MenuSplitItem"],
             [class*="MenuSplitItem"]>label:hover {
                 background-color:rgb(109, 109, 109, .4);
+            }
+        }
+        [class*="Window"] {
+            background: $focusBackColor;
+            box-shadow: 0 0 12px rgba(10,10,10,.8);
+            [class*="Header"] {
+                background: $normalBackColor;
+                [class*="Icon"] {
+                    color: $focusTextColor;
+                }
+                [class*="Buttons"] {
+                    button {
+                        background: transparent;
+                        color: $titleColor;
+                        &:hover {
+                            background: $focusBackColor;
+                        }
+                        &:active {
+                            background: darken($focusBackColor, 5);
+                        }
+                    }
+                    [class*="BtnClose"] {
+                        background: $alertColor;
+                        &:hover {
+                            background: lighten($alertColor, 5);
+                        }
+                        &:active {
+                            background: darken($alertColor, 5);
+                        }
+                    }
+                }
+                [class*="Title"] {
+                    color: $titleColor;
+                }
             }
         }
     }

@@ -51,6 +51,9 @@ export const ApplicationHeader = () => {
         editApp.callApi("menu", "applicationMenu").then((data) => {
             setMenuList(data);
         });
+        editApp.on("onMenuChange", (menuData) => {
+            setMenuList(menuData);
+        });
     },[]);
     return (
         <div className={cn(styles.applicationHeader, "NormalBackColor")}>
