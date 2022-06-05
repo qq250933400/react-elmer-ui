@@ -6,6 +6,7 @@
     >div {
         display: block;
         padding: 2rem;
+        padding-top: 4rem;
         .title {
             display: block;
             margin: 0;
@@ -51,5 +52,13 @@
             white-space: nowrap;
             overflow: hidden;
         }
+    }
+}
+.notifyContainer {
+    [class*="NotifyCard"] {
+        margin-top: .6rem;
+    }
+    [class*="NotifyCard"]:first-child {
+        margin-top: 0;
     }
 }

@@ -4,6 +4,8 @@ import i18nData from "../i18n";
 import styles from "../styles/theme.module.scss";
 import { editApp } from "../config";
 import { ApplicationHeader } from "../components/ApplicationHeader";
+import { Container } from "../components/Window";
+import { WindowOperate } from "./WindowOperate";
 
 const Home = () => {
     const [ CurrentPage, setCurrentPage ] = useState({
@@ -46,17 +48,21 @@ const Home = () => {
             window.removeEventListener("resize", onResize);
         };
     }, [rootRef]);
-    return (<div ref={rootRef} className={styles.page_editor} onContextMenu={(event) => {
-        event.preventDefault();
-        return false;
-    }}>
-        <div className={theme}>
-            <ApplicationHeader />
-            {
-                RenderPage && <RenderPage initState={CurrentPage.state}/>
-            }
+    return (
+    <Container data={[]}>
+        <div ref={rootRef} className={styles.page_editor} onContextMenu={(event) => {
+            event.preventDefault();
+            return false;
+        }}>
+            <div className={theme}>
+                <ApplicationHeader />
+                {
+                    RenderPage && <RenderPage initState={CurrentPage.state}/>
+                }
+            </div>
+            <WindowOperate />
         </div>
-    </div>);
+    </Container>);
 };
 
 export default withI18n({

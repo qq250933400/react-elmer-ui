@@ -3,7 +3,7 @@ import { createWorkspace, createInstance } from "@MSJApp";
 import React from "react";
 import { EditAppImpl } from "./EditAppImpl";
 import { UseModel, TypeModels } from "./model";
-import { TypeApi, TypeApiEvent } from "./api/index";
+import { TypeApi, TypeApiEvent, Api } from "./api/index";
 
 const Portal = loadable({
     loader: () => import(/* webpackChunkName: 'PageEditor_Portal' */"../Portal")
@@ -21,5 +21,6 @@ export const worksapce = createWorkspace<TypeEditAppPageInfo>("PageEditApplicato
     });
 
 export const editApp = createInstance<TypeModels, TypeApi, TypeApiEvent>(EditAppImpl, {
-    models: UseModel
+    models: UseModel,
+    attachApi: Api
 });

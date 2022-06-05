@@ -92,7 +92,17 @@
         }
     }
 }
-
+.progress {
+    display: block;
+    height: 4px;
+    padding: 0 !important;
+    position: relative;
+    >i {
+        display: block;
+        height: 100%;
+        transition: width 1s ease;
+    }
+}
 .window {
     display: block;
     position: fixed;
