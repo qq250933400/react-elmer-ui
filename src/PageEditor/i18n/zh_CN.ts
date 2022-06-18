@@ -5,5 +5,8 @@ export default {
     openFile: "打开文件...",
     start: "启动",
     more: "更多...",
-    recent: "最近"
+    recent: "最近",
+    btnConfirm: "确认",
+    btnCancel: "取消",
+    btnRetry: "重试"
 };

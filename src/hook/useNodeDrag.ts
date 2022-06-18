@@ -66,7 +66,6 @@ export const useNodeDrag = (target:HTMLElement, options?: TypeUseDragOptions) =>
             const onMoveEnd = () => {
                 dragState.isPressed = false;
             }
-            console.log("offsetLeft", target.style.left, target.clientTop);
             target.addEventListener("mousedown", onPress);
             target.addEventListener("touchstart", onPress);
             document.body.addEventListener("mousemove", onMove);

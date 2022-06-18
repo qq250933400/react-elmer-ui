@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "../style.module.scss";
 import { cn } from "../../../utils";
 import { CloseOutlined, CodeSandboxOutlined, ExpandAltOutlined, ExpandOutlined, MinusOutlined } from "@ant-design/icons";
 import { useNodeDrag } from "src/hook/useNodeDrag";
+import { eventBus } from "./EventHandler";
 
 type TypeWindowOptions = {
     hideClose?: boolean;
@@ -20,6 +22,7 @@ type TypeWindowProps = {
     hideIcon?: boolean;
     options?: TypeWindowOptions;
     onClose?: Function;
+    uid?: string;
 };
 
 export const Window = (props: TypeWindowProps) => {
@@ -33,6 +36,9 @@ export const Window = (props: TypeWindowProps) => {
         isClose: false,
         showAnimation: props.options?.showAnimation || styles.animationZoomIn,
         hideAnimation: props.options?.hideAnimation || styles.animationZoomOut
+    });
+    const [ eventOptions ] = useState({
+        closeOption: {}
     });
     const [ formAnimation, setFormAnimation ] = useState("");
     const [ bottom ] = useState(props.bottom);
@@ -84,9 +90,9 @@ export const Window = (props: TypeWindowProps) => {
         formState.isClose = true;
         setFormAnimation(formState.hideAnimation);
     }, [formState]);
-    const onFormAnimationEnd = useCallback(() => {
+    const onFormAnimationEnd = useCallback(() => {console.log("-----");
         if(formState.isClose) {
-            typeof props.onClose === "function" && props.onClose();
+            typeof props.onClose === "function" && props.onClose(props.uid, eventOptions.closeOption);
             return;
         }
     }, [formState, props]);
@@ -115,6 +121,16 @@ export const Window = (props: TypeWindowProps) => {
         formState.isClose = false;
         setDragNode(headerRef.current);
         setFormAnimation(formState.showAnimation);
+        // -----
+        const removeClose = eventBus.on("close", (uid, option) => {
+            if(uid === props.uid) {
+                eventOptions.closeOption = option;
+                onCloseClick();
+            }
+        });
+        return () => {
+            removeClose();
+        }
     }, []);
     return (
         <div ref={formRef}

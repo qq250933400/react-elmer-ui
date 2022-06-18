@@ -8,12 +8,30 @@
         position: relative;
     }
 }
+.editorApplication {
+    button {
+        font-size: .9rem;
+        appearance: none;
+        outline: none;
+        padding: .4rem 1rem;
+        font-size: .8rem;
+    }
+    [class*="btn_small"] {
+        padding: .2rem .5rem;
+        font-size: .6rem;
+    }
+    [class*="btn_large"] {
+        padding: .4rem .8rem;
+        font-size: .6rem;
+    }
+}
 [class*="theme_dark"] {
     $titleColor: #ccc;
     $subTitleColor: rgba(204, 204, 204, 0.7);
     $disableColor: rgba(108, 108, 108, 0.7);
     $focusBackColor: rgb(30, 30, 30);
     $focusTextColor: #3794ff;
+    $statusBarColor: #3794ff;
     $normalBackColor: #333;
     $alertColor: #b50505;
     [class*="Container"], [class*="ContextMenu"] {
@@ -87,9 +105,11 @@
                     }
                 }
             }
-            [class*="Title"] {
-                color: $titleColor;
-            }
+        }
+        [class*="Title"],
+        [class*="Content"],
+        [class*="Bottom"] {
+            color: $titleColor;
         }
     }
     [class*="Progress"] {
@@ -106,6 +126,63 @@
         }
         &:hover {
             background-color: $normalBackColor;
+        }
+    }
+    button {
+        border: none;
+        background-color: $normalBackColor;
+        &:hover {
+            background-color: lighten($normalBackColor, 4);
+        }
+        &:active {
+            background-color: darken($normalBackColor, 4);
+        }
+    }
+    [class*="AlertBottom"] {
+        [class*="Confirm"] {
+            background-color: $focusTextColor;
+            color: #fff;
+            &:hover {
+                background-color: lighten($focusTextColor, 4);
+            }
+            &:active {
+                background-color: darken($focusTextColor, 4);
+            }
+        }
+        [class*="Cancel"] {
+            background-color: $alertColor;
+            color: #fff;
+            &:hover {
+                background-color: lighten($alertColor, 4);
+            }
+            &:active {
+                background-color: darken($alertColor, 4);
+            }
+        }
+    }
+    [class*="Error"] {
+        [class*="Icon"] {
+            color: $alertColor;
+            svg path:nth-child(1),
+            svg path:nth-child(3) {
+                fill: $alertColor;
+            }
+            svg path:nth-child(2) {
+                fill: #f7b9b9;
+            }
+        }
+    }
+    [class*="StatusBar"] {
+        background: $statusBarColor;
+        button {
+            background-color: $statusBarColor;
+            color: #fff;
+            &:hover {
+                background-color: lighten($statusBarColor, 5);
+            }
+            &:active {
+                background-color: darken($statusBarColor, 10);
+            }
         }
     }
 }

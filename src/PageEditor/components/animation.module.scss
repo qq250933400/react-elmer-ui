@@ -1,0 +1,40 @@
+@keyframes frameZoomIn {
+    0% {
+        opacity: 0.1;
+        transform: scale(.1,.1);
+    }
+    80% {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+    90% {
+        opacity: 1;
+        transform: scale(1.1,1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+}
+@keyframes frameZoomOut {
+    0% {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+    10% {
+        opacity: 1;
+        transform: scale(1.1,1.1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.1,0.1);
+    }
+}
+.animationZoomIn {
+    transform-origin: 50% 50%;
+    animation: frameZoomIn .4s ease-in forwards;
+}
+.animationZoomOut {
+    transform-origin: center center;
+    animation: frameZoomOut .4s ease-out forwards;
+}

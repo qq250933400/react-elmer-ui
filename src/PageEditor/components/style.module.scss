@@ -1,3 +1,6 @@
+@import "./animation.module.scss";
+$statusBarHeight: 1.6rem;
+
 .applicationHeader {
     $applicationHeight: 2.6rem;
     display: flex;
@@ -159,45 +162,59 @@
         position: relative;
         overflow: hidden;
     }
+    .alert {
+        padding: 1rem;
+        padding-top: .6rem;
+        display: flex;
+        align-items: flex-start;
+        max-width: 600px;
+        .alertIcon {
+            flex: 0 0 3rem;
+            font-size: 2.4rem;
+        }
+        .alertMsg {
+            flex: auto;
+            padding-top: 1rem;
+            font-size: 1rem;
+        }
+    }
+    .alertBottom {
+        padding: .5rem .4rem;
+        text-align: right;
+        button {
+            min-width: 4rem;
+            margin-right: .4rem;
+        }
+        button:last-child {
+            margin-right: 0;
+        }
+    }
+}
+.windowMask {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(10,10,10, .5);
+    >div {
+        position: absolute;
+    }
 }
 
-@keyframes frameZoomIn {
-    0% {
-        opacity: 0.1;
-        transform: scale(.1,.1);
+.statusBar {
+    display: block;
+    overflow: hidden;
+    height: $statusBarHeight;
+    line-height: $statusBarHeight;
+    padding: 0 .5rem;
+    font-size: 0;
+    button {
+        height: $statusBarHeight;
+        padding: 0 .4rem;
+        display: inline-block;
+        margin: 0;
+        font-size: .6rem;
     }
-    80% {
-        opacity: 1;
-        transform: scale(1,1);
-    }
-    90% {
-        opacity: 1;
-        transform: scale(1.1,1.1);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1,1);
-    }
-}
-@keyframes frameZoomOut {
-    0% {
-        opacity: 1;
-        transform: scale(1,1);
-    }
-    10% {
-        opacity: 1;
-        transform: scale(1.1,1.1);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(0.1,0.1);
-    }
-}
-.animationZoomIn {
-    transform-origin: 50% 50%;
-    animation: frameZoomIn .6s ease-in forwards;
-}
-.animationZoomOut {
-    transform-origin: center center;
-    animation: frameZoomOut .6s ease-out forwards;
 }

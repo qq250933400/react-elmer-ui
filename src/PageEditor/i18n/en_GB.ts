@@ -5,5 +5,8 @@ export default {
     openFile: "Open...",
     start: "Start",
     more: "More...",
-    recent: "Recent"
+    recent: "Recent",
+    btnConfirm: "Confirm",
+    btnCancel: "Cancel",
+    btnRetry: "Retry"
 };

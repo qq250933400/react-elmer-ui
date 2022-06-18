@@ -1,0 +1,6 @@
+.pageContainer {
+    $scaleHeight: 100%;
+    $offsetHeight: 4.2rem;
+    display: block;
+    height: calc(#{$scaleHeight} - #{$offsetHeight});
+}

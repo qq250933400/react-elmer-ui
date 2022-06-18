@@ -1,14 +1,22 @@
+import { useModel } from "../components/Window/Container";
 import { useEffect } from "react";
-import { withModel } from "../components/Window";
 import { editApp } from "../config";
 
-export const WindowOperate = withModel()((props) => {
+export const WindowOperate = (props:any) => {
+    const modelObj = useModel();
     useEffect(()=>{
-        return editApp.on("onCreateWindow", (options) => {
-            props.withModelApi.createWindow(options);
+        const desCreateWindow = editApp.on("onCreateWindow", (options) => {
+            modelObj.createWindow(options);
         }) as any;
-    }, [props.withModelApi]);
+        const desAlert = editApp.on("onCreateAlert", (options) => {
+            modelObj.alert(options);console.log("----Alert--");
+        }) as any;
+        return () => {
+            desCreateWindow();
+            desAlert();
+        };
+    }, [modelObj]);
     return (
         <>{props.children}</>
     );
-});
+};

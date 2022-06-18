@@ -2,10 +2,13 @@ import { withI18n } from "@HOC/withI18n";
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import i18nData from "../i18n";
 import styles from "../styles/theme.module.scss";
+import homeStyles from "./styles.module.scss";
 import { editApp } from "../config";
 import { ApplicationHeader } from "../components/ApplicationHeader";
 import { Container } from "../components/Window";
 import { WindowOperate } from "./WindowOperate";
+import StatusBar from "../components/StatusBar";
+import cn from "classnames";
 
 const Home = () => {
     const [ CurrentPage, setCurrentPage ] = useState({
@@ -50,15 +53,18 @@ const Home = () => {
     }, [rootRef]);
     return (
     <Container data={[]}>
-        <div ref={rootRef} className={styles.page_editor} onContextMenu={(event) => {
+        <div ref={rootRef} className={cn(styles.page_editor, styles.editorApplication)} onContextMenu={(event) => {
             event.preventDefault();
             return false;
         }}>
             <div className={theme}>
                 <ApplicationHeader />
-                {
-                    RenderPage && <RenderPage initState={CurrentPage.state}/>
-                }
+                <div className={cn(homeStyles.pageContainer, "Container")}>
+                    {
+                        RenderPage && <RenderPage initState={CurrentPage.state}/>
+                    }
+                </div>
+                <StatusBar />
             </div>
             <WindowOperate />
         </div>
