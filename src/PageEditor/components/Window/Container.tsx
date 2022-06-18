@@ -11,12 +11,13 @@ import rootStyles from "../../styles/theme.module.scss";
 import cn from "classnames";
 
 type TypeContainerProps = {
-    data: IWindowProps[];
+    attachRoot?: boolean;
     children?: any;
 };
 type TypeWindowModelProps = {
     config: IWindowProps;
     onClose: Function;
+    attachRoot?: boolean;
 };
 
 const CONST_WINDOW_CONTAINER_ID: string = "CONST_WINDOW_CONTAINER_202206052023";
@@ -34,8 +35,7 @@ const getRootContainer = () => {
     }
 };
 
-const WindowModel = ({ config, onClose }: TypeWindowModelProps) => {
-    const container = useMemo(() => getRootContainer(), []);
+const WindowModel = ({ config, onClose, attachRoot }: TypeWindowModelProps) => {
     const WindowApp = useMemo(() => {
         const WindowApp = (<AWindow
             title={config.title}
@@ -60,7 +60,11 @@ const WindowModel = ({ config, onClose }: TypeWindowModelProps) => {
             return WindowApp;
         }
     }, [config]);
-    return ReactDOM.createPortal(WindowApp, container);
+    if(attachRoot) {
+        return ReactDOM.createPortal(WindowApp, getRootContainer());
+    } else {
+        return WindowApp;
+    }
 };
 
 const ModelContext = createContext({
@@ -134,7 +138,7 @@ export const Container = (props: TypeContainerProps) => {
             {props.children}
             {
                 windowList.length > 0 && windowList.map((item, index) => {
-                    return <WindowModel onClose={(uid: string, opt:any) => onWindowClose(uid, opt, item)} config={item} key={item.uid || index} />
+                    return <WindowModel attachRoot={props.attachRoot} onClose={(uid: string, opt:any) => onWindowClose(uid, opt, item)} config={item} key={item.uid || index} />
                 })
             }
         </ModelContext.Provider>

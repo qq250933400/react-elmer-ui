@@ -1,9 +1,9 @@
-import React, { createContext, useCallback, useState } from 'react';
-import { TypeServiceConfig, ElmerService, TypeServiceSendOptions } from "./ElmerService";
-import { getServiceObj } from "elmer-common/lib/decorators/Autowired";
+import React, { createContext, useCallback, useContext, useState, useMemo } from 'react';
+import { TypeServiceConfig, ElmerService, TypeServiceSendOptions, TypeServiceNamespace } from "./ElmerService";
 import { commonHandler } from "./ErrorHandle";
 import { useNavigate } from "react-router-dom";
-export  { createServiceConfig } from "./ServiceContext";
+import { IServiceContext } from './ServiceContext';
+export { createServiceConfig } from "./ServiceContext";
 
 type TypeServiceProviderProps = {
     env: string,
@@ -13,14 +13,21 @@ type TypeServiceProviderProps = {
 type TypeServiceRequestOptions = {
     throwException?: boolean;
 };
-export type TypeService = {
-    send<T={}>(option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions):Promise<T>;
+type TypeWithService<T={}> = {
+    config: React.Context<IServiceContext<T>>;
 };
 
-
-export const ServiceContext = createContext({
+const ServiceContext = createContext({
     config: {},
     env: "DEV"
+});
+
+const WithServiceContext = createContext<{
+    config: TypeServiceNamespace<any>,
+    send: (option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions) => Promise<any>
+}>({
+    config: {} as any,
+    send: (() => {}) as any
 });
 
 export const ServiceProvider = (props: TypeServiceProviderProps) => {
@@ -34,11 +41,17 @@ export const ServiceProvider = (props: TypeServiceProviderProps) => {
     );
 };
 
-const withService = () => {
+const withService = function<T={}>(option?:TypeWithService<T>) {
     return (SerivceWrapper:React.ElementType) => {
         return (props:any) => {
+            const rootContext = useContext(ServiceContext);
+            const configContext: IServiceContext<T> = option?.config ? useContext(option.config) : {} as any;
             const [ serviceObj ] = useState(() => {
-                return getServiceObj(ElmerService) as ElmerService;
+                const obj = new ElmerService();
+                obj.setENV(rootContext.env);
+                obj.setConfig(rootContext.config as any);
+                obj.setNamespace(configContext.name, configContext.data);
+                return obj;
             });
             const navigateTo = useNavigate();
             const sendRequest = useCallback((option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions) =>{
@@ -90,21 +103,22 @@ const withService = () => {
                         });
                 });
             },[serviceObj, navigateTo]);
+            const api = useMemo(()=> ({
+                send: sendRequest,
+                config: serviceObj.getConfig() as any
+            }), [sendRequest, serviceObj]);
             return (
-                <ServiceContext.Consumer>
-                    {
-                        data => {
-                            serviceObj.setENV(data.env);
-                            serviceObj.setConfig(data.config as any);
-                            return <SerivceWrapper {...props} serviceConfig={data} service={{
-                                send: sendRequest
-                            }}/>
-                        }
-                    }
-                </ServiceContext.Consumer>
+                <WithServiceContext.Provider value={api}>
+                    <SerivceWrapper {...props} service={{
+                        send: api.send,
+                        config: api.config
+                    }}/>
+                </WithServiceContext.Provider>
             );
         }
     }
 };
 
+export const useService = () => useContext(WithServiceContext);
+export { createService } from "./ServiceContext";
 export default withService;

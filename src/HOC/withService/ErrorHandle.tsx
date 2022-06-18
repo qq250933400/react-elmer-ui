@@ -59,8 +59,6 @@ export const commonHandler = (respData:any, errorResponse?: boolean, opt?: TypeC
                 return true;
             }
         }
-    } else {
-
     }
     if(errorResponse) {
         const msg = resp.message || resp.info || resp.statusText || "请求失败";

@@ -3,4 +3,5 @@
     $offsetHeight: 4.2rem;
     display: block;
     height: calc(#{$scaleHeight} - #{$offsetHeight});
+    overflow: hidden;
 }

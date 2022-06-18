@@ -37,7 +37,7 @@ export type TypeServiceEndPoint<T={}> = {
 };
 
 export type TypeServiceNamespace<T={}> = {
-    host?: any;
+    host?: { [H in keyof TypeRuningEnv]?: string };
     isDummy?: boolean;
     endPoints: {[P in keyof T]: TypeServiceEndPoint<T[P]>};
 };
@@ -99,7 +99,7 @@ export class ElmerService {
                 const isDummy = this.config.isDummy || namespaceData.isDummy || endPoint.isDummy;
                 const env:any = this.config.env || this.env || "PROD";
                 const rootHost = (this.config.host as any || {})[env];
-                const namespaceHost = (namespaceData.host || {})[env];
+                const namespaceHost = (namespaceData.host as any || {})[env];
                 const domainPath = namespaceHost || rootHost;
                 let url = endPoint.url;
                 if(utils.isObject(endPoint.url)) {

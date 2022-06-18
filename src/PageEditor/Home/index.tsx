@@ -9,6 +9,8 @@ import { Container } from "../components/Window";
 import { WindowOperate } from "./WindowOperate";
 import StatusBar from "../components/StatusBar";
 import cn from "classnames";
+import { ServiceConfig } from "../config/ServiceConfig";
+import withService from "@HOC/withService";
 
 const Home = () => {
     const [ CurrentPage, setCurrentPage ] = useState({
@@ -52,12 +54,12 @@ const Home = () => {
         };
     }, [rootRef]);
     return (
-    <Container data={[]}>
-        <div ref={rootRef} className={cn(styles.page_editor, styles.editorApplication)} onContextMenu={(event) => {
-            event.preventDefault();
-            return false;
-        }}>
-            <div className={theme}>
+    <div ref={rootRef} className={cn(styles.page_editor, theme, styles.editorApplication)} onContextMenu={(event) => {
+        event.preventDefault();
+        return false;
+    }}>
+        <Container>
+            <div>
                 <ApplicationHeader />
                 <div className={cn(homeStyles.pageContainer, "Container")}>
                     {
@@ -67,11 +69,17 @@ const Home = () => {
                 <StatusBar />
             </div>
             <WindowOperate />
-        </div>
-    </Container>);
+        </Container>
+    </div>);
 };
 
 export default withI18n({
     name: "page_editor_app",
     i18n: i18nData
-})(Home);
+})(
+    withService({
+        config: ServiceConfig
+    })(
+        Home
+    )
+);
