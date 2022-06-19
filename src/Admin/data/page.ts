@@ -17,6 +17,9 @@ export const adminWorkspace = createWorkspace<TypePageExtAttr>("admin")
     .createPageFrom("landing", {
         id: "homeLanding",
         onBeforeEnter: "admin.initLoad"
+    }).createPage({
+        id: "editor",
+        path: "/editor"
     });
 
 export type TypeDefinePage = IPageInfoEx & {

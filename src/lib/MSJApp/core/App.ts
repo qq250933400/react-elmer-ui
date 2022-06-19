@@ -5,6 +5,7 @@ import { IMSJAppOptions, IMSJAppRunOpt } from "../types/IMSJApp";
 import { getWorkspace, CONSTPAGEDATAKEY, clearAllPages } from "./PageStorage";
 import { TypeAttachApi } from "./AttachApi";
 import { CONST_ENTRY_CONFIG_KEY, TypeEntryRule } from "../types/IAdmin";
+import { IPageInfo } from "@MSJApp/types/IPage";
 
 export class MSJApp<UseModel={}, AllApi={}> {
     public api: Api<UseModel> & AllApi & TypeAttachApi;
@@ -46,7 +47,11 @@ export class MSJApp<UseModel={}, AllApi={}> {
         const allData:any = this.impl.getData() || {};
         allData[CONSTPAGEDATAKEY] = workspaceData;
         this.impl.setData(allData);
-        this.gotoHome(opt.location);
+        this.runMatchLocation(opt.location || "").then(() => {
+            this.api.log("the current location has match the config page.", "Info");
+        }).catch(() => {
+            this.gotoHome(opt.location);
+        });
     }
     destory(): void {
         clearAllPages();
@@ -96,6 +101,25 @@ export class MSJApp<UseModel={}, AllApi={}> {
             this.api.emit("onAfterRun");
         }).catch((err) => {
             this.api.showException(err);
+        });
+    }
+    private runMatchLocation(location: string) {
+        return new Promise((resolve, reject) => {
+            const pageData: IPageInfo[] = this.api.getPageList();
+            let findPage = null;
+            for(const page of pageData) {
+                const pagePath = page.path;
+                const checkPath = location.length > pagePath.length ? location.substring(0, pagePath.length) : pagePath;
+                if(checkPath === location) {
+                    findPage = page;
+                }
+            }
+            if(findPage) {
+                this.api.navigateTo(findPage);
+                resolve({});
+            } else {
+                reject({ message: "Not match exists page."});
+            }
         });
     }
 }

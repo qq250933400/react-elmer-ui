@@ -1,6 +1,6 @@
 import { TypeModels } from "../model";
 import { Api as ApiModel } from "@MSJApp/core/Api";
-import { IWindowProps, IAlertOption } from "../../components/Window/IWindowModel";
+import { IWindowProps, IAlertOption, IModal } from "../../components/Window/IWindowModel";
 import { FormattedMessage } from "@HOC/withI18n";
 import { IApplication } from "../../components/Application/IApplication";
 import { registeApp } from "../../components/Application";
@@ -10,6 +10,7 @@ export type TypeApiEvent = {
     onFullScreenChange: (isFullScreen: boolean) => void;
     onCreateWindow: (opt: any) => void;
     onCreateAlert: (opt: IAlertOption) => void;
+    onCreateModal: (opt: IModal) => void;
     onApplicationChange: (name: string, ...args: any[]) => void;
 };
 
@@ -21,6 +22,7 @@ type TypeLoadingOpt = {
 export type TypeApi = {
     createWindow: (option: IWindowProps) => void;
     alert: (option: IAlertOption) => void;
+    modal: (option: IModal) => void;
     registeApp: (app: IApplication) => void;
     showLoading: (opt?: TypeLoadingOpt) => void;
     hideLoaidng: () => void;
@@ -34,6 +36,14 @@ export const Api: {[P in keyof TypeApi]: (api: TypeEditorApi) => TypeApi[P]} = {
         cancelText: option.cancelText || <FormattedMessage id="btnCancel"/>,
         retryText: option.retryText || <FormattedMessage id="btnRetry"/>
     }),
+    modal: (api) => (option) => {
+        api.emit("onCreateModal", {
+            ...option,
+            okText: option.okText || <FormattedMessage id="btnConfirm"/>,
+            cancelText: option.cancelText || <FormattedMessage id="btnCancel"/>,
+            retryText: option.retryText || <FormattedMessage id="btnRetry"/>
+        });
+    },
     registeApp: () => (app) => registeApp(app),
     showLoading: (api) => (opt: any) => {
         api.emit("onApplicationChange", "showLoading", {

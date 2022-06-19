@@ -8,6 +8,10 @@ type TypeCreateWorkspaceResult<PageExtAttr> = {
     createPage: TypeCreatePage<PageExtAttr>;
     createPageFrom: TypeCreatePageFrom<PageExtAttr>;
 };
+type TypeWorkspace = {
+    index: number;
+    pages: any;
+}
 
 const pageState:any = {};
 
@@ -24,8 +28,9 @@ export const getPageById = <T={}>(pageId: string): (IPageInfo & T) | null => {
         const workspace = idM[1];
         const myPageId = idM[2];
         if(pageState[workspace]) {
-            if(pageState[workspace][myPageId]) {
-                return pageState[workspace][myPageId];
+            const workspaceData: TypeWorkspace = pageState[workspace];
+            if(workspaceData.pages[myPageId]) {
+                return workspaceData.pages[myPageId];
             } else {
                 console.error(`指定页面ID(${myPageId})在workspace(${workspace})下不存在。`);
             }
@@ -47,12 +52,19 @@ export const createWorkspace = <PageExtAttr={}>(name: string): TypeCreateWorkspa
     if(pageState[name]) {
         throw new Error(`创建Workspace失败名称已存在。(${name})`);
     }
-    const workspace:any = {};
+    const workspace:TypeWorkspace = {
+        index: 0,
+        pages: {}
+    };
     pageState[name] = workspace;
     const myworkspace = {
         createPage: <T={}>(pageInfo: IPageInfo & T) => {
-            if(!workspace[pageInfo.id]) {
-                workspace[pageInfo.id] = pageInfo;
+            if(!workspace.pages[pageInfo.id]) {
+                workspace.pages[pageInfo.id] = {
+                    ...pageInfo,
+                    index: workspace.index
+                };
+                workspace.index += 1;
             } else {
                 throw new Error(`定义PageId已经存在，请检查配置（${pageInfo.id}）`);
             }
@@ -69,13 +81,15 @@ export const createWorkspace = <PageExtAttr={}>(name: string): TypeCreateWorkspa
                 if(utils.isEmpty(pageInfo.id)) {
                     throw new Error("创建新的页面ID不能为空。");
                 }
-                if(pageState[name][pageInfo.id]) {
+                if(workspace.pages[pageInfo.id]) {
                     throw new Error(`创建页面的ID已经存在，请检查设置。(${pageInfo.id})`);
                 }
-                pageState[name][pageInfo.id] = {
+                workspace.pages[pageInfo.id] = {
                     ...oldPageInfo,
-                    ...pageInfo
+                    ...pageInfo,
+                    index: workspace.index
                 };
+                workspace.index += 1;
             }
             return {
                 createPage: myworkspace.createPage,
@@ -86,7 +100,7 @@ export const createWorkspace = <PageExtAttr={}>(name: string): TypeCreateWorkspa
     return myworkspace;
 };
 
-export const getWorkspace = (name: string): any => {
+export const getWorkspace = (name: string): TypeWorkspace => {
     return pageState[name];
 };
 

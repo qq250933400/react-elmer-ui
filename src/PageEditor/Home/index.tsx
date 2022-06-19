@@ -12,6 +12,8 @@ import cn from "classnames";
 import { ServiceConfig } from "../config/ServiceConfig";
 import withService from "@HOC/withService";
 import { Application } from "../components/Application";
+import { RootStore } from "../data";
+
 
 const Home = () => {
     const [ CurrentPage, setCurrentPage ] = useState({
@@ -60,18 +62,20 @@ const Home = () => {
         return false;
     }}>
         <Application>
-            <Container>
-                <div className={styles.routerLayout}>
-                    <ApplicationHeader />
-                    <div className={cn(homeStyles.pageContainer, "Container")}>
-                        {
-                            RenderPage && <RenderPage initState={CurrentPage.state}/>
-                        }
+            <RootStore>
+                <Container>
+                    <div className={styles.routerLayout}>
+                        <ApplicationHeader />
+                        <div className={cn(homeStyles.pageContainer, "Container")}>
+                            {
+                                RenderPage && <RenderPage initState={CurrentPage.state}/>
+                            }
+                        </div>
+                        <StatusBar />
                     </div>
-                    <StatusBar />
-                </div>
-                <WindowOperate />
-            </Container>
+                    <WindowOperate />
+                </Container>
+            </RootStore>
         </Application>
     </div>);
 };

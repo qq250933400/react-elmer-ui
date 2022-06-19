@@ -94,7 +94,7 @@ export default class Admin extends BaseModel {
     }
     getLeftMenuSelectKey(page: IPageInfoEx, leftMenuList: IMenuListEx): string|undefined {
         for(const item of leftMenuList) {
-            if(item.type !== "Api" && page.id === item.value) {
+            if(item.type !== "Api" && page?.id === item.value) {
                 return item.key;
             } else {
                 if(item.subMenu) {
@@ -127,7 +127,7 @@ export default class Admin extends BaseModel {
     private findMenuByPage(page: IPageInfoEx, menuList: IMenuListEx, breadCrumbList: IBreadCrumbList): boolean {
         const allPageData:any = this.api.getAllPages();
         for(const menuItem of menuList) {
-            if(menuItem.type !== "Api" && menuItem.value === page.id) {
+            if(menuItem.type !== "Api" && menuItem.value === page?.id) {
                 breadCrumbList.push({
                     title: menuItem.title,
                     page: undefined

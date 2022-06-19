@@ -19,7 +19,7 @@ const Right = Loadable({
 });
 const Lang = Loadable({
     loader: () => import(/** webpackChunkName: Lang */"./Lang")
-})
+});
 
 export const Entry = Loadable({
     loader: () => import(/** webpackChunkName: Entry */"./Entry")
@@ -85,6 +85,9 @@ export default [
     }, {
         path: "/landing",
         component: Landing
+    },{
+        path: "/editor",
+        component: EditPage
     },{
         path: "/*",
         component: Landing

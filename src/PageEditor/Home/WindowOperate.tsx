@@ -11,9 +11,13 @@ export const WindowOperate = (props:any) => {
         const desAlert = editApp.on("onCreateAlert", (options) => {
             modelObj.alert(options);
         }) as any;
+        const desModal = editApp.on("onCreateModal", (options) => {
+            modelObj.modal(options);
+        }) as any;
         return () => {
             desCreateWindow();
             desAlert();
+            desModal();
         };
     }, [modelObj]);
     return (

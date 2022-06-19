@@ -226,7 +226,25 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
      * 获取所有页面数据
      */
     getAllPages<T={}>(): {[P in keyof T]: IPageInfo} {
-        return getWorkspace(this.workspace);
+        return getWorkspace(this.workspace).pages;
+    }
+    getPageList<T={}>(): (IPageInfo & T)[] {
+        const allPages = getWorkspace(this.workspace).pages;
+        const pageKeys = Object.keys(allPages);
+        const pageData: any[] = [];
+        pageKeys.sort((a: string, b: string) => {
+            const pageA = allPages[a];
+            const pageB = allPages[b];
+            return pageA.index > pageB.index ? 1 : -1;
+        });
+        pageKeys.forEach((id: string) => {
+            const info = allPages[id];
+            pageData.push({
+                ...info,
+                path: this.formatPath(info.path)
+            });
+        });
+        return pageData;
     }
     /**
      * 显示错误信息
@@ -304,6 +322,10 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                 break;
             }
         }
+    }
+    formatPath(path: string): string {
+        const url = [this.urlPrefix || "", path].join("/");
+        return url.replace(/\\/g, "/").replace(/[/]{2,}/g,"/");
     }
     private getWorkspaceName(): string {
         return (this as any).workspace;

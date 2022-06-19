@@ -13,7 +13,7 @@ export default class Menu extends Base {
     }
     public applicationMenuFile(): IMenuList {
         return [
-            { title: "新建文件", hotKey: "Ctrl+N" },
+            { title: "新建文件", hotKey: "Ctrl+N", value: "portal.onCreateFile" },
             { title: "新建窗口", hotKey: "Ctrl+W" },
             { title: "", type: "Split" },
             { title: "打开文件", hotKey: "Ctrl+O" },
