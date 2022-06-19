@@ -38,3 +38,21 @@
     transform-origin: center center;
     animation: frameZoomOut .4s ease-out forwards;
 }
+
+@keyframes framesSpin1 {
+    0% { opacity: 1;}
+    20% { opacity: 0;}
+    40% { opacity: 1;}
+}
+@keyframes framesSpin2 {
+    0% { opacity: 1;}
+    20% { opacity: 1;}
+    40% { opacity: 0;}
+    60% { opacity: 1;}
+}
+@keyframes framesSpin3 {
+    0% { opacity: 1;}
+    60% { opacity: 1;}
+    80% { opacity: 0;}
+    100% { opacity: 1;}
+}

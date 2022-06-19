@@ -90,7 +90,7 @@ export const Window = (props: TypeWindowProps) => {
         formState.isClose = true;
         setFormAnimation(formState.hideAnimation);
     }, [formState]);
-    const onFormAnimationEnd = useCallback(() => {console.log("-----");
+    const onFormAnimationEnd = useCallback(() => {
         if(formState.isClose) {
             typeof props.onClose === "function" && props.onClose(props.uid, eventOptions.closeOption);
             return;

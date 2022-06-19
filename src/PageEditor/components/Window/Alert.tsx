@@ -28,7 +28,7 @@ export const Alert = (props: TypeAlertProps) => {
     </div>);
 };
 
-export const createAlertButton = (msgType: TypeAlertMsg, options: IAlertOption, fn: TypeClickCallback) => {
+export const createAlertButton = (msgType: TypeAlertMsg, options: any, fn: TypeClickCallback) => {
     const defaultOKText = "Ok", defaultCancelText = "Cancel", defaultRetryText = "Retry";
     const btnClassName = "btn_large";
     const onClick = (type: TypeAlertButton) => {

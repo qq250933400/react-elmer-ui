@@ -2,7 +2,7 @@
     display: block;
     width: 100%;
     height: 100%;
-    >div {
+    .routerLayout {
         width: 100%;
         height: 100%;
         position: relative;
@@ -138,26 +138,26 @@
             background-color: darken($normalBackColor, 4);
         }
     }
-    [class*="AlertBottom"] {
-        [class*="Confirm"] {
-            background-color: $focusTextColor;
-            color: #fff;
-            &:hover {
-                background-color: lighten($focusTextColor, 4);
-            }
-            &:active {
-                background-color: darken($focusTextColor, 4);
-            }
+    [class*="AlertBottom"] [class*="Confirm"],
+    [class*="btn-primary"] {
+        background-color: $focusTextColor;
+        color: #fff;
+        &:hover {
+            background-color: lighten($focusTextColor, 4);
         }
-        [class*="Cancel"] {
-            background-color: $alertColor;
-            color: #fff;
-            &:hover {
-                background-color: lighten($alertColor, 4);
-            }
-            &:active {
-                background-color: darken($alertColor, 4);
-            }
+        &:active {
+            background-color: darken($focusTextColor, 4);
+        }
+    }
+    [class*="AlertBottom"] [class*="Cancel"],
+    [class*="btn-warn"] {
+        background-color: $alertColor;
+        color: #fff;
+        &:hover {
+            background-color: lighten($alertColor, 4);
+        }
+        &:active {
+            background-color: darken($alertColor, 4);
         }
     }
     [class*="Error"] {

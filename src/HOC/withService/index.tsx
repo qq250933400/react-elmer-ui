@@ -87,7 +87,6 @@ const withService = function<T={}>(option?:TypeWithService<T>) {
                                 navigateTo("/login");
                             }
                         }).catch((err) => {
-                            console.log(handleEvent, "----", option);
                             handleEvent.onError = (errx:any) => {
                                 reject({
                                     ...err,

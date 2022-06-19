@@ -34,3 +34,18 @@ export interface IAlertOption {
     onCancel?: Function;
     onRetry?: Function;
 };
+
+export interface IModal {
+    title: string|number;
+    context: string|number|React.ComponentType<any>;
+    icon?: React.ComponentType<any>;
+    hideIcon?: boolean;
+    okText?: string;
+    cancelText?: string;
+    retryText?: string;
+    onConfirm?: Function;
+    onCancel?: Function;
+    onRetry?: Function;
+    hideMax?: boolean;
+    button?: TypeAlertMsg;
+}

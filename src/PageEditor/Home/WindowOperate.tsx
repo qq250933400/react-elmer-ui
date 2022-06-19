@@ -9,7 +9,7 @@ export const WindowOperate = (props:any) => {
             modelObj.createWindow(options);
         }) as any;
         const desAlert = editApp.on("onCreateAlert", (options) => {
-            modelObj.alert(options);console.log("----Alert--");
+            modelObj.alert(options);
         }) as any;
         return () => {
             desCreateWindow();

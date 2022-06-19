@@ -1,9 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FileAddOutlined, FolderOpenOutlined } from "@ant-design/icons";
 import { FormattedMessage } from "@HOC/withI18n";
 import { cn } from "src/utils";
 import { Section } from "./Section";
 import { editApp } from "../config";
 import styles from "./style.module.scss";
+import { useEffect, useMemo } from "react";
+import { useService } from "@HOC/withService";
+import { useStore } from "./DataStore";
 
 type TypeActionButtonProps = {
     icon: any;
@@ -51,9 +55,28 @@ export const ActionButtonSection = () => {
 };
 
 export const ActionLinkSection = () => {
+    const service = useService();
+    const storeData = useStore(["openHistory"]);
+    const historyData = useMemo(() => (storeData.data.openHistory || []), [storeData.data]);
+    useEffect(() => {
+        editApp.showLoading();
+        service.send({
+            endPoint: "editor.recent"
+        }).then((resp) => {
+            storeData.action.openHistory(resp);
+            editApp.hideLoaidng();
+        }).catch((err) => {
+            editApp.hideLoaidng();
+        });
+    }, []);
+
     return (
         <Section title={<FormattedMessage id="recent"/>}>
-            <ActionLink title="CommonPage" description="/mnt/page"/>
+            {
+                historyData.map((item, index) => {
+                    return (<ActionLink key={index} title={item.name} description={item.path}/>)
+                })
+            }
             <ActionLink title={<FormattedMessage id="more"/>}/>
         </Section>
     );

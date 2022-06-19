@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { IWindowProps, IAlertOption } from "./IWindowModel";
+import { IWindowProps, IAlertOption, IModal } from "./IWindowModel";
 import { useMemo, createContext, useState, useCallback, useContext } from "react";
 import { Window as AWindow } from "./Window";
 import { utils } from "elmer-common";
@@ -69,7 +69,8 @@ const WindowModel = ({ config, onClose, attachRoot }: TypeWindowModelProps) => {
 
 const ModelContext = createContext({
     createWindow: (opt: IWindowProps) => {},
-    alert: (option:IAlertOption) => {}
+    alert: (option:IAlertOption) => {},
+    modal: (option: IModal) => {}
 });
 
 export const useModel = () => useContext(ModelContext);
@@ -130,10 +131,43 @@ export const Container = (props: TypeContainerProps) => {
             }
         });
     }, [createWindow, state]);
+    const modal = useCallback((option: IModal) => {
+        const uid = "window_" + utils.guid();
+        const bottomNode = createAlertButton(option.button || "OkOnly", option, ((_id) => {
+            return (type, opt) => {
+                eventBus.emit("close", _id, {
+                    type,
+                    option: opt
+                });
+            };
+        })(uid));
+        createWindow({
+            uid,
+            title: option.title,
+            context: option.context,
+            icon: option.icon,
+            hideMax: true,
+            hideMin: true,
+            hideIcon: option.hideIcon,
+            showBottom: true,
+            hasMask: true,
+            bottom: (<div className={cn(styles.alertBottom, "AlertBottom", option.button)}>{bottomNode}</div>),
+            onClose: (opt: { type: TypeAlertButton, option: IAlertOption }) => {
+                if(opt?.type === "Confirm") {
+                    typeof option.onConfirm === "function" && option.onConfirm();
+                } else if(opt?.type === "Retry") {
+                    typeof option.onRetry === "function" && option.onRetry();
+                } else {
+                    typeof option.onCancel === "function" && option.onCancel();
+                }
+            }
+        });
+    }, [createWindow, state]);
     return (
         <ModelContext.Provider value={{
             createWindow,
-            alert
+            alert,
+            modal
         }}>
             {props.children}
             {

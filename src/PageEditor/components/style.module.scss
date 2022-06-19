@@ -218,3 +218,62 @@ $statusBarHeight: 1.6rem;
         font-size: .6rem;
     }
 }
+.loading {
+    $duration: .8s;
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background:rgba(10,10,10, .5);
+    left: 0;
+    top: 0;
+    >div {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        .spin {
+            display: flex;
+            width: 80px;
+            height: 30px;
+            margin: 0 auto;
+            align-items: center;
+            flex-wrap: nowrap;
+            justify-content: space-around;
+            i {
+                flex: 0 0 15px;
+                width: 15px;
+                height: 15px;
+                background: #fff;
+                border-radius: 100%;
+            }
+            i:nth-child(1) {
+                animation: framesSpin1 $duration linear infinite;
+            }
+            i:nth-child(2) {
+                animation: framesSpin2 $duration linear infinite;
+            }
+            i:nth-child(3) {
+                animation: framesSpin3 $duration ease-out infinite;
+            }
+        }
+        .loadingSpin {
+            display: block;
+            width: 400px;
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            top: 50%;
+            margin-top: -30px;
+            label {
+                display: block;
+                text-align: center;
+                font-size: 1.1rem;
+                color: #fff;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}

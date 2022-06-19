@@ -11,6 +11,7 @@ import StatusBar from "../components/StatusBar";
 import cn from "classnames";
 import { ServiceConfig } from "../config/ServiceConfig";
 import withService from "@HOC/withService";
+import { Application } from "../components/Application";
 
 const Home = () => {
     const [ CurrentPage, setCurrentPage ] = useState({
@@ -58,18 +59,20 @@ const Home = () => {
         event.preventDefault();
         return false;
     }}>
-        <Container>
-            <div>
-                <ApplicationHeader />
-                <div className={cn(homeStyles.pageContainer, "Container")}>
-                    {
-                        RenderPage && <RenderPage initState={CurrentPage.state}/>
-                    }
+        <Application>
+            <Container>
+                <div className={styles.routerLayout}>
+                    <ApplicationHeader />
+                    <div className={cn(homeStyles.pageContainer, "Container")}>
+                        {
+                            RenderPage && <RenderPage initState={CurrentPage.state}/>
+                        }
+                    </div>
+                    <StatusBar />
                 </div>
-                <StatusBar />
-            </div>
-            <WindowOperate />
-        </Container>
+                <WindowOperate />
+            </Container>
+        </Application>
     </div>);
 };
 
