@@ -35,17 +35,17 @@ export const createAlertButton = (msgType: TypeAlertMsg, options: any, fn: TypeC
         fn(type, options);
     };
     const buttons: JSX.Element[] = [
-        <button type="button" className={cn(btnClassName,"Confirm")} onClick={() => onClick("Confirm")}>{options.okText || defaultOKText}</button>
+        <button key="Alert_Confirm" type="button" className={cn(btnClassName,"Confirm")} onClick={() => onClick("Confirm")}>{options.okText || defaultOKText}</button>
     ];
     
     switch(msgType) {
         case "OkCancel": {
-            buttons.push(<button type="button" className={cn(btnClassName,"Cancel")} onClick={() => onClick("Cancel")}>{options.cancelText || defaultCancelText}</button>);
+            buttons.push(<button key="Alert_Cancel" type="button" className={cn(btnClassName,"Cancel")} onClick={() => onClick("Cancel")}>{options.cancelText || defaultCancelText}</button>);
             break;
         }
         case "OkCancelRetry" : {
-            buttons.push(<button type="button" className={cn(btnClassName,"Cancel")} onClick={() => onClick("Cancel")}>{options.cancelText || defaultCancelText}</button>);
-            buttons.push(<button type="button" className={cn(btnClassName,"Retry")} onClick={() => onClick("Retry")}>{options.retryText || defaultRetryText}</button>);
+            buttons.push(<button key="Alert_Cancel" type="button" className={cn(btnClassName,"Cancel")} onClick={() => onClick("Cancel")}>{options.cancelText || defaultCancelText}</button>);
+            buttons.push(<button key="Alert_Retry" type="button" className={cn(btnClassName,"Retry")} onClick={() => onClick("Retry")}>{options.retryText || defaultRetryText}</button>);
             break;
         }
     }

@@ -62,3 +62,56 @@
         margin-top: 0;
     }
 }
+
+.CreatePanel {
+    display: block;
+    padding: 1rem;
+    >div {
+        display: block;
+        width: 400px;
+        .createPanelFileTypes {
+            display: block;
+            label {
+                display: inline-block;
+                vertical-align: text-top;
+                width: 80px;
+                height: 70px;
+                margin-right: .5rem;
+                position: relative;
+                border: 1px solid #333;
+                border-radius: 3px;
+                input[type="radio"] {
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    margin: 0;
+                    padding: 0;
+                    opacity: 0;
+                }
+                >i {
+                    display: block;
+                    font-size: 1.8rem;
+                    text-align: center;
+                    padding: .2rem;
+                    padding-top: .4rem;
+                }
+                >span {
+                    display: block;
+                    font-size: .8rem;
+                    text-align: center;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    padding: .2rem .4rem;
+                    overflow: hidden;
+                }
+            }
+        }
+        .createPanelAlignTop {
+            vertical-align: text-top;
+            padding-top: .4rem;
+        }
+    }
+}

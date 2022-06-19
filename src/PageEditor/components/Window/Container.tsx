@@ -172,7 +172,12 @@ export const Container = (props: TypeContainerProps) => {
             {props.children}
             {
                 windowList.length > 0 && windowList.map((item, index) => {
-                    return <WindowModel attachRoot={props.attachRoot} onClose={(uid: string, opt:any) => onWindowClose(uid, opt, item)} config={item} key={item.uid || index} />
+                    return <WindowModel
+                        attachRoot={props.attachRoot}
+                        onClose={(uid: string, opt:any) => onWindowClose(uid, opt, item)}
+                        config={item}
+                        key={item.uid || index}
+                    />
                 })
             }
         </ModelContext.Provider>

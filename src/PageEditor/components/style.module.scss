@@ -277,3 +277,12 @@ $statusBarHeight: 1.6rem;
         }
     }
 }
+
+.input {
+    border: 1px solid transparent;
+    border-radius: 0;
+    appearance: none;
+    outline: none;
+    padding: .3rem .4rem;
+    color: #333;
+}

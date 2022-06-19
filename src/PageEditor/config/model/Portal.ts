@@ -1,13 +1,12 @@
 import Base from "./Base";
+import { createPanel } from "../../Portal/CreatePanel";
 
 export default class Portal extends Base {
     onCreateFile(): void {
         this.api.modal({
             title: "测试提示",
-            // msgType: "OkCancelRetry",
-            // msgIcon: "Error",
             button: "OkCancel",
-            context: "Hello world 测试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提示测试提示",
+            context: createPanel(),
             onConfirm: () => {
                 alert("click confirm")
             }

@@ -37,7 +37,7 @@ export interface IAlertOption {
 
 export interface IModal {
     title: string|number;
-    context: string|number|React.ComponentType<any>;
+    context: string|number|JSX.Element;
     icon?: React.ComponentType<any>;
     hideIcon?: boolean;
     okText?: string;

@@ -185,4 +185,21 @@
             }
         }
     }
+    [class*="Input"] {
+        background-color: darken($normalBackColor, 3);
+        border-color: darken($focusBackColor, 2);
+        box-shadow: 0 0 2px rgba(10,10,10,.6);
+        color: darken($titleColor,4);
+        &:focus {
+            background-color: darken($focusBackColor,2);
+            border-color: $focusTextColor;
+        }
+    }
+    [class*="RadioButton"] {
+        border-color: darken($normalBackColor, 5);
+        background-color: $normalBackColor;
+        &:hover {
+            border-color: $focusTextColor;
+        }
+    }
 }

@@ -8,5 +8,7 @@ export default {
     recent: "最近",
     btnConfirm: "确认",
     btnCancel: "取消",
-    btnRetry: "重试"
+    btnRetry: "重试",
+    webPage: "Web页面",
+    markdown: "Markdown文档"
 };

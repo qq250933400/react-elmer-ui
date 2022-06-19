@@ -8,5 +8,7 @@ export default {
     recent: "Recent",
     btnConfirm: "Confirm",
     btnCancel: "Cancel",
-    btnRetry: "Retry"
+    btnRetry: "Retry",
+    webPage: "Web Page",
+    markdown: "Markdown"
 };
