@@ -196,10 +196,19 @@
         }
     }
     [class*="RadioButton"] {
-        border-color: darken($normalBackColor, 5);
-        background-color: $normalBackColor;
-        &:hover {
+        >i {
+            &::before {
+                border-color: darken($normalBackColor, 5);
+                background-color: $normalBackColor;
+            }
+        }
+        &:hover>i::before {
+            border-color: lighten($focusTextColor, 8);
+        }
+        input[type="radio"]:checked + i::before {
             border-color: $focusTextColor;
+            box-shadow: 0 0 3px lighten($focusTextColor, 2);
+            background-color: darken($normalBackColor, 4);
         }
     }
 }

@@ -10,5 +10,7 @@ export default {
     btnCancel: "取消",
     btnRetry: "重试",
     webPage: "Web页面",
-    markdown: "Markdown文档"
+    markdown: "Markdown文档",
+    fileName: "文件名",
+    fileType: "项目类型"
 };

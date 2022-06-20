@@ -12,7 +12,7 @@ import cn from "classnames";
 import { ServiceConfig } from "../config/ServiceConfig";
 import withService from "@HOC/withService";
 import { Application } from "../components/Application";
-import { RootStore } from "../data";
+import { RootStore, EmitValidation } from "../data";
 
 
 const Home = () => {
@@ -61,22 +61,24 @@ const Home = () => {
         event.preventDefault();
         return false;
     }}>
-        <Application>
-            <RootStore>
-                <Container>
-                    <div className={styles.routerLayout}>
-                        <ApplicationHeader />
-                        <div className={cn(homeStyles.pageContainer, "Container")}>
-                            {
-                                RenderPage && <RenderPage initState={CurrentPage.state}/>
-                            }
+        <EmitValidation>
+            <Application>
+                <RootStore>
+                    <Container>
+                        <div className={styles.routerLayout}>
+                            <ApplicationHeader />
+                            <div className={cn(homeStyles.pageContainer, "Container")}>
+                                {
+                                    RenderPage && <RenderPage initState={CurrentPage.state}/>
+                                }
+                            </div>
+                            <StatusBar />
                         </div>
-                        <StatusBar />
-                    </div>
-                    <WindowOperate />
-                </Container>
-            </RootStore>
-        </Application>
+                        <WindowOperate />
+                    </Container>
+                </RootStore>
+            </Application>
+        </EmitValidation>
     </div>);
 };
 

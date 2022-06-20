@@ -12,6 +12,7 @@ export type TypeApiEvent = {
     onCreateAlert: (opt: IAlertOption) => void;
     onCreateModal: (opt: IModal) => void;
     onApplicationChange: (name: string, ...args: any[]) => void;
+    onBeforeCreateApp: () => boolean;
 };
 
 type TypeEditorApi = ApiModel<TypeModels, TypeApiEvent>;

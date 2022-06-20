@@ -10,5 +10,7 @@ export default {
     btnCancel: "Cancel",
     btnRetry: "Retry",
     webPage: "Web Page",
-    markdown: "Markdown"
+    markdown: "Markdown",
+    fileName: "Name",
+    fileType: "Type"
 };

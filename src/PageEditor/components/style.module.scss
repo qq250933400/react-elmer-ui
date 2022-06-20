@@ -286,3 +286,53 @@ $statusBarHeight: 1.6rem;
     padding: .3rem .4rem;
     color: #333;
 }
+.radioButton {
+    display: inline-block;
+    vertical-align: text-top;
+    width: 80px;
+    height: 70px;
+    margin-right: .5rem;
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+    input[type="radio"] {
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+    }
+    >i {
+        display: block;
+        font-size: 1.8rem;
+        text-align: center;
+        padding: .2rem;
+        padding-top: .4rem;
+        &::before {
+            display: block;
+            box-sizing: border-box;
+            border-width: 1px;
+            border-style: solid;
+            content: "";
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -1;
+        }
+    }
+    >span {
+        display: block;
+        font-size: .8rem;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: .2rem .4rem;
+        overflow: hidden;
+    }
+}

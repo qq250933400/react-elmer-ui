@@ -33,6 +33,9 @@ export interface IAlertOption {
     onConfirm?: Function;
     onCancel?: Function;
     onRetry?: Function;
+    onBeforeConfirm?: Function;
+    onBeforeCancel?: Function;
+    onBeforeRetry?: Function;
 };
 
 export interface IModal {
@@ -48,4 +51,7 @@ export interface IModal {
     onRetry?: Function;
     hideMax?: boolean;
     button?: TypeAlertMsg;
+    onBeforeConfirm?: Function;
+    onBeforeCancel?: Function;
+    onBeforeRetry?: Function;
 }

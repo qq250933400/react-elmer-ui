@@ -78,8 +78,8 @@
                 height: 70px;
                 margin-right: .5rem;
                 position: relative;
-                border: 1px solid #333;
                 border-radius: 3px;
+                overflow: hidden;
                 input[type="radio"] {
                     width: 100%;
                     height: 100%;
@@ -97,6 +97,19 @@
                     text-align: center;
                     padding: .2rem;
                     padding-top: .4rem;
+                    &::before {
+                        display: block;
+                        box-sizing: border-box;
+                        border-width: 1px;
+                        border-style: solid;
+                        content: "";
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        z-index: -1;
+                    }
                 }
                 >span {
                     display: block;

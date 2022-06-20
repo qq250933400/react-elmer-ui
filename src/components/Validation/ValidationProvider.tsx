@@ -26,7 +26,7 @@ const ValidationProvider = (props: any) => {
         },
         getValidateByTag: (tag: string) => {
             const res:Validator[] = [];
-            Object.keys(validates).map((validateId: string) => {
+            Object.keys(validates).forEach((validateId: string):void => {
                 const vd: Validator = validates[validateId];
                 if(vd.option.tag === tag) {
                     res.push(vd);

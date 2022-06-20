@@ -2,13 +2,14 @@
 import { IWindowProps, IAlertOption, IModal } from "./IWindowModel";
 import { useMemo, createContext, useState, useCallback, useContext } from "react";
 import { Window as AWindow } from "./Window";
-import { utils } from "elmer-common";
+import { queueCallFunc, utils } from "elmer-common";
 import { Alert, createAlertButton, TypeAlertButton } from "./Alert";
 import { eventBus } from "./EventHandler";
 import ReactDOM from "react-dom";
 import styles from "../style.module.scss";
 import rootStyles from "../../styles/theme.module.scss";
 import cn from "classnames";
+import { invoke } from "../../../utils";
 
 type TypeContainerProps = {
     attachRoot?: boolean;
@@ -135,9 +136,36 @@ export const Container = (props: TypeContainerProps) => {
         const uid = "window_" + utils.guid();
         const bottomNode = createAlertButton(option.button || "OkOnly", option, ((_id) => {
             return (type, opt) => {
-                eventBus.emit("close", _id, {
-                    type,
-                    option: opt
+                queueCallFunc([
+                    {
+                        id: "onBeforeConfirm",
+                        fn: ():any => {
+                            if(type === "Confirm" && typeof opt.onBeforeConfirm === "function") {
+                                return invoke(opt.onBeforeConfirm);
+                            }
+                        }
+                    }, {
+                        id: "onBeforeCancel",
+                        fn: ():any => {
+                            if(type === "Cancel" && typeof opt.onBeforeCancel === "function") {
+                                return invoke(opt.onBeforeCancel);
+                            }
+                        }
+                    }, {
+                        id: "onBeforeRetry",
+                        fn: ():any => {
+                            if(type === "Retry" && typeof opt.onBeforeRetry === "function") {
+                                return invoke(opt.onBeforeRetry);
+                            }
+                        }
+                    }
+                ], undefined, {
+                    throwException: true
+                }).then(() => {
+                    eventBus.emit("close", _id, {
+                        type,
+                        option: opt
+                    });
                 });
             };
         })(uid));

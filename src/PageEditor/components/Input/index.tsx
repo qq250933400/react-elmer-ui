@@ -8,6 +8,7 @@ type TypeInputProps = {
     className?: string;
     type?: "text"|"password"|"number"|"date"|"email"|"mobile";
     placeholder?: string;
+    defaultValue?: any;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onCompositionEnd?: (event: React.CompositionEvent<HTMLInputElement>) => void;
     onCompositionStart?: (event: React.CompositionEvent<HTMLInputElement>) => void;
@@ -20,6 +21,7 @@ export const Input = (props: TypeInputProps) => {
     return (<input
         className={cn(styles.input, "Input", props.className)}
         type={props.type || "text"}
+        defaultValue={props.defaultValue}
         placeholder={props.placeholder}
         onChange={props.onChange}
         onCompositionEnd={props.onCompositionEnd}
