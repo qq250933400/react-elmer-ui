@@ -9,6 +9,10 @@ export const ServiceConfig = createService("editor", {
         recent: {
             url: "/editor/recent/files",
             method: "GET"
+        },
+        createApp: {
+            url: "/editor/create/app",
+            method: "POST"
         }
     }
 });

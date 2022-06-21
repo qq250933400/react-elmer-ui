@@ -10,7 +10,7 @@ import { WindowOperate } from "./WindowOperate";
 import StatusBar from "../components/StatusBar";
 import cn from "classnames";
 import { ServiceConfig } from "../config/ServiceConfig";
-import withService from "@HOC/withService";
+import withService, { useService } from "@HOC/withService";
 import { Application } from "../components/Application";
 import { RootStore, EmitValidation } from "../data";
 
@@ -20,6 +20,7 @@ const Home = () => {
         page: null,
         state: null
     });
+    const serviceObj = useService();
     const [ theme ] = useState("theme_dark");
     const RenderPage = useMemo<React.ComponentType<any>>(() => (CurrentPage.page as any)?.Component, [CurrentPage]);
     const rootRef = useRef(null);
@@ -36,6 +37,7 @@ const Home = () => {
                 }
             }
         });
+        editApp.setService(serviceObj);
     },[]);
     useEffect(() => {
         const unBind = editApp.on("onFullScreenChange", (isFullScreen) => {

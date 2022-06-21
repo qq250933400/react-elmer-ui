@@ -1,9 +1,15 @@
 import { Model } from "@MSJApp";
 import { TypeModels } from "./index";
 import { TypeApi, TypeApiEvent } from "../api/index";
+import { IWithServiceApi } from "@HOC/withService";
 
 export default class Base extends Model<TypeModels, TypeApi, TypeApiEvent> {
     // the basic model
+    public service!: IWithServiceApi;
+    constructor(api: any) {
+        super(api);
+        this.service = (api as any).service;
+    }
     public exitFullscreen() {
         if((document as any).exitFullScreen) {
             (document as any).exitFullScreen();

@@ -17,15 +17,17 @@ type TypeWithService<T={}> = {
     config: React.Context<IServiceContext<T>>;
 };
 
+export interface IWithServiceApi {
+    config: TypeServiceNamespace<any>;
+    send: (option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions) => Promise<any>
+}
+
 const ServiceContext = createContext({
     config: {},
     env: "DEV"
 });
 
-const WithServiceContext = createContext<{
-    config: TypeServiceNamespace<any>,
-    send: (option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions) => Promise<any>
-}>({
+const WithServiceContext = createContext<IWithServiceApi>({
     config: {} as any,
     send: (() => {}) as any
 });

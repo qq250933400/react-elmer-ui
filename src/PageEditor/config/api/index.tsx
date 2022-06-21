@@ -4,6 +4,7 @@ import { IWindowProps, IAlertOption, IModal } from "../../components/Window/IWin
 import { FormattedMessage } from "@HOC/withI18n";
 import { IApplication } from "../../components/Application/IApplication";
 import { registeApp } from "../../components/Application";
+import { IWithServiceApi } from "@HOC/withService";
 
 export type TypeApiEvent = {
     onMenuChange: (menuList: any[]) => void;
@@ -13,6 +14,7 @@ export type TypeApiEvent = {
     onCreateModal: (opt: IModal) => void;
     onApplicationChange: (name: string, ...args: any[]) => void;
     onBeforeCreateApp: () => boolean;
+    onAfterCreateApp: (data: any) => void;
 };
 
 type TypeEditorApi = ApiModel<TypeModels, TypeApiEvent>;
@@ -27,6 +29,7 @@ export type TypeApi = {
     registeApp: (app: IApplication) => void;
     showLoading: (opt?: TypeLoadingOpt) => void;
     hideLoaidng: () => void;
+    setService: (obj: IWithServiceApi) => void;
 };
 
 export const Api: {[P in keyof TypeApi]: (api: TypeEditorApi) => TypeApi[P]} = {
@@ -56,5 +59,8 @@ export const Api: {[P in keyof TypeApi]: (api: TypeEditorApi) => TypeApi[P]} = {
         api.emit("onApplicationChange", "showLoading", {
             visible: false
         });
+    },
+    setService: (api) => (obj) => {
+        (api as any).service = obj;
     }
 };

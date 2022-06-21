@@ -161,11 +161,22 @@ export const Container = (props: TypeContainerProps) => {
                     }
                 ], undefined, {
                     throwException: true
-                }).then(() => {
+                }).then((data: any) => {
+                    let nextData = null;
+                    if(type === "Confirm") {
+                        nextData = data.onBeforeConfirm;
+                    } else if(type === "Cancel") {
+                        nextData = data.onBeforeCancel;
+                    } else {
+                        nextData = data.onBeforeRetry;
+                    }
                     eventBus.emit("close", _id, {
                         type,
-                        option: opt
-                    });
+                        option: opt,
+                        data: nextData
+                    });console.log(type,"--BeforeResult--", nextData);
+                }).catch((err) => {
+                    console.error(err.exception || err);
                 });
             };
         })(uid));
@@ -180,13 +191,14 @@ export const Container = (props: TypeContainerProps) => {
             showBottom: true,
             hasMask: true,
             bottom: (<div className={cn(styles.alertBottom, "AlertBottom", option.button)}>{bottomNode}</div>),
-            onClose: (opt: { type: TypeAlertButton, option: IAlertOption }) => {
+            onClose: (opt: { type: TypeAlertButton, option: IAlertOption, data: any }) => {
+                console.log("----", opt);
                 if(opt?.type === "Confirm") {
-                    typeof option.onConfirm === "function" && option.onConfirm();
+                    typeof option.onConfirm === "function" && option.onConfirm(opt.data);
                 } else if(opt?.type === "Retry") {
-                    typeof option.onRetry === "function" && option.onRetry();
+                    typeof option.onRetry === "function" && option.onRetry(opt.data);
                 } else {
-                    typeof option.onCancel === "function" && option.onCancel();
+                    typeof option.onCancel === "function" && option.onCancel(opt.data);
                 }
             }
         });

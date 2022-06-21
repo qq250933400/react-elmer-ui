@@ -294,6 +294,14 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
             ]);
         }
     }
+    goto(pageId: string, state?: any): Promise<any> {
+        const pageData = this.getPageById(pageId);
+        if(pageData) {
+            return this.navigateTo(pageData);
+        } else {
+            return Promise.reject({ message: "Page not found" });
+        }
+    }
     log(msg: any, type: TypeLogType): void {
         const logType = type || "Info";
         const now = "[" + moment().format("YYYY-MM-DD H:mm:ss") + "]";

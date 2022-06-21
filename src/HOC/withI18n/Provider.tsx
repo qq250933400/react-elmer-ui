@@ -15,11 +15,12 @@ const getDefaultLocale = () => {
 
 const I18nContext = createContext({
     locale: "en",
+    message: {},
     getLocale: (): string => { return "en-GB"},
     setLocale: (locale: string) => {},
     setMessages: (msgData:any) => {},
     removeMessages: (msgData: any) => {},
-    getMessages: () => {}
+    getMessages: ():any => {}
 });
 
 export const I18nProvider = (props: TypeI18nProviderProps) => {
@@ -70,6 +71,7 @@ export const I18nProvider = (props: TypeI18nProviderProps) => {
     return (<IntlProvider locale={locale} messages={message}>
         <I18nContext.Provider value={{
             locale,
+            message,
             setLocale: (vLocale: string) => {
                 localStorage.setItem("locale", vLocale);
                 setLocale(vLocale);

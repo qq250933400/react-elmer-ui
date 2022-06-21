@@ -9,6 +9,10 @@ const Portal = loadable({
     loader: () => import(/* webpackChunkName: 'PageEditor_Portal' */"../Portal")
 });
 
+const App = loadable({
+    loader: () => import(/* webpackChunkName: 'PageEditor_App' */"../App")
+});
+
 type TypeEditAppPageInfo = {
     Component: React.ComponentType<any>
 };
@@ -18,6 +22,10 @@ export const worksapce = createWorkspace<TypeEditAppPageInfo>("PageEditApplicato
         id: "portal",
         path: "/portal",
         Component: Portal
+    }).createPage({
+        id: "app",
+        path: "/app",
+        Component: App
     });
 
 export const editApp = createInstance<TypeModels, TypeApi, TypeApiEvent>(EditAppImpl, {

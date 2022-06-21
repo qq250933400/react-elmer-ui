@@ -71,13 +71,19 @@ export const ActionLinkSection = () => {
     }, []);
 
     return (
-        <Section title={<FormattedMessage id="recent"/>}>
+        <>
             {
-                historyData.map((item, index) => {
-                    return (<ActionLink key={index} title={item.name} description={item.path}/>)
-                })
+                historyData && historyData.length > 0 && (
+                    <Section title={<FormattedMessage id="recent"/>}>
+                        {
+                            historyData.map((item, index) => {
+                                return (<ActionLink key={index} title={item.name} description={item.path}/>)
+                            })
+                        }
+                        <ActionLink title={<FormattedMessage id="more"/>}/>
+                    </Section>
+                )
             }
-            <ActionLink title={<FormattedMessage id="more"/>}/>
-        </Section>
+        </>
     );
 };
