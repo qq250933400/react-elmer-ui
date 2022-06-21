@@ -4,10 +4,18 @@ import { FormattedMessage } from "@HOC/withI18n";
 import { Info } from "./Info";
 import { cn } from "src/utils";
 import { StoreContainer } from "./DataStore";
+import { useRootStore } from "../data";
+import { useEffect } from "react";
+import { editApp } from "../config";
 
 const Portal = () => {
-
-    return (
+    const rootStore = useRootStore(["currentApp"]);
+    useEffect(()=>{
+        if(rootStore.data.currentApp) {
+            editApp.goto("app", rootStore.data.currentApp);
+        }
+    }, []);
+    return rootStore.data.currentApp ? <></> : (
         <StoreContainer>
             <div className={cn(styles.portal, "Container")}>
                 <div style={{ maxWidth: 1000, margin: "0 auto" }}>

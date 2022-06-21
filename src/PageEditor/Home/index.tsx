@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { withI18n } from "@HOC/withI18n";
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import i18nData from "../i18n";

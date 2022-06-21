@@ -25,9 +25,13 @@ export default class Menu extends Base {
             { title: "保存", hotKey: "Ctrl+S" },
             { title: "另存为", hotKey: "Ctrl+Shift+S" },
             { title: "", type: "Split" },
-            { title: "关闭文件", hotKey: "Ctrl+Q" },
+            { title: "关闭文件", hotKey: "Ctrl+Q", value: "menu.onCloseFile" },
             { title: "关闭窗口", hotKey: "ECS" },
         ];
+    }
+    public onCloseFile(): void {
+        this.api.emit("onRemoveFromStore", "editor.currentApp");
+        this.api.goto("portal");
     }
     public applicationMenuView(): IMenuList {
         return [

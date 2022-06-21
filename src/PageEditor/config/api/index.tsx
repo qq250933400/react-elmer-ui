@@ -15,6 +15,7 @@ export type TypeApiEvent = {
     onApplicationChange: (name: string, ...args: any[]) => void;
     onBeforeCreateApp: () => boolean;
     onAfterCreateApp: (data: any) => void;
+    onRemoveFromStore: (key: string) => void;
 };
 
 type TypeEditorApi = ApiModel<TypeModels, TypeApiEvent>;

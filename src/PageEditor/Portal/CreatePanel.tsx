@@ -3,7 +3,7 @@ import { Input } from "../components/Input";
 import { useState, useEffect } from "react";
 import { FormattedMessage, useMessage } from "@HOC/withI18n";
 import { FileMarkdownOutlined, Html5Outlined } from "@ant-design/icons";
-import { EmitValidation } from "../data";
+import { EmitValidation, useRootStore } from "../data";
 import RadioButton from "../components/RadioButton";
 import { editApp } from "../config";
 import { useValidate } from "@Component/Validation";
@@ -18,6 +18,7 @@ const CreatePanelNode = () => {
     const getMsg = useMessage();
     const service = useService();
     const storeData = useStore(["openHistory"]);
+    const rootStore = useRootStore(["currentApp"]);
     const [ fileTypes ] = useState([
         { title: getMsg("webPage"), value: "WebPage", icon: <Html5Outlined /> },
         { title: getMsg("markdown"), value: "Markdown", icon: <FileMarkdownOutlined /> },
@@ -33,14 +34,14 @@ const CreatePanelNode = () => {
             return validateApi.validateByTag(CONST_VALIDATE_TAG_NAME);
         });
         const removeAfterCreateApp = editApp.on("onAfterCreateApp", (data:any):any => {
-            console.log(data);
-            // editApp.goto("app", data);
+            rootStore.action.currentApp(data);
+            editApp.goto("app", data);
         });
         return () => {
             removeBeforeCreateApp();
             removeAfterCreateApp();
         };
-    }, [validateApi,service,storeData, fileName, fileType]);
+    }, [validateApi, service, storeData, rootStore.action, fileName, fileType]);
     return (<section className={styles.CreatePanel}>
         <div>
             <table>

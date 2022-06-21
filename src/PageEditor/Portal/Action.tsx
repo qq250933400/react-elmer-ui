@@ -5,9 +5,10 @@ import { cn } from "src/utils";
 import { Section } from "./Section";
 import { editApp } from "../config";
 import styles from "./style.module.scss";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useService } from "@HOC/withService";
 import { useStore } from "./DataStore";
+import { useRootStore } from "../data";
 
 type TypeActionButtonProps = {
     icon: any;
@@ -57,7 +58,12 @@ export const ActionButtonSection = () => {
 export const ActionLinkSection = () => {
     const service = useService();
     const storeData = useStore(["openHistory"]);
+    const rootStore = useRootStore(["currentApp"]);
     const historyData = useMemo(() => (storeData.data.openHistory || []), [storeData.data]);
+    const onHistoryClick = useCallback((data: any) => {
+        rootStore.action.currentApp(data);
+        editApp.goto("app", data);
+    }, []);
     useEffect(() => {
         editApp.showLoading();
         service.send({
@@ -77,7 +83,7 @@ export const ActionLinkSection = () => {
                     <Section title={<FormattedMessage id="recent"/>}>
                         {
                             historyData.map((item, index) => {
-                                return (<ActionLink key={index} title={item.name} description={item.path}/>)
+                                return (<ActionLink onClick={() => onHistoryClick(item)} key={index} title={item.name} description={item.path}/>)
                             })
                         }
                         <ActionLink title={<FormattedMessage id="more"/>}/>

@@ -13,7 +13,7 @@ interface IPortalStore {
 export const StoreContainer = withStore<IPortalStore>({
     name: "portal",
     dispatch: {
-        openHistory: (dispatch: Function, root: any) => (data) => dispatch(data)
+        openHistory: (dispatch: Function) => (data) => dispatch(data, true)
     }
 })(
     (props: any) => {

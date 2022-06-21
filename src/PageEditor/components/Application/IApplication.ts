@@ -1,5 +1,8 @@
 import React from "react";
 
+
+type TypeStoreDispatch = (newData: any, localized?: boolean) => void;
+
 export interface IApplicationContext {
     data: any;
     setData: (key: string, value: any) => void;
@@ -7,7 +10,7 @@ export interface IApplicationContext {
 
 export interface IWithStore<T={}> {
     name: string;
-    dispatch?: { [ P in keyof T]: (dispatch: Function, rootData: any) => (data: T[P]) => void };
+    dispatch?: { [ P in keyof T]: (dispatch: TypeStoreDispatch, rootData: any) => (data: T[P]) => void };
 }
 export type IWithStoreResult<T={}, P={}> = React.ComponentType<P> & {
     useData: <Names extends (keyof T)>(keys: Names[]) => {
@@ -18,8 +21,11 @@ export type IWithStoreResult<T={}, P={}> = React.ComponentType<P> & {
 export interface IWithStoreContext {
     rootPath: string;
     rootData: any;
+    currentPath: string;
     data: any;
     dispatchs: any;
+    parentPatchs: any;
+    name: string;
     updateData: (dataKey: string, data: any) => void;
 };
 

@@ -9,7 +9,7 @@ interface IWithStoreDispatchs {
 export const RootStore = withStore<IWithStoreDispatchs>({
     name: "editor",
     dispatch: {
-        currentApp: (dispatch) => (data) => dispatch(data)
+        currentApp: (dispatch) => (data) => dispatch(data, true)
     }
 })((props: any) => {
     return props.children;
