@@ -192,7 +192,6 @@ export const Container = (props: TypeContainerProps) => {
             hasMask: true,
             bottom: (<div className={cn(styles.alertBottom, "AlertBottom", option.button)}>{bottomNode}</div>),
             onClose: (opt: { type: TypeAlertButton, option: IAlertOption, data: any }) => {
-                console.log("----", opt);
                 if(opt?.type === "Confirm") {
                     typeof option.onConfirm === "function" && option.onConfirm(opt.data);
                 } else if(opt?.type === "Retry") {

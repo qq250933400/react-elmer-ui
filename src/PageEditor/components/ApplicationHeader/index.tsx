@@ -33,7 +33,11 @@ const ApplicationMenuButton = ({ data }: TypeMenuButton) => {
         if(!utils.isEmpty(data.value)) {
             editApp.callApiEx(data.value, data);
         }
-    }, []);
+        setMenuStyle({
+            ...menuStyle,
+            display: "none"
+        });
+    }, [menuStyle]);
     return (
         <li className={cn("TitleColor", "MenuBarItem")} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <label>
@@ -64,7 +68,6 @@ export const ApplicationHeader = () => {
                     })
                 }
             </ul>
-            <h5 className={cn(styles.applicationHeaderTitle, "TitleColor")}><FormattedMessage id="applicationTitle"/></h5>
         </div>
     );
 };

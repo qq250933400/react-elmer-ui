@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styles from "./style.module.scss";
 import { ActionButtonSection, ActionLinkSection } from "./Action";
 import { FormattedMessage } from "@HOC/withI18n";
@@ -5,17 +6,27 @@ import { Info } from "./Info";
 import { cn } from "src/utils";
 import { StoreContainer } from "./DataStore";
 import { useRootStore } from "../data";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { editApp } from "../config";
 
 const Portal = () => {
     const rootStore = useRootStore(["currentApp"]);
+    const [ shouldInApp, setShouldInApp ] = useState( !!rootStore.data.currentApp );
+
     useEffect(()=>{
-        if(rootStore.data.currentApp) {
-            editApp.goto("app", rootStore.data.currentApp);
+        if(shouldInApp) {
+            editApp.goto("app", rootStore.data.currentApp).catch((err) => {
+                console.error(err.exception || err);
+                editApp.alert({
+                    title: "错误项目",
+                    message: err.message,
+                    msgIcon: "Error"
+                });
+                setShouldInApp(false);
+            });
         }
     }, []);
-    return rootStore.data.currentApp ? <></> : (
+    return rootStore.data.currentApp && shouldInApp ? <></> : (
         <StoreContainer>
             <div className={cn(styles.portal, "Container")}>
                 <div style={{ maxWidth: 1000, margin: "0 auto" }}>

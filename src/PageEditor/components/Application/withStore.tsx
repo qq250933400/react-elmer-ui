@@ -152,25 +152,28 @@ export const withStore = function<T={}, P={}>(option: IWithStore<T>){
                 const inDefineContext = currentStore.currentPath === (option as any).path;
                 useKeys.forEach((key: any) => {
                     const fallbackKey = (option as any).path + "." + key;
-                    const findDispatchPatch = inDefineContext ? currentStore.dispatchs[key] : currentStore.parentPatchs[fallbackKey].dispatch;
-                    const updateData = inDefineContext ? currentStore.updateData : currentStore.parentPatchs[fallbackKey].updateData; // 当调用Store处于自己一层的Context才可以使用Context的update方法
-                    newData[key] = currentStore.data[key];
-                    newAction[key] = ((dataKey: string, dispatch: Function, setData: Function, actionPath: string) => {
-                        return (saveData: any) => {
-                            const dispatchSaveData = dispatch((newSaveData: any, localized?: boolean) => {
-                                const saveKey = newSaveData.dataKey || dataKey;
-                                const saveData = newSaveData.dataKey || newSaveData;
-                                const localKey = actionPath + "." + saveKey;
-                                localized && updateLocalData(localKey); // 需要本地化数据先将key保存，在恢复数据时使用
-                                saveDataToStorage(localKey, saveData);
-                                return {
-                                    dataKey: saveKey,
-                                    data: saveData
-                                }
-                            }, appObj.data)(saveData);
-                            setData(dispatchSaveData.dataKey, dispatchSaveData.data);
-                        };
-                    })(key, findDispatchPatch, updateData, (option as any).path);
+                    const findDispatchPatch = inDefineContext ? currentStore.dispatchs[key] : currentStore.parentPatchs[fallbackKey]?.dispatch;
+                    // 当findDispatchPath为undefined或者null时，有可能是第一次渲染
+                    if(findDispatchPatch) {
+                        const updateData = inDefineContext ? currentStore.updateData : currentStore.parentPatchs[fallbackKey]?.updateData; // 当调用Store处于自己一层的Context才可以使用Context的update方法
+                        newData[key] = currentStore.data[key];
+                        newAction[key] = ((dataKey: string, dispatch: Function, setData: Function, actionPath: string) => {
+                            return (saveData: any) => {
+                                const dispatchSaveData = dispatch((newSaveData: any, localized?: boolean) => {
+                                    const saveKey = newSaveData?.dataKey || dataKey;
+                                    const saveData = newSaveData?.dataKey || newSaveData;
+                                    const localKey = actionPath + "." + saveKey;
+                                    localized && updateLocalData(localKey); // 需要本地化数据先将key保存，在恢复数据时使用
+                                    saveDataToStorage(localKey, saveData);
+                                    return {
+                                        dataKey: saveKey,
+                                        data: saveData
+                                    }
+                                }, appObj.data)(saveData);
+                                setData(dispatchSaveData.dataKey, dispatchSaveData.data);
+                            };
+                        })(key, findDispatchPatch, updateData, (option as any).path);
+                    }
                 });
                 return {
                     data: newData,

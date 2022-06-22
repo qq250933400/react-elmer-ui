@@ -25,6 +25,7 @@ export const worksapce = createWorkspace<TypeEditAppPageInfo>("PageEditApplicato
     }).createPage({
         id: "app",
         path: "/app",
+        onBeforeEnter: "app.onBeforeAppInit",
         Component: App
     });
 

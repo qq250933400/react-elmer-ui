@@ -21,6 +21,7 @@ export type TypeApiEvent = {
 type TypeEditorApi = ApiModel<TypeModels, TypeApiEvent>;
 type TypeLoadingOpt = {
     title?: string;
+    position?: "fixed" | "absolute"
 };
 
 export type TypeApi = {
@@ -53,7 +54,8 @@ export const Api: {[P in keyof TypeApi]: (api: TypeEditorApi) => TypeApi[P]} = {
     showLoading: (api) => (opt: any) => {
         api.emit("onApplicationChange", "showLoading", {
             ...(opt || {}),
-            visible: true
+            visible: true,
+            position: "absolute"
         });
     },
     hideLoaidng: (api) => () => {

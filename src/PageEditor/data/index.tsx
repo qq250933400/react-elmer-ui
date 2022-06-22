@@ -1,9 +1,9 @@
 import { withStore } from "../components/Application";
-import { ICurrentApp } from "./ICurrentApp";
+import { IAppInfo } from "./IAppInfo";
 import { withValidate } from "@Component/Validation";
 
 interface IWithStoreDispatchs {
-    currentApp: ICurrentApp;
+    currentApp: IAppInfo;
 }
 
 export const RootStore = withStore<IWithStoreDispatchs>({

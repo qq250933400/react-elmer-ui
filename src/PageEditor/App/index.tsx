@@ -1,6 +1,16 @@
+import styles from "./style.module.scss";
+import { ControllPanel } from "./components/ControllPanel";
+import { useState } from "react";
 
-const App = () => {
-    return (<div>Hello world</div>);
+const App = (props: any) => {
+    const [ initState ] = useState(props.initData);
+    console.log(initState);
+    return (<div className={styles.workspace}>
+        <ControllPanel />
+        <section className={styles.editPanel}>
+            Editor
+        </section>
+    </div>);
 }
 
 export default App;

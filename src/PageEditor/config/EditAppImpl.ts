@@ -1,7 +1,7 @@
 import { Impl, IPageInfo } from "@MSJApp";
 
 type TypeImplInit = {
-    navigateTo: (page: any, state?: any) => void;
+    navigateTo: (page: any, state?: any, data?: any) => void;
 }
 
 export class EditAppImpl<M, P> extends Impl<M, P> {
@@ -19,9 +19,9 @@ export class EditAppImpl<M, P> extends Impl<M, P> {
     public setData(data: any): void {
         this.storeData = { ...this.storeData, ...data};
     }
-    public nativateTo<T = {}>(info: IPageInfo & T, state?: any) {
+    public nativateTo<T = {}>(info: IPageInfo & T, state?: any, externalData?: any) {
         return new Promise((resolve) => {
-            this.options.navigateTo(info, state);
+            this.options.navigateTo(info, state, externalData);
             resolve({});
         });
     }

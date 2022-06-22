@@ -3,6 +3,7 @@ import styles from "../style.module.scss";
 type TypeLoadingProps = {
     title?: string;
     visible?: boolean;
+    position?: "absolute" | "fixed";
 };
 
 const Spin = () => {
@@ -14,8 +15,10 @@ const Spin = () => {
 };
 
 const Loading = (props: TypeLoadingProps) => {
+
     return (<div className={styles.loading} style={{
-        display: props.visible ? "block" : "none"
+        display: props.visible ? "block" : "none",
+        position: props.position || "fixed"
     }}>
         <div>
             <section className={styles.loadingSpin}>

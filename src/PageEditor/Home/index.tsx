@@ -16,30 +16,59 @@ import { Application } from "../components/Application";
 import { RootStore, EmitValidation } from "../data";
 
 
-const Home = () => {
+const AppInit = (props: any) => {
     const [ CurrentPage, setCurrentPage ] = useState({
         page: null,
-        state: null
+        state: null,
+        data: null
     });
-    const serviceObj = useService();
-    const [ theme ] = useState("theme_dark");
     const RenderPage = useMemo<React.ComponentType<any>>(() => (CurrentPage.page as any)?.Component, [CurrentPage]);
-    const rootRef = useRef(null);
+    const serviceObj = useService();
     useEffect(()=>{
+        const removeBeforeEvent = editApp.on("onBeforeNavigateTo", () => {
+            editApp.showLoading({
+                position: "absolute"
+            });
+        });
+        const removeAfterEvent = editApp.on("onAfterNavigateTo", () => {
+            editApp.hideLoaidng();
+        });
         editApp.run({
             location: "/",
             workspace: "PageEditApplicaton",
             implInit: {
-                navigateTo: (pageInfo: any, state: any) => {
+                navigateTo: (pageInfo: any, state: any, data: any) => {
                     setCurrentPage({
                         page: pageInfo,
-                        state
+                        state,
+                        data
                     });
                 }
             }
         });
         editApp.setService(serviceObj);
+        return () => {
+            removeBeforeEvent();
+            removeAfterEvent();
+        };
     },[]);
+    return (
+        <div className={styles.routerLayout}>
+            <ApplicationHeader />
+            <div className={cn(homeStyles.pageContainer, "Container")}>
+                {
+                    RenderPage && <RenderPage initState={CurrentPage.state} initData={CurrentPage.data}/>
+                }
+            </div>
+            <StatusBar />
+        </div>
+    );
+};
+
+const Home = () => {
+    const [ theme ] = useState("theme_dark");
+    const rootRef = useRef(null);
+
     useEffect(() => {
         const unBind = editApp.on("onFullScreenChange", (isFullScreen) => {
             if(rootRef && rootRef.current) {
@@ -60,30 +89,24 @@ const Home = () => {
         };
     }, [rootRef]);
     return (
-    <div ref={rootRef} className={cn(styles.page_editor, theme, styles.editorApplication)} onContextMenu={(event) => {
-        event.preventDefault();
-        return false;
-    }}>
-        <EmitValidation>
-            <Application>
-                <RootStore>
-                    <Container>
-                        <div className={styles.routerLayout}>
-                            <ApplicationHeader />
-                            <div className={cn(homeStyles.pageContainer, "Container")}>
-                                {
-                                    RenderPage && <RenderPage initState={CurrentPage.state}/>
-                                }
-                            </div>
-                            <StatusBar />
-                        </div>
-                        <WindowOperate />
-                    </Container>
-                </RootStore>
-            </Application>
-        </EmitValidation>
-    </div>);
+        <div ref={rootRef} className={cn(styles.page_editor, theme, styles.editorApplication)} onContextMenu={(event) => {
+            event.preventDefault();
+            return false;
+        }}>
+            <EmitValidation>
+                <Application>
+                    <RootStore>
+                        <Container>
+                            <AppInit />
+                            <WindowOperate />
+                        </Container>
+                    </RootStore>
+                </Application>
+            </EmitValidation>
+        </div>
+    );
 };
+
 
 export default withI18n({
     name: "page_editor_app",

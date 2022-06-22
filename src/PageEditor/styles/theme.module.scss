@@ -211,4 +211,20 @@
             background-color: darken($normalBackColor, 4);
         }
     }
+    [class*="ControllPanel"] {
+        [class*="ControllTabs"] {
+            background-color: $normalBackColor;
+            li {
+                color: $titleColor;
+                &:hover {
+                    background-color: lighten($focusBackColor, 5);
+                    color: #fff;
+                }
+            }
+            [class*="Active"] {
+                background-color: $focusBackColor;
+                color: #fff;
+            }
+        }
+    }
 }

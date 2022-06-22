@@ -256,11 +256,19 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
         return errMsg;
     }
     navigateTo<T={}>(pageInfo: IPageInfo & T, ...args: any[]): Promise<any> {
-        if(this.currentPage && !utils.isEmpty(this.currentPage.onBeforeClose)) {
-            return queueCallFunc([
+        return new Promise((resolve, reject) => {
+            queueCallFunc([
+                {
+                    id: "beforeNavigate",
+                    fn: () => this.emit("onBeforeNavigateTo", ...args)
+                },
                 {
                     id: "onBeforePrevClose",
-                    fn: () => this.callApiEx(this.currentPage?.onBeforeClose as string)
+                    fn: () => {
+                        if(this.currentPage && this.currentPage.onBeforeClose && !utils.isEmpty(this.currentPage.onBeforeClose)) {
+                            return this.callApiEx(this.currentPage.onBeforeClose);
+                        }
+                    }
                 },
                 {
                     id: "onBeforeEnter",
@@ -273,31 +281,31 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                 }, {
                     id: "navigateTo",
                     params: {},
-                    fn: () => this.impl.nativateTo(pageInfo, ...args)
-                }
-            ]);
-        } else {
-            return queueCallFunc([
-                {
-                    id: "onBeforeEnter",
-                    params: {},
-                    fn: ():any => {
-                        if(!this.impl.ignoreBeforeEnter && !utils.isEmpty(pageInfo.onBeforeEnter)) {
-                            return this.callApiEx(pageInfo.onBeforeEnter as string, ...args);
-                        }
+                    fn: (opt) => {
+                        const externalData = {
+                            ...(opt.result.beforeNavigate || {}),
+                            ...(opt.result.onBeforePrevClose || {}),
+                            ...(opt.result.onBeforeEnter || {})
+                        };
+                        return this.impl.nativateTo(pageInfo, ...[...args, externalData]);
                     }
-                }, {
-                    id: "navigateTo",
-                    params: {},
-                    fn: () => this.impl.nativateTo(pageInfo, ...args)
                 }
-            ]);
-        }
+            ], undefined, {
+                throwException: true
+            }).then((data: any) => {
+                
+                this.emit("onAfterNavigateTo", ...args);
+                resolve(data);
+            }).catch((err) => {
+                this.emit("onAfterNavigateTo", ...[...args, err]);
+                reject(err);
+            });
+        });
     }
     goto(pageId: string, state?: any): Promise<any> {
         const pageData = this.getPageById(pageId);
         if(pageData) {
-            return this.navigateTo(pageData);
+            return this.navigateTo(pageData, state);
         } else {
             return Promise.reject({ message: "Page not found" });
         }

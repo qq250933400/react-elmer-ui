@@ -62,7 +62,14 @@ export const ActionLinkSection = () => {
     const historyData = useMemo(() => (storeData.data.openHistory || []), [storeData.data]);
     const onHistoryClick = useCallback((data: any) => {
         rootStore.action.currentApp(data);
-        editApp.goto("app", data);
+        editApp.goto("app", data).catch((err) => {
+            rootStore.action.currentApp();
+            editApp.alert({
+                title: "错误",
+                message: err.message,
+                msgIcon: "Error"
+            });
+        });
     }, []);
     useEffect(() => {
         editApp.showLoading();
@@ -83,7 +90,7 @@ export const ActionLinkSection = () => {
                     <Section title={<FormattedMessage id="recent"/>}>
                         {
                             historyData.map((item, index) => {
-                                return (<ActionLink onClick={() => onHistoryClick(item)} key={index} title={item.name} description={item.path}/>)
+                                return (<ActionLink onClick={() => onHistoryClick(item)} key={index} title={item.name} description={item.fileName}/>)
                             })
                         }
                         <ActionLink title={<FormattedMessage id="more"/>}/>
