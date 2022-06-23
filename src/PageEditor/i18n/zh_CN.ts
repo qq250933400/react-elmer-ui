@@ -12,5 +12,7 @@ export default {
     webPage: "Web页面",
     markdown: "Markdown文档",
     fileName: "文件名",
-    fileType: "项目类型"
+    fileType: "项目类型",
+    project: "项目文件",
+    component: "组件"
 };

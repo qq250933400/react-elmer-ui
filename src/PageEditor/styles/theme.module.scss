@@ -33,6 +33,7 @@
     $focusTextColor: #3794ff;
     $statusBarColor: #3794ff;
     $normalBackColor: #333;
+    $lightNomralBackColor: #383b3d;
     $alertColor: #b50505;
     [class*="Container"], [class*="ContextMenu"] {
         background: $focusBackColor;
@@ -212,18 +213,28 @@
         }
     }
     [class*="ControllPanel"] {
+        background-color: $lightNomralBackColor;
         [class*="ControllTabs"] {
             background-color: $normalBackColor;
             li {
                 color: $titleColor;
                 &:hover {
-                    background-color: lighten($focusBackColor, 5);
                     color: #fff;
+                }
+                >i {
+                    background: rgba(30, 30, 30, 0.51);
+                    box-shadow: 0 0 1px rgba(255,255,255, .2);
+                    >span::before {
+                        border-right-color: rgba(30, 30, 30, 0.51);
+                    }
                 }
             }
             [class*="Active"] {
-                background-color: $focusBackColor;
+                background-color: lighten($focusBackColor, 5);
                 color: #fff;
+                &::before {
+                    background-color: #fff;
+                }
             }
         }
     }

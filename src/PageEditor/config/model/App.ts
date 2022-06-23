@@ -1,4 +1,5 @@
 import { IAppData, IAppInfo } from "../../data/IAppInfo";
+import { FolderOpenOutlined, ToolOutlined } from "@ant-design/icons";
 import Base from "./Base";
 
 export default class App extends Base {
@@ -21,9 +22,17 @@ export default class App extends Base {
     }
     private WebPageApp(data: IAppInfo): IAppData {
         const webData: IAppData = {
-            controller: {
-                directory: []
-            }
+            panels: [
+                {
+                    title: "project",
+                    Icon: FolderOpenOutlined,
+                    value: "project"
+                }, {
+                    title: "component",
+                    Icon: ToolOutlined,
+                    value: "component"
+                }
+            ]
         };
 
         return webData;

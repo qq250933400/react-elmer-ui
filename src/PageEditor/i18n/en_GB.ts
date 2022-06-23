@@ -12,5 +12,7 @@ export default {
     webPage: "Web Page",
     markdown: "Markdown",
     fileName: "Name",
-    fileType: "Type"
+    fileType: "Type",
+    project: "Project",
+    component: "Component"
 };

@@ -91,7 +91,10 @@ export const withStore = function<T={}, P={}>(option: IWithStore<T>){
             const [ currentData, setCurrentData ] = useState(() => {
                 const currentPath = topStore.rootPath + "." + option.name;
                 (option as any).path = currentPath.replace(/^\./,"");
-                return getSaveLocalData(currentPath, option.dispatch || {});
+                return {
+                    ...(props.initData || {}),
+                    ...getSaveLocalData(currentPath, option.dispatch || {})
+                };
             });
             const currentStore = useMemo(() => {
                 const rootPath = utils.isEmpty(topStore.rootPath) ? option.name : topStore.rootPath + "." + option.name;
