@@ -6,7 +6,7 @@ type TypeLoadingProps = {
     position?: "absolute" | "fixed";
 };
 
-const Spin = () => {
+export const Spin = () => {
     return (<div className={styles.spin}>
         <i />
         <i />

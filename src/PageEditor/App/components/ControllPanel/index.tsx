@@ -2,13 +2,30 @@ import styles from "../../style.module.scss";
 import cn from "classnames";
 import { useApp } from "../../data";
 import { FormattedMessage } from "@HOC/withI18n";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Panel } from "./Panel";
+import { IPanel } from "../../../data/IAppInfo";
+import { useApp as useAppModel } from "../../hooks";
 
 export const ControllPanel = () => {
     const appData = useApp(["appData"]).data.appData;
-    const [ currentPanel, setCurrentPanel ] = useState<any>(appData.panels[0]);
-
+    const [ currentPanel, setCurrentPanel ] = useState<IPanel>(appData.panels[0]);
+    const [ openPanels, setOpenPanels ] = useState<any[]>(appData.panels[0] ? [ appData.panels[0] ] : []);
+    const appObj = useAppModel(appData.appKey);
+    const onActivePanel = useCallback((item: any)=>{
+        let isExists = false;
+        for(const info of openPanels) {
+            if(info.value === item.value) {
+                isExists = true;
+                break;
+            }
+        }
+        setCurrentPanel(item);
+        if(!isExists) {
+            setOpenPanels([...openPanels, item]);
+        }
+        appObj.emit("onCtrlTabChange", item);
+    }, [openPanels, appObj]);
     return (
         <section className={cn(styles.controllPanel, "ControllPanel")}>
             <div>
@@ -19,7 +36,7 @@ export const ControllPanel = () => {
                             return (<li
                                     key={index}
                                     className={item.value === currentPanel?.value ? "Active" : ""}
-                                    onClick={() => setCurrentPanel(item)}
+                                    onClick={() => onActivePanel(item)}
                                 >
                                     <Icon />
                                     <i>
@@ -31,7 +48,11 @@ export const ControllPanel = () => {
                         })
                     }
                 </ul>
-                <Panel title={<FormattedMessage id={currentPanel.title} />}/>
+                {
+                    openPanels.length > 0 && openPanels.map((data: any, index) => {
+                        return <Panel key={index} visible={data.value === currentPanel?.value} data={data} title={<FormattedMessage id={data.title} />}/>;
+                    })
+                }
             </div>
         </section>
     );

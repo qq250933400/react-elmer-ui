@@ -1,10 +1,18 @@
 import styles from "./style.module.scss";
 import { ControllPanel } from "./components/ControllPanel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppStore } from "./data";
+import { editApp } from "../config";
+import { IAppData } from "../data/IAppInfo";
 
 const App = (props: any) => {
-    const [ initState ] = useState(props.initData);
+    const [ initState ] = useState<IAppData>(props.initData);
+    useEffect(() => {
+        editApp.callApiEx(`${initState.appKey}.init`);
+        return () => {
+            editApp.callApiEx(`${initState.appKey}.destory`);
+        }
+    }, []);
     return (<AppStore initData={{
         appData: initState
     }}>
