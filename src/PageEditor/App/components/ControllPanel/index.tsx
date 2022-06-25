@@ -3,11 +3,12 @@ import cn from "classnames";
 import { useApp } from "../../data";
 import { FormattedMessage } from "@HOC/withI18n";
 import { useState } from "react";
+import { Panel } from "./Panel";
 
 export const ControllPanel = () => {
     const appData = useApp(["appData"]).data.appData;
-    const [ currentPanel, setCurrentPanel ] = useState<any>({});
-    console.log(appData);
+    const [ currentPanel, setCurrentPanel ] = useState<any>(appData.panels[0]);
+
     return (
         <section className={cn(styles.controllPanel, "ControllPanel")}>
             <div>
@@ -30,6 +31,7 @@ export const ControllPanel = () => {
                         })
                     }
                 </ul>
+                <Panel title={<FormattedMessage id={currentPanel.title} />}/>
             </div>
         </section>
     );

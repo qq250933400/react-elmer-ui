@@ -14,5 +14,22 @@ export default {
     fileName: "Name",
     fileType: "Type",
     project: "Project",
-    component: "Component"
+    component: "Component",
+    "menu.file": "File",
+    "menu.view": "View",
+    "menu.edit": "Edit",
+    "menu.help": "Help",
+    "menu.file.newFile": "New File",
+    "menu.file.newWindow": "New Window",
+    "menu.file.openFile": "Open File",
+    "menu.file.openHistory": "Open Recent",
+    "menu.file.save": "Save",
+    "menu.file.saveAs": "Save as",
+    "menu.file.close": "Close File",
+    "menu.file.exit": "Close Window",
+    "menu.view.fullScreen": "Full screen",
+    "menu.view.exitFullScreen": "Exit full screen",
+    "menu.help.doc": "Document",
+    "menu.help.releaseLog": "Release Log",
+    "menu.help.language": "Lanugage"
 };

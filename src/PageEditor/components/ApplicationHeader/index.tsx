@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { cn } from "src/utils";
 import { utils } from "elmer-common";
 import { FormattedMessage } from "@HOC/withI18n";
@@ -6,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { editApp } from "../../config";
 import { IMenuList, IMenuInfo } from "../../config/types/IMenu";
 import { ContextMenu } from "../ContextMenu";
+import { useLocales } from "./useLocales";
 
 type TypeMenuButton = {
     data: IMenuInfo;
@@ -51,14 +53,26 @@ const ApplicationMenuButton = ({ data }: TypeMenuButton) => {
 
 export const ApplicationHeader = () => {
     const [ menuList, setMenuList ] = useState<IMenuList>([]);
+    const localeData = useLocales();
     useEffect(()=>{
-        editApp.callApi("menu", "applicationMenu").then((data) => {
-            setMenuList(data);
-        });
-        editApp.on("onMenuChange", (menuData) => {
+        const rmEvent = editApp.on("onMenuChange", (menuData) => {
             setMenuList(menuData);
         });
+        return () => {
+            rmEvent();
+        };
     },[]);
+    useEffect(()=>{
+        editApp.callApi("menu", "updateLocaleMenus", localeData).then(() => {
+            editApp.callApi("menu", "applicationMenu").then((data) => {
+                setMenuList(data);
+            });
+        }).catch(() => {
+            editApp.callApi("menu", "applicationMenu").then((data) => {
+                setMenuList(data);
+            });
+        });
+    },[localeData.locale]);
     return (
         <div className={cn(styles.applicationHeader, "NormalBackColor")}>
             <ul className={styles.applicationHeaderMenu}>

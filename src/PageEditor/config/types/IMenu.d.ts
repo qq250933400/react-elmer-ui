@@ -6,6 +6,8 @@ export interface IMenuInfo {
     type?: TypeMenuType;
     hotKey?: string;
     value?: any;
+    checked?: boolean;
+    args?: any;
     items?: TypeMenuInfo[];
 };
 

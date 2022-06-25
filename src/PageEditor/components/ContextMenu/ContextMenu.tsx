@@ -18,15 +18,18 @@ type TypeContextMenuItemProps = {
 const MenuItem = ({ data, onClick }: TypeContextMenuItemProps) => {
     // const mouseMove = useCallback(() => {}, []);
     return (
-        <li className={cn("MenuItem", data.type === "Split" ? "MenuSplitItem" : "")} onClick={() => {
+        <li className={cn("MenuItem", data.type === "Split" ? "MenuSplitItem" : "")} onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
             typeof onClick === "function" && onClick(data);
+            return false;
         }}>
             <label>
                 <span>{data.title}</span>
                 { (!data.items || data.items?.length <= 0) && <i>{data.hotKey}</i> }
                 { data.items && data.items.length > 0 && <i><RightOutlined className="icon"/></i> }
             </label>
-            { data.items && data.items.length > 0 && <MenuList data={data.items}/> }
+            { data.items && data.items.length > 0 && <MenuList data={data.items} onClick={onClick}/> }
         </li>
     );
 };

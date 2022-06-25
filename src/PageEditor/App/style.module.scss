@@ -22,7 +22,7 @@
                 margin: 0;
                 padding: 0;
             }
-            ul {
+            >ul {
                 flex: 0 0 60px;
                 height: 100%;
                 box-sizing: border-box;
@@ -40,10 +40,11 @@
                         top: 10px;
                         font-style: normal;
                         font-size: .8rem;
-                        width: 80px;
+                        min-width: 80px;
                         text-align: left;
                         border-radius: 5px;
                         line-height: .8rem;
+                        z-index: 101;
                         >span {
                             display: block;
                             padding: .6rem .8rem;
@@ -73,6 +74,17 @@
                         left: 0;
                         top: 0;
                     }
+                }
+            }
+            >section {
+                flex: auto;
+                position: relative;
+                >label {
+                    display: block;
+                    height: 30px;
+                    line-height: 30px;
+                    padding: 0 10px;
+                    font-size: .8rem;
                 }
             }
         }

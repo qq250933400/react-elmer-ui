@@ -14,5 +14,22 @@ export default {
     fileName: "文件名",
     fileType: "项目类型",
     project: "项目文件",
-    component: "组件"
+    component: "组件",
+    "menu.file": "文件",
+    "menu.view": "视图",
+    "menu.edit": "编辑",
+    "menu.help": "帮助",
+    "menu.file.newFile": "新建文件",
+    "menu.file.newWindow": "新建窗口",
+    "menu.file.openFile": "打开文件",
+    "menu.file.openHistory": "打开最近",
+    "menu.file.save": "保存",
+    "menu.file.saveAs": "另存为",
+    "menu.file.close": "关闭文件",
+    "menu.file.exit": "关闭窗口",
+    "menu.view.fullScreen": "全屏",
+    "menu.view.exitFullScreen": "退出全屏",
+    "menu.help.doc": "文档",
+    "menu.help.releaseLog": "发行说明",
+    "menu.help.language": "语言"
 };

@@ -35,7 +35,7 @@
     $normalBackColor: #333;
     $lightNomralBackColor: #383b3d;
     $alertColor: #b50505;
-    [class*="Container"], [class*="ContextMenu"] {
+    [class*="Container"], [class="ContextMenu"] {
         background: $focusBackColor;
     }
     [class*="NormalBackColor"] {
