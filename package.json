@@ -15,6 +15,7 @@
     "antd-mobile-icons": "^0.2.2",
     "axios": "^0.24.0",
     "elmer-common": "^3.1.10",
+    "elmer-ui": "^1.0.1",
     "history": "^5.1.0",
     "moment": "^2.29.1",
     "postcss-color-functional-notation": "^4.1.0",
@@ -33,7 +34,8 @@
     "build": "react-app-rewired build --scripts-version react-scripts ENV=PROD",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "release": "np --no-yarn --no-tests --no-cleanup"
   },
   "eslintConfig": {
     "extends": [

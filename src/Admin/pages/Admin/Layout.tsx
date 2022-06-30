@@ -137,10 +137,10 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
     useEffect(()=>{
         if(!utilsObj.isEmpty(notifyApi)) {
             if(staticState.notifyTimeHandler) {
-                clearInterval(staticState.notifyTimeHandler);
+                clearInterval(staticState.notifyTimeHandler as any);
                 staticState.notifyTimeHandler = null;
             } else {
-                staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler);
+                staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler as any);
                 staticState.notifyTimeHandler = setInterval(() => {
                     msjApi.callApi("admin", "getNotifyList", notifyApi).then((resp) => {
                         console.log(resp);
@@ -148,11 +148,11 @@ const AdminLayout = (props: TypeAdminLayoutProps) => {
                 }, staticState.notifyInterval) as any;
             }
         } else {
-            staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler);
+            staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler as any);
             staticState.notifyTimeHandler = null;
         }
         return () => {
-            staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler);
+            staticState.notifyTimeHandler && clearInterval(staticState.notifyTimeHandler as any);
             staticState.notifyTimeHandler = null;
         }
     }, [notifyApi, staticState]);
