@@ -1,6 +1,6 @@
 {
   "name": "elmer-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./index.tsx",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
