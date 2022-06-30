@@ -62,7 +62,7 @@ export const Validated = function <P = {}>(props: TypeValidatedProps & P) {
         }
     });
     useEffect(() => {
-        if (!props.emitValidate) {console.log("validate in firstTime", props.emitValidate);
+        if (!props.emitValidate) {
             if (validateApi.validateById(props.id, value, {})) {
                 setValidateStatus({
                     pass: true,
@@ -81,7 +81,7 @@ export const Validated = function <P = {}>(props: TypeValidatedProps & P) {
         setValue(props.value);
     }, [props.value]);
     useEffect(() => {
-        const removeValidateById = validateApi.on("onValidateById", (evt) => {
+        const removeValidateById = contxtObj.observeObj.on("onValidateById", (evt) => {
             if (evt.id === props.id) {
                 if (evt.pass) {
                     setValidateStatus({
@@ -102,7 +102,7 @@ export const Validated = function <P = {}>(props: TypeValidatedProps & P) {
         };
     }, []);
     useEffect(() => {
-        const removeOnValidateByTag = validateApi.on("onValidateByTag", (event) => {
+        const removeOnValidateByTag = contxtObj.observeObj.on("onValidateByTag", (event) => {
             if ((event.fail && event.fail.indexOf(props.id) >= 0) ||
                 (event.success && event.success.indexOf(props.id) >= 0)) {
                 if (validatorObj.validateResult !== validateStatus.pass) {

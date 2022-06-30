@@ -1,7 +1,7 @@
 {
-  "name": "react-elmer-ui",
+  "name": "elmer-ui",
   "version": "1.0.0",
-  "private": false,
+  "main": "./index.tsx",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-layout": "^6.34.6",
