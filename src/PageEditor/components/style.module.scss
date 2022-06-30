@@ -338,3 +338,26 @@ $statusBarHeight: 1.6rem;
         overflow: hidden;
     }
 }
+.panelSection {
+    display: block;
+    height: 100%;
+    position: relative;
+    >div {
+        display: block;
+        box-sizing: border-box;
+        border-top: 1px solid transparent;
+        >label {
+            display: block;
+            height: 1.4rem;
+            line-height: 1.4rem;
+            padding: 0 .2rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            [class*="Text"] {
+                padding-left: .2rem;
+                font-size: .8rem;
+            }
+        }
+    }
+}

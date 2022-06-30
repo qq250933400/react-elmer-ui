@@ -4,4 +4,14 @@
     display: block;
     height: calc(#{$scaleHeight} - #{$offsetHeight});
     overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.fullScreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
 }

@@ -237,5 +237,13 @@
                 }
             }
         }
+        [class*="PanelSection"] {
+            >div {
+                border-top-color: #e6e6e640;
+            }
+            >div:first-child {
+                border-top-color: transparent;
+            }
+        }
     }
 }

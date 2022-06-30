@@ -68,14 +68,16 @@ const AppInit = (props: any) => {
 const Home = () => {
     const [ theme ] = useState("theme_dark");
     const rootRef = useRef(null);
-
+    const [ fullScreen, setFullScreen ] = useState("");
     useEffect(() => {
         const unBind = editApp.on("onFullScreenChange", (isFullScreen) => {
             if(rootRef && rootRef.current) {
                 if(isFullScreen) {
-                    editApp.callApi("menu","setFullScreen", (rootRef.current as HTMLDivElement));
+                    editApp.callApi("menu","setFullScreen", (document.body as HTMLDivElement));
+                    setFullScreen(homeStyles.fullScreen);
                 } else {
                     editApp.callApi("menu", "exitFullscreen");
+                    setFullScreen("");
                 }
             }
         });
@@ -89,7 +91,7 @@ const Home = () => {
         };
     }, [rootRef]);
     return (
-        <div ref={rootRef} className={cn(styles.page_editor, theme, styles.editorApplication)} onContextMenu={(event) => {
+        <div ref={rootRef} className={cn(styles.page_editor, theme, fullScreen, styles.editorApplication)} onContextMenu={(event) => {
             event.preventDefault();
             return false;
         }}>

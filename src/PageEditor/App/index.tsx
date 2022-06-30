@@ -8,7 +8,12 @@ import { IAppData } from "../data/IAppInfo";
 const App = (props: any) => {
     const [ initState ] = useState<IAppData>(props.initData);
     useEffect(() => {
-        editApp.callApiEx(`${initState.appKey}.init`);
+        editApp.showLoading();
+        editApp.callApiEx(`${initState.appKey}.init`).then(() => {
+            editApp.hideLoaidng();
+        }).catch(() => {
+            editApp.hideLoaidng();
+        });
         return () => {
             editApp.callApiEx(`${initState.appKey}.destory`);
         }

@@ -2,7 +2,7 @@ import styles from "../../style.module.scss";
 import cn from "classnames";
 import { useApp } from "../../data";
 import { FormattedMessage } from "@HOC/withI18n";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Panel } from "./Panel";
 import { IPanel } from "../../../data/IAppInfo";
 import { useApp as useAppModel } from "../../hooks";
@@ -24,8 +24,11 @@ export const ControllPanel = () => {
         if(!isExists) {
             setOpenPanels([...openPanels, item]);
         }
-        appObj.emit("onCtrlTabChange", item);
+        appObj.emit("onPanelChange", item);
     }, [openPanels, appObj]);
+    useEffect(() => {
+        appObj.emit("onPanelChange", currentPanel);
+    }, []);
     return (
         <section className={cn(styles.controllPanel, "ControllPanel")}>
             <div>

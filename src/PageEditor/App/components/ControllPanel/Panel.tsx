@@ -16,11 +16,12 @@ type TypePanelProps = {
 export const Panel = (props:TypePanelProps) => {
     const PanelNode = useMemo(() => props.data.Component, [props.data]);
     const [ loading, setLoading ] = useState(true);
+    const [ data, setData ] = useState<any>();
     useEffect(()=>{
         if(props.data.onBeforeEnter) {
             setLoading(true)
             editApp.callApiEx(props.data.onBeforeEnter, props.data).then((data) => {
-                console.log("data", data);
+                setData(data as any);
                 setLoading(false);
             }).catch((err) => {
                 console.error(err);
@@ -34,7 +35,7 @@ export const Panel = (props:TypePanelProps) => {
                 <span>{props.title}</span>
             </label>
             <div className={styles.panelContainer}>
-                { !loading && PanelNode && <PanelNode /> }
+                { !loading && PanelNode && <PanelNode data={data}/> }
                 <Loading visible={loading} position="absolute"/>
             </div>
         </section>

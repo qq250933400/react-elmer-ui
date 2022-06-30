@@ -15,6 +15,8 @@ export default {
     fileType: "Type",
     project: "Project",
     component: "Component",
+    projectFiles: "Files",
+    properties: "Properties",
     "menu.file": "File",
     "menu.view": "View",
     "menu.edit": "Edit",
