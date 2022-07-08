@@ -4,7 +4,8 @@ import { IPageInfo } from "../types/IPage";
 type TypeCreatePageFromInfo<T> =  {[P in Exclude<keyof T, "path">]?: T[P] } & { id: string; };
 type TypeCreatePage<T={}> = (pageInfo: IPageInfo & T) => TypeCreateWorkspaceResult<T>;
 type TypeCreatePageFrom<T={}> = (pageId: string, pageInfo: TypeCreatePageFromInfo<IPageInfo> & T) => TypeCreateWorkspaceResult<T>;
-type TypeCreateWorkspaceResult<PageExtAttr> = {
+
+export type TypeCreateWorkspaceResult<PageExtAttr> = {
     createPage: TypeCreatePage<PageExtAttr>;
     createPageFrom: TypeCreatePageFrom<PageExtAttr>;
 };

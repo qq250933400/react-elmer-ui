@@ -100,7 +100,7 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                 } else {
                     reject({
                         code: "Api404",
-                        msg: `调用模块${model}上不存在方法${method}，请检查模块代码。`
+                        msg: `调用模块${String(model)}上不存在方法${String(method)}，请检查模块代码。`
                     });
                 }
             } else {
@@ -109,7 +109,7 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                 if(!ModelFn) {
                     reject({
                         code: "Api404",
-                        msg: `调用模块${model}未定义。`
+                        msg: `调用模块${String(model)}未定义。`
                     });
                 }
                 if(ModelFn.flag === loaderFlag) {
@@ -127,7 +127,7 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                                 } else {
                                     reject({
                                         code: "Api404",
-                                        msg: `调用模块${model}上不存在方法${method}，请检查模块代码。`
+                                        msg: `调用模块${String(model)}上不存在方法${String(method)}，请检查模块代码。`
                                     });
                                 }
                             } else {
@@ -139,7 +139,7 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                         }).catch((err) => {
                             reject({
                                 code: "Api500",
-                                msg: `加载模块错误。(${model})`
+                                msg: `加载模块错误。(${String(model)})`
                             });
                         })
                 } else if(((ModelFn as unknown) as typeof Model).flag === ModelFlag) {
@@ -150,13 +150,13 @@ export class Api<UseModel={}, DefineEvent={}> extends Observe<IEventHandlers & D
                     } else {
                         reject({
                             code: "Api404",
-                            msg: `调用模块${model}上不存在方法${method}，请检查模块代码。`
+                            msg: `调用模块${String(model)}上不存在方法${String(method)}，请检查模块代码。`
                         });
                     }
                 } else {
                     reject({
                         code: "Api502",
-                        msg: `不合法的模块，调用模块${model}必须继承Model请检查模块代码。`
+                        msg: `不合法的模块，调用模块${String(model)}必须继承Model请检查模块代码。`
                     });
                 }
             }

@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback } from "react";
 import { FormattedMessage as FormattedMessageIntl } from "react-intl";
 import { utils } from "elmer-common";
 import { useWithi18n } from "./withI18n";

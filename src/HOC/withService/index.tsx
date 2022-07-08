@@ -43,7 +43,7 @@ export const ServiceProvider = (props: TypeServiceProviderProps) => {
     );
 };
 
-const withService = function<T={}>(option?:TypeWithService<T>) {
+export const withService = function<T={}>(option?:TypeWithService<T>) {
     return (SerivceWrapper:React.ElementType) => {
         return (props:any) => {
             const rootContext = useContext(ServiceContext);
@@ -122,4 +122,4 @@ const withService = function<T={}>(option?:TypeWithService<T>) {
 
 export const useService = () => useContext(WithServiceContext);
 export { createService } from "./ServiceContext";
-export default withService;
+// export default withService;

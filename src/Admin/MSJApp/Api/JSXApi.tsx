@@ -1,5 +1,5 @@
 import { TypeAttachApiFunc } from "@MSJApp";
-import { TypeServiceSendOptions } from "src/HOC/withService/ElmerService";
+import { TypeServiceSendOptions } from "@HOC/withService/ElmerService";
 import { IPageHeadButton } from "../Types/IPageInfoEx";
 
 type TypeApiState = {

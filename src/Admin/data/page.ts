@@ -1,11 +1,11 @@
 import { IPageInfoEx } from "@Admin/MSJApp/Types/IPageInfoEx";
-import { createWorkspace } from "@MSJApp";
+import { createWorkspace, TypeCreateWorkspaceResult } from "../../lib/MSJApp";
 type TypePageExtAttr = {
     navigateTo?: string;
     component?: any;
     isAdminPage?: boolean;
 };
-export const adminWorkspace = createWorkspace<TypePageExtAttr>("admin")
+const adminWorkspaceData = createWorkspace<TypePageExtAttr>("admin")
     .createPage({
         id: "login",
         path: "/admin/login"
@@ -28,3 +28,5 @@ export type TypeDefinePage = IPageInfoEx & {
     component: any;
     isAdminPage?: boolean;
 };
+
+export const adminWorkspace:TypeCreateWorkspaceResult<TypePageExtAttr> = adminWorkspaceData as any;
