@@ -1,6 +1,6 @@
 {
   "name": "elmer-ui",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "main": "./lib/main.js",
   "types": "./lib/main.d.ts",
   "dependencies": {
@@ -38,7 +38,8 @@
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "serve": "webpack serve"
+    "serve": "webpack serve",
+    "static": "eui-cli static"
   },
   "eslintConfig": {
     "extends": [

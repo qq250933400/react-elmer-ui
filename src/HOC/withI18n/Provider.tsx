@@ -1,4 +1,4 @@
-import { useMemo, useState, createContext, useCallback, useEffect, useContext } from "react";
+import React, { useMemo, useState, createContext, useCallback, useEffect, useContext } from "react";
 import { IntlProvider } from "react-intl";
 
 type TypeI18nProviderProps = {

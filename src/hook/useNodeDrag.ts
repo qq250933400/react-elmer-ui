@@ -6,12 +6,15 @@ type TypeRect = {
     right: number;
     bottom: number;
 };
+type TypeMoveData = { left?: number, top?: number, offsetLeft?: number, offsetTop?: number };
 type TypeUseDragOptions = {
     moveTarget?: HTMLElement|null;
     limitRect?: TypeRect;
+    onlyOffset?: boolean;
+    onChange?: (data: TypeMoveData) => void;
 };
 
-export const useNodeDrag = (target:HTMLElement, options?: TypeUseDragOptions) => {
+export const useNodeDrag = (target:HTMLElement|null, options?: TypeUseDragOptions) => {
     const [ dragState ] = useState({
         isPressed: false,
         offsetX: 0,
@@ -43,7 +46,7 @@ export const useNodeDrag = (target:HTMLElement, options?: TypeUseDragOptions) =>
                 dragState.isPressed = true;
             };
             const onMove = (event: MouseEvent|TouchEvent) => {
-                if(dragState.isPressed) {
+                if(dragState.isPressed && moveTarget) {
                     const nodeX = moveTarget.offsetLeft, nodeY = moveTarget.offsetTop;
                     let mouseX = 0, mouseY = 0;
                     if(event instanceof MouseEvent) {
@@ -53,11 +56,22 @@ export const useNodeDrag = (target:HTMLElement, options?: TypeUseDragOptions) =>
                         mouseX = event.touches[0].clientX;
                         mouseY = event.touches[0].clientY;
                     }
-                    const moveLeft = nodeX + (mouseX - dragState.offsetX),
-                        moveTop = nodeY + (mouseY - dragState.offsetY);
-                    if(moveLeft >= limitRect.left && moveLeft < limitRect.right && moveTop >= limitRect.top && moveTop <limitRect.bottom) {
-                        moveTarget.style.left = moveLeft + "px";
-                        moveTarget.style.top = moveTop + "px";
+                    if(!options?.onlyOffset) {
+                        const moveLeft = nodeX + (mouseX - dragState.offsetX),
+                            moveTop = nodeY + (mouseY - dragState.offsetY);
+                        if(moveLeft >= limitRect.left && moveLeft < limitRect.right && moveTop >= limitRect.top && moveTop <limitRect.bottom) {
+                            moveTarget.style.left = moveLeft + "px";
+                            moveTarget.style.top = moveTop + "px";
+                        }
+                        typeof options?.onChange === "function" && options?.onChange({
+                            left: moveLeft,
+                            top: moveTop
+                        });
+                    } else {
+                        typeof options?.onChange === "function" && options?.onChange({
+                            offsetLeft: mouseX - dragState.offsetX,
+                            offsetTop: mouseY - dragState.offsetY
+                        });
                     }
                     dragState.offsetX = mouseX;
                     dragState.offsetY = mouseY;
@@ -81,5 +95,5 @@ export const useNodeDrag = (target:HTMLElement, options?: TypeUseDragOptions) =>
                 document.body.removeEventListener("touchend", onMoveEnd);
             };
         }
-    }, [ target, dragState, moveTarget,limitRect]);
+    }, [ target, options, dragState, moveTarget,limitRect]);
 };

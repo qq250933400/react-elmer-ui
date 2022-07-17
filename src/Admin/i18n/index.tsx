@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { ConfigProvider } from "antd";
 import { useI18n, I18nProvider } from "@HOC/withI18n";
 import { msjApi } from "@Admin/MSJApp";

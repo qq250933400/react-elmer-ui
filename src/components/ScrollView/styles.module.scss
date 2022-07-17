@@ -1,0 +1,103 @@
+.scrollView,
+.scrollViewContext {
+    display: block;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.scrollViewWrapper {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 100%;
+}
+.vScrollBar {
+    display: block;
+    height: 100%;
+    width: 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.hScrollBar {
+    display: block;
+    width: 100%;
+    height: 10px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.vScrollBar,
+.hScrollBar {
+    background-color: rgba(250, 250, 250, .2);
+
+    &:hover {
+        background-color: rgba(250, 250, 250, .4);
+    }
+    .vScrollBarTracker,
+    .hScrollBarTracker {
+        display: block;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        button {
+            padding: 0;
+            height: 100%;
+            border: none;
+            background: rgba(250, 250, 250, .6);
+            border-radius: 0;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            -ms-border-radius: 0;
+            -o-border-radius: 0;
+            position: absolute;
+            left: o;
+            top: 0;
+        }
+    }
+    .hScrollBarTracker {
+        button {
+            height: 100%;
+        }
+    }
+    .vScrollBarTracker {
+        button {
+            width: 100%;
+        }
+    }
+}
+
+.scrollView {
+    .mask {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+}
+
+.scrollView[class*="OnlyHorizontal"]>.scrollViewContext {
+    padding-bottom: 10px;
+}
+
+.scrollView[class*="Onlyvertical"]>.scrollViewContext {
+    padding-right: 10px;
+}
+
+.scrollView[class*="Both"] {
+    &>.scrollViewContext {
+        padding-bottom: 10px;
+        padding-right: 10px;
+    }
+
+    .vScrollBar {
+        height: calc(100% - #{10px}) !important;
+    }
+
+    .hScrollBar {
+        width: calc(100% - #{10px}) !important;
+    }
+}
