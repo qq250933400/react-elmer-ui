@@ -21,7 +21,6 @@ export const commonHandler = (respData:any, errorResponse?: boolean, opt?: TypeC
     if(resp.statusCode !== 200) {
         if(!isEmpty(resp.statusCode)) {
             let msg = resp.message || resp.info || resp.statusText || "请求失败";
-            msg = `${msg} (${resp.statusCode})`
             !opt?.throwException && Toast.show({
                 content: msg,
                 icon: "fail",
@@ -79,4 +78,5 @@ export const commonHandler = (respData:any, errorResponse?: boolean, opt?: TypeC
         }
         return true;
     }
+    return false;
 };

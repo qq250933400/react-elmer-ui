@@ -31,7 +31,7 @@ export type TypeServiceEndPoint<T={}> = {
     header?: T;
     withCredentials?: boolean;
     auth?: AxiosBasicCredentials;
-    options?: TypeServiceEndPointOption;
+    options?: any;
     isDummy?: boolean;
     dummyData?: string;
 };
@@ -40,6 +40,8 @@ export type TypeServiceNamespace<T={}> = {
     host?: { [H in keyof TypeRuningEnv]?: string };
     isDummy?: boolean;
     endPoints: {[P in keyof T]: TypeServiceEndPoint<T[P]>};
+    options?: any;
+    withCredentials?: boolean;
 };
 
 export type TypeServiceConfig<T={}, ENV = keyof TypeRuningEnv> = {
@@ -114,6 +116,12 @@ export class ElmerService {
                     url = this.mergeLinkAndUri(url, endPoint.uri);
                 }
                 endPoint.url = url;
+                endPoint.options = {
+                    ...( namespaceData.options || {} ),
+                    ...( endPoint.options || {} )
+                };
+                endPoint.withCredentials = typeof endPoint.withCredentials === "boolean" ? endPoint.withCredentials : namespaceData.withCredentials;
+                endPoint.id = endPointId;
                 return endPoint;
             }
         }
@@ -134,7 +142,8 @@ export class ElmerService {
             if(!endPoint) {
                 reject({
                     message: "The endpoint is not found.",
-                    status: "IT-500"
+                    status: "IT-500",
+                    endPoint: ((newEndPoint || {}) as any).endPoint || options.endPoint
                 });
             } else {
                 const sendData = {
@@ -166,12 +175,27 @@ export class ElmerService {
                         data: resp.data,
                         endPoint,
                         headers: resp.headers,
-                        options
+                        options: {
+                            ...(endPoint.options || {}),
+                            ...(options || {})
+                        }
                     } as any));
                 }).catch((error) => {
                     // tslint:disable-next-line: no-console
                     console.error(error);
-                    reject(error);
+                    const respData = error?.response?.data || error?.data || error;
+                    reject({
+                        response: error?.response || error,
+                        config: endPoint,
+                        endPoint,
+                        headers: error?.response?.headers || error?.headers,
+                        data: error?.response?.data || error?.data || error,
+                        statusCode: error?.response?.status || respData.status || respData.statusCode,
+                        options: {
+                            ...(endPoint.options || {}),
+                            ...(options || {})
+                        }
+                    });
                 });
             }
         });

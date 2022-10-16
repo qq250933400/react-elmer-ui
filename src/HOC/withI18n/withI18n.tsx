@@ -30,7 +30,7 @@ export const withI18n = (options: TypeWithi18nOptions<Exclude<keyof TypeWithCont
         const [ updateMessage, setUpdateMessage ] = useState(false);
         const messages = useMemo(()=>{
             const currentData:any = {};
-            const prevMsgData = rootContext.getMessages();
+            const prevMsgData: any = rootContext.getMessages();
             options.i18n && Object.keys(options.i18n).forEach((locale: string) => {
                 const i18nData = (options.i18n as any)[locale] || {};
                 const currentI18nMessage:any = {};
@@ -70,7 +70,7 @@ export const withI18n = (options: TypeWithi18nOptions<Exclude<keyof TypeWithCont
                 i18n: messages,
                 prev: prevConfig,
                 getLocale: rootContext.getLocale as any,
-                setLocale: rootContext.setLocale
+                setLocale: rootContext.setLocale as any
             }}>
                 {updateMessage && <TargetWrapper {...props} /> }
             </WithContext.Provider>

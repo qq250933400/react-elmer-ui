@@ -7,16 +7,26 @@ type TypeI18nProviderProps = {
     onMessagesChange?: Function;
 };
 
+export interface II18nApi<I18nData={}> {
+    locale: (keyof I18nData) | "en-GB",
+    message: I18nData,
+    getLocale: () => (keyof I18nData) | "en-GB",
+    setLocale: (locale: keyof I18nData) => void,
+    setMessages: (msgData:any) => void,
+    removeMessages: (msgData: any) => void,
+    getMessages: () => I18nData
+}
+
 const getDefaultLocale = () => {
     let locale = localStorage.getItem("locale");
     locale = !locale || locale.length <=0 ? (navigator.language || "zh-CN") : locale;
     return locale;
 };
 
-const I18nContext = createContext({
-    locale: "en",
+const I18nContext = createContext<II18nApi>({
+    locale: "en-GB",
     message: {},
-    getLocale: (): string => { return "en-GB"},
+    getLocale: () => { return "en-GB"},
     setLocale: (locale: string) => {},
     setMessages: (msgData:any) => {},
     removeMessages: (msgData: any) => {},
@@ -65,23 +75,25 @@ export const I18nProvider = (props: TypeI18nProviderProps) => {
         });
         msgData && setI18nMsg(newI18nData);
     }, [i18nMsg]);
+    const i18nData = useMemo(() => ({
+        locale,
+        message,
+        setLocale: (vLocale: string) => {
+            localStorage.setItem("locale", vLocale);
+            setLocale(vLocale);
+            i18nState.locale = vLocale;
+        },
+        setMessages,
+        removeMessages,
+        getLocale,
+        getMessages
+    }), [locale, message, i18nState, setMessages, removeMessages, getLocale, getMessages]);
     useEffect(()=>{
         typeof props.onMessagesChange === "function" && props.onMessagesChange(i18nMsg);
     },[i18nMsg, props]);
+
     return (<IntlProvider locale={locale} messages={message}>
-        <I18nContext.Provider value={{
-            locale,
-            message,
-            setLocale: (vLocale: string) => {
-                localStorage.setItem("locale", vLocale);
-                setLocale(vLocale);
-                i18nState.locale = vLocale;
-            },
-            setMessages,
-            removeMessages,
-            getLocale,
-            getMessages
-        }}>
+        <I18nContext.Provider value={i18nData as any}>
             {props.children}
         </I18nContext.Provider>
     </IntlProvider>);

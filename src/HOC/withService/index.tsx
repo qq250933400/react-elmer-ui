@@ -1,8 +1,8 @@
 import React, { createContext, useCallback, useContext, useState, useMemo } from 'react';
-import { TypeServiceConfig, ElmerService, TypeServiceSendOptions, TypeServiceNamespace } from "./ElmerService";
+import { TypeServiceConfig, ElmerService, TypeServiceSendOptions, TypeServiceNamespace, TypeServiceEndPoint } from "./ElmerService";
 import { commonHandler } from "./ErrorHandle";
-import { useNavigate } from "react-router-dom";
 import { IServiceContext } from './ServiceContext';
+import { utils, queueCallFunc } from "elmer-common";
 export { createServiceConfig } from "./ServiceContext";
 
 type TypeServiceProviderProps = {
@@ -10,16 +10,19 @@ type TypeServiceProviderProps = {
     data: TypeServiceConfig;
     children: any;
 };
-type TypeServiceRequestOptions = {
+export type TypeServiceRequestOptions = {
     throwException?: boolean;
+    newEndPoint?: TypeServiceEndPoint
 };
 type TypeWithService<T={}> = {
-    config: React.Context<IServiceContext<T>>;
+    config?: React.Context<IServiceContext<T>>;
+    handlers?: Function[];
 };
 
 export interface IWithServiceApi {
     config: TypeServiceNamespace<any>;
-    send: (option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions) => Promise<any>
+    send: (option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions) => Promise<any>,
+    handlers?: Function[];
 }
 
 const ServiceContext = createContext({
@@ -46,29 +49,52 @@ export const ServiceProvider = (props: TypeServiceProviderProps) => {
 export const withService = function<T={}>(option?:TypeWithService<T>) {
     return (SerivceWrapper:React.ElementType) => {
         return (props:any) => {
+            const { forService } = props;
             const rootContext = useContext(ServiceContext);
             const configContext: IServiceContext<T> = option?.config ? useContext(option.config) : {} as any;
+            const withContext = useContext(WithServiceContext);
             const [ serviceObj ] = useState(() => {
                 const obj = new ElmerService();
                 obj.setENV(rootContext.env);
                 obj.setConfig(rootContext.config as any);
-                obj.setNamespace(configContext.name, configContext.data);
+                !utils.isEmpty(configContext.name) && obj.setNamespace(configContext.name, configContext.data);
                 return obj;
             });
-            const navigateTo = useNavigate();
+            const allHanlders: Function[] = useMemo(() => ([
+                ...(withContext.handlers || []),
+                ...(option?.handlers || [])
+            ]), [withContext]);
+            const handlerExec = useCallback(async(response: any, success: boolean):Promise<any> => {
+                let pIndex = -1;
+                return new Promise((resolve, reject) => {
+                    queueCallFunc(allHanlders as any[], (_, fn: Function) => {
+                        return fn({
+                            response,
+                            success: !!!success
+                        },forService);
+                    }, {
+                        throwException: true,
+                        paramConvert: (fn: Function) => {
+                            pIndex += 1;
+                            return {
+                                id: "sevHandle_" + pIndex,
+                                params: fn
+                            };
+                        }
+                    }).then((data: any) => {
+                        const lastKey: string = "sevHandle_" + (allHanlders.length - 1).toString();
+                        resolve(data[lastKey]);
+                    }).catch((err) => {
+                        reject(err.exception?.stack || err.exception || err);
+                    });
+                });
+            }, [allHanlders, forService]);
             const sendRequest = useCallback((option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions) =>{
                 return new Promise((resolve, reject) => {
-                    const token = sessionStorage.getItem("token");
                     const handleEvent:any = {
-                        throwException: opt?.throwException || option.throwException
+                        throwException: opt?.throwException || option?.throwException
                     };
-                    serviceObj.send({
-                        ...option,
-                        cookie: {
-                            ...(option.cookie || {}),
-                            token
-                        }
-                    }).then((resp: any) => {
+                    serviceObj.send(option || {}, opt?.newEndPoint).then(async(resp: any) => {
                             handleEvent.onError = (err:any) => {
                                 reject({
                                     ...resp,
@@ -76,38 +102,50 @@ export const withService = function<T={}>(option?:TypeWithService<T>) {
                                     message: err.message
                                 });
                             }
-                            if(!commonHandler(resp, false, handleEvent)) {
-                                resolve(resp.data);
+                            let reqStatus = commonHandler(resp, false, handleEvent);
+                            let reqHandlerResult = null;
+                            if(allHanlders.length > 0) {
+                                reqHandlerResult = await handlerExec(resp, reqStatus);
+                                if(reqHandlerResult) {
+                                    reqStatus = reqHandlerResult.success;
+                                }
+                            }
+                            if(!reqStatus) {
+                                resolve(reqHandlerResult || (resp.data || {}));
                             } else {
                                 reject({
                                     ...resp,
-                                    statusCode: resp.data?.statusCode,
-                                    message: resp.data?.message
+                                    statusCode: reqHandlerResult?.statusCode || resp.data?.statusCode,
+                                    message: reqHandlerResult?.message || resp.data?.message,
+                                    ...(reqHandlerResult || (resp.data || {}))
                                 });
                             }
-                            if(handleEvent.returnValue?.statusCode === "NoLogin") {
-                                navigateTo("/login");
-                            }
-                        }).catch((err) => {
+                        }).catch(async(err) => {
+                            let statusCode, message;
                             handleEvent.onError = (errx:any) => {
-                                reject({
-                                    ...err,
-                                    statusCode: errx.statusCode,
-                                    message: errx.message
-                                });
+                                statusCode = errx.statusCode;
+                                message = errx.message;
                             };
                             commonHandler(err, true, handleEvent);
-                            if(handleEvent.returnValue?.statusCode === "NoLogin") {
-                                navigateTo("/login");
+                            let reqHandlerResult = null;
+                            if(allHanlders.length > 0) {
+                                reqHandlerResult = await handlerExec(err, false);
                             }
-                            reject(err);
+                            reject({
+                                statusCode: reqHandlerResult?.statusCode || statusCode || err.status,
+                                message: reqHandlerResult?.message || message,
+                                ...(reqHandlerResult || (err.data || {})),
+                                response: err
+                            });
                         });
                 });
-            },[serviceObj, navigateTo]);
+            },[serviceObj, allHanlders, handlerExec]);
+
             const api = useMemo(()=> ({
                 send: sendRequest,
-                config: serviceObj.getConfig() as any
-            }), [sendRequest, serviceObj]);
+                config: serviceObj.getConfig() as any,
+                handlers: allHanlders
+            }), [sendRequest, serviceObj, allHanlders]);
             return (
                 <WithServiceContext.Provider value={api}>
                     <SerivceWrapper {...props} service={{
@@ -122,4 +160,4 @@ export const withService = function<T={}>(option?:TypeWithService<T>) {
 
 export const useService = () => useContext(WithServiceContext);
 export { createService } from "./ServiceContext";
-// export default withService;
+

@@ -1,8 +1,8 @@
 {
   "name": "elmer-ui",
-  "version": "1.0.3",
-  "main": "./lib/main.js",
-  "types": "./lib/main.d.ts",
+  "version": "1.0.4",
+  "main": "./src/main.ts",
+  "types": "./src/main.d.ts",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-layout": "^6.34.6",

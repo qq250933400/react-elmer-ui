@@ -1,4 +1,4 @@
-# 🚀 基于ant-design创建的后台管理系统
+# 🚀 基于ant-design创建组件库
 
 This project has been created using **webpack-cli**, you can now run
 

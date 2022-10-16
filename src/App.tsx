@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
 import reportWebVitals from './reportWebVitals';
-import App from "./Admin";
-// import App from './App';
+
+const App = () => {
+  return (<h2>Hello world</h2>);
+};
 
 
-ReactDOM.render(<App urlPrefix='/kxcbzx/'/>,
+ReactDOM.render(<App />,
   document.getElementById('root')
 );
 

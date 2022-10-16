@@ -32,5 +32,5 @@ export const useResize = (callback: Function) => {
             }
             isUnmount = true;
         };
-    });
+    }, []);
 }
