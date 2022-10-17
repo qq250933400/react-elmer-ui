@@ -94,7 +94,7 @@ export const withService = function<T={}>(option?:TypeWithService<T>) {
                     const handleEvent:any = {
                         throwException: opt?.throwException || option?.throwException
                     };
-                    serviceObj.send(option || {}, opt?.newEndPoint).then(async(resp: any) => {
+                    serviceObj.send((option || {}) as any, opt?.newEndPoint).then(async(resp: any) => {
                             handleEvent.onError = (err:any) => {
                                 reject({
                                     ...resp,

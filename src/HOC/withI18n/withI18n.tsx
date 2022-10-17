@@ -1,5 +1,5 @@
 import React, { createContext, useContext,useMemo,useEffect, useState } from "react";
-import { useI18n } from "./Provider";
+import { useI18n } from "./hook";
 
 type TypeLocales = "en-GB" | "zh-CN" | "zh-HK" | "zh-TW";
 
@@ -13,15 +13,13 @@ type TypeWithContext = {
 
 type TypeWithi18nOptions<Name extends Exclude<keyof TypeWithContext, "getLocale"|"setLocale"|"prev">> = {[P in Name]: TypeWithContext[P]};
 
-const WithContext = createContext<TypeWithContext>({
+export const WithContext = createContext<TypeWithContext>({
     name: "",
     i18n: {},
     prev: null,
     getLocale: (): TypeLocales => { return "en-GB"},
     setLocale: (locale: string) => {},
 });
-
-export const useWithi18n = () => useContext(WithContext);
 
 export const withI18n = (options: TypeWithi18nOptions<Exclude<keyof TypeWithContext, "getLocale"|"setLocale"|"prev">>) => (TargetWrapper:React.ComponentType<any>) => {
     return (props: any) => {

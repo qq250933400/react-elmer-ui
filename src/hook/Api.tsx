@@ -1,8 +1,6 @@
-import React, { useContext, createContext, useState, useMemo } from "react";
 import { Observe } from "elmer-common";
-import type { IApi, IUseApi, IApiEvent } from "./useApi.d"
-
-const ApiContext = createContext({});
+import React, { useMemo, useState } from "react";
+import { ApiContext } from "./useApi";
 
 export const ApiProvider = (props: any) => {
     const [ api ] = useState<any>({});
@@ -45,16 +43,4 @@ export const ApiProvider = (props: any) => {
             {props.children}
         </ApiContext.Provider>
     );
-};
-
-export const useApi = <T={}, Event={}>(): IApi<IUseApi & T, Event & IApiEvent> & T & IUseApi => {
-    const contextData:any = useContext(ApiContext);
-    return useMemo<any>(() => {
-        const { externalApi, internalApi } = contextData;
-        Object.keys(internalApi).forEach((name: string) => {
-            const api = internalApi[name];
-            externalApi[name] = api;
-        });
-        return externalApi;
-    }, [contextData]);
 };

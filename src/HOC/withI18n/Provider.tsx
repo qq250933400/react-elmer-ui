@@ -23,7 +23,7 @@ const getDefaultLocale = () => {
     return locale;
 };
 
-const I18nContext = createContext<II18nApi>({
+export const I18nContext = createContext<II18nApi>({
     locale: "en-GB",
     message: {},
     getLocale: () => { return "en-GB"},
@@ -34,7 +34,7 @@ const I18nContext = createContext<II18nApi>({
 });
 
 export const I18nProvider = (props: TypeI18nProviderProps) => {
-    const [ locale, setLocale ] = useState(getDefaultLocale());
+    const [ locale, setLocale ] = useState(() => getDefaultLocale());
     const [ i18nMsg, setI18nMsg ] = useState(props.messages || {});
     const [ i18nState ] = useState({
         locale: locale
@@ -99,4 +99,4 @@ export const I18nProvider = (props: TypeI18nProviderProps) => {
     </IntlProvider>);
 };
 
-export const useI18n = <T={}>() => useContext<II18nApi<T>>(I18nContext as any);
+
