@@ -16,3 +16,15 @@ export interface ICapabilityProps<ExProps={}> {
     location: ILocation;
     props: ExProps,
 }
+
+
+export interface IPageData {
+    id: string;
+    path: string;
+    external?: boolean;
+    moduleId?: string;
+    host?: string;
+    sourceId?: string;
+    children?: IPageData[];
+    functions?: IFunction[];
+}

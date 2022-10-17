@@ -99,4 +99,4 @@ export const I18nProvider = (props: TypeI18nProviderProps) => {
     </IntlProvider>);
 };
 
-export const useI18n = () => useContext(I18nContext);
+export const useI18n = <T={}>() => useContext<II18nApi<T>>(I18nContext as any);

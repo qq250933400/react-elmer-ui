@@ -1,4 +1,4 @@
-import { IPageInfo } from "@MSJApp/types/IPage";
+import { IPageInfo } from "../types/IPage";
 import { Api } from "./Api";
 
 export const ImplFlag = "MSJApp_Impl_202203191129"

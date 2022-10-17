@@ -22,12 +22,9 @@
     "jsx": "react",
     "outDir": "./lib",
     "baseUrl": ".",
+    "declarationDir": "./build",
     "declaration": true,
     "paths": {
-      "@MSJApp": ["src/lib/MSJApp"],
-      "@MSJApp/*": ["src/lib/MSJApp/*"],
-      "@Admin": ["src/Admin"],
-      "@Admin/*": ["src/Admin/*"],
       "@Component": ["src/components"],
       "@Component/*": ["src/components/*"],
       "@HOC": ["src/HOC"],

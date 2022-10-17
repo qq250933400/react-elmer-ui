@@ -1,18 +1,8 @@
 import React, { useContext, createContext, useState, useMemo } from "react";
 import { Observe } from "elmer-common";
+import type { IApi, IUseApi, IApiEvent } from "./useApi.d"
 
 const ApiContext = createContext({});
-
-type TypeProtectApi = "registe" | "registeEx" | "unRegiste" | "unRegisteEx";
-
-export interface IApi<IExternalAPI={}, IExternalEvent={}> {
-    registe: <Name extends keyof IExternalAPI>(name: Name, callback: (api: Omit<IApi & IExternalAPI, TypeProtectApi>) => IExternalAPI[Name]) => void;
-    registeEx: <ExAPI extends Omit<IApi & IExternalAPI, TypeProtectApi>>(api: {[P in keyof ExAPI]?: (api: Omit<IApi & IExternalAPI, TypeProtectApi>) => ExAPI[P]}) => void;
-    unRegiste: (name: keyof Omit<IApi & IExternalAPI, TypeProtectApi>) => void;
-    unRegisteEx: <Name extends keyof Omit<IApi & IExternalAPI, TypeProtectApi>>(name: Name[]) => void;
-    on: <EventName extends keyof IExternalEvent>(eventName: EventName, callback: IExternalEvent[EventName]) => void;
-    emit: <EventName extends keyof IExternalEvent>(eventName: EventName, ...args: any[]) => any;
-}
 
 export const ApiProvider = (props: any) => {
     const [ api ] = useState<any>({});
@@ -57,7 +47,7 @@ export const ApiProvider = (props: any) => {
     );
 };
 
-export const useApi = <T={}, Event={}>(): IApi<T, Event> & T => {
+export const useApi = <T={}, Event={}>(): IApi<IUseApi & T, Event & IApiEvent> & T & IUseApi => {
     const contextData:any = useContext(ApiContext);
     return useMemo<any>(() => {
         const { externalApi, internalApi } = contextData;

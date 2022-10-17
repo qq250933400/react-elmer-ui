@@ -5,7 +5,7 @@ import { IMSJAppOptions, IMSJAppRunOpt } from "../types/IMSJApp";
 import { getWorkspace, CONSTPAGEDATAKEY, clearAllPages } from "./PageStorage";
 import { TypeAttachApi } from "./AttachApi";
 import { CONST_ENTRY_CONFIG_KEY, TypeEntryRule } from "../types/IAdmin";
-import { IPageInfo } from "@MSJApp/types/IPage";
+import { IPageInfo } from "../types/IPage";
 
 export class MSJApp<UseModel={}, AllApi={}> {
     public api: Api<UseModel> & AllApi & TypeAttachApi;
