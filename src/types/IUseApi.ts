@@ -1,6 +1,6 @@
 import { TypeServiceSendOptions } from "../HOC/withService/ElmerService";
 import { TypeServiceRequestOptions } from "../HOC/withService";
-import { IPageData } from "./Admin";
+import { IPageData } from "./IApi";
 import React from "react";
 
 export type TypeProtectApi = "registe" | "registeEx" | "unRegiste" | "unRegisteEx";

@@ -17,6 +17,11 @@ export interface ICapabilityProps<ExProps={}> {
     props: ExProps,
 }
 
+export interface IFunction {
+    moduleId: string;
+    id: string;
+    callbackId: string;
+}
 
 export interface IPageData {
     id: string;
