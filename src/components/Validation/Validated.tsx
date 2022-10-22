@@ -64,7 +64,9 @@ export const Validated = function <P = {}>(props: TypeValidatedProps & P) {
     });
     useEffect(() => {
         if (!props.emitValidate) {
-            if (validateApi.validateById(props.id, value, {})) {
+            if (validateApi.validateById(props.id, value, {
+                getValue: () => value
+            })) {
                 setValidateStatus({
                     pass: true,
                     message: ""

@@ -10,10 +10,15 @@ type TypeWithValidateOption<V={}> = {
     emitValidate?: boolean;
 };
 type TypeWithValidatedProps<Validators={}> = TypeValidatedProps & { type: keyof Validators | TypeValidatorType }
-
+type TypeWithValidateByTagOption = {
+    ignore?: string[];
+};
+type TypeWithValidateByIdOption = {
+    getValue: Function;
+};
 export interface IValidateApi {
-    validateById(id: string, value: any, opt?: any): boolean;
-    validateByTag(tag: string, opt?: any): boolean;
+    validateById(id: string, value: any, opt: TypeWithValidateByIdOption): boolean;
+    validateByTag(tag: string, opt?: TypeWithValidateByTagOption): boolean;
     on<Name extends keyof TypeWithValidateEvent>(eventName: Name, callback: TypeWithValidateEvent[Name]): Function;
 };
 
@@ -23,10 +28,11 @@ export const withValidate = <P extends {}, V={}>(opt?: TypeWithValidateOption<V>
             const contextObj = useContext(ValidationContext);
             const validatedObj = useContext(ValidatedContext);
             const observeObj = contextObj.observeObj;
-            const validateById = useCallback((id: string, value:any, opt: any): boolean => {
+            const validateById = useCallback((id: string, value:any, opt: TypeWithValidateByIdOption): boolean => {
                 const validate = contextObj.getValidateById(id);
                 if(validate) {
                     const pass = validate.validate(value, opt || {});
+                    validate.getValue = opt.getValue as any;
                     observeObj.emit("onValidateById", {
                         id: validate.option.id,
                         tag: validate.option.tag,
@@ -45,20 +51,23 @@ export const withValidate = <P extends {}, V={}>(opt?: TypeWithValidateOption<V>
                     return false;
                 }
             }, [contextObj, observeObj]);
-            const validateByTag = useCallback((tagName: string, opt: any): boolean => {
+            const validateByTag = useCallback((tagName: string, opt: TypeWithValidateByTagOption): boolean => {
                 const validates = contextObj.getValidateByTag(tagName);
                 if(validates.length > 0) {
                     const failedVD: string[] = [];
                     const successVD: string[] = [];
                     const failedMsg: any = {};
+                    const ignoreList = opt.ignore || [];
                     let pass = true;
                     for(const vd of validates) {
-                        if(!vd.validate(vd.getValue(), opt || {})) {
-                            pass = false;
-                            failedMsg[vd.option.id] = vd.message;
-                            failedVD.push(vd.option.id);
-                        } else {
-                            successVD.push(vd.option.id);
+                        if(!ignoreList.includes(vd.option.id)) {
+                            if(!vd.validate(vd.getValue(), opt || {})) {
+                                pass = false;
+                                failedMsg[vd.option.id] = vd.message;
+                                failedVD.push(vd.option.id);
+                            } else {
+                                successVD.push(vd.option.id);
+                            }
                         }
                     }
                     observeObj.emit("onValidateByTag", {
