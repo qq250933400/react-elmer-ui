@@ -23,6 +23,7 @@ export interface IWithServiceApi {
     config: TypeServiceNamespace<any>;
     send: (option: TypeServiceSendOptions, opt?: TypeServiceRequestOptions) => Promise<any>,
     handlers?: Function[];
+    setConfig: (namespace: string, endPoints: any) => void;
 }
 
 const ServiceContext = createContext({
@@ -32,7 +33,8 @@ const ServiceContext = createContext({
 
 const WithServiceContext = createContext<IWithServiceApi>({
     config: {} as any,
-    send: (() => {}) as any
+    send: (() => {}) as any,
+    setConfig: (name, endpoints) => {}
 });
 
 export const ServiceProvider = (props: TypeServiceProviderProps) => {
@@ -144,7 +146,10 @@ export const withService = function<T={}>(option?:TypeWithService<T>) {
             const api = useMemo(()=> ({
                 send: sendRequest,
                 config: serviceObj.getConfig() as any,
-                handlers: allHanlders
+                handlers: allHanlders,
+                setConfig: (namespace: string, endPoints: any) => {
+                    serviceObj.setNamespace(namespace, endPoints);
+                }
             }), [sendRequest, serviceObj, allHanlders]);
             return (
                 <WithServiceContext.Provider value={api}>
