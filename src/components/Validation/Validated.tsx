@@ -19,6 +19,7 @@ export type TypeValidatedProps = {
     // 是否手动触发验证规则，未设置或false将在value改变的时候触发
     emitValidate?: boolean;
     errMsg?: string;
+    hideMsg?: boolean;
 };
 
 export const Validated = function <P = {}>(props: TypeValidatedProps & P) {
@@ -123,7 +124,7 @@ export const Validated = function <P = {}>(props: TypeValidatedProps & P) {
             !validateStatus.pass && styles.validateFailed,
             !validateStatus.pass ? "validated_failed" : null)}>
             <div>{props.children}</div>
-            {!validateStatus.pass && (
+            { !props.hideMsg && !validateStatus.pass && (
                 <div className={styles.validated_message}>
                     <CloseCircleOutlined className="icon" />
                     <span>{validateStatus.message}</span>
