@@ -5,7 +5,7 @@ interface ILocation {
     state?: any;
 }
 
-interface IStore {
+export interface IStore {
     getData: <T={}>(key?: string) => T;
     setData: <T={}>(data: Partial<T>) => void;
 }
