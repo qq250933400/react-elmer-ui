@@ -57,7 +57,7 @@ export const withValidate = <P extends {}, V={}>(opt?: TypeWithValidateOption<V>
                     const failedVD: string[] = [];
                     const successVD: string[] = [];
                     const failedMsg: any = {};
-                    const ignoreList = opt.ignore || [];
+                    const ignoreList = opt?.ignore || [];
                     let pass = true;
                     for(const vd of validates) {
                         if(!ignoreList.includes(vd.option.id)) {

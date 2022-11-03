@@ -34,9 +34,9 @@ module.exports = function override(config, env) {
             library: "react-common-ui",
             libraryTarget: "umd",
         },
-        externals: {
-            'react': 'react',
-            'react-dom': 'react-dom'
-        }
+        // externals: {
+        //     'react': 'react',
+        //     'react-dom': 'react-dom'
+        // }
     };
 };
