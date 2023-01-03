@@ -34,6 +34,7 @@ export type TypeServiceEndPoint<T={}> = {
     options?: any;
     isDummy?: boolean;
     dummyData?: string;
+    timeout?: number;
 };
 
 export type TypeServiceNamespace<T={}> = {
@@ -60,6 +61,7 @@ export type TypeServiceSendOptions = {
     cookie?: any;
     withCredentials?: boolean;
     throwException?: boolean;
+    timeout?: number;
 };
 
 @Service
@@ -160,13 +162,14 @@ export class ElmerService {
                     ...(endPoint.cookie || {}),
                     ...(options.cookie || {})
                 };
+                const timeout = options.timeout || endPoint?.timeout;
                 this.setCookies(cookieData);
                 axios.request({
                     auth: endPoint.auth,
                     data: sendData,
                     headers,
                     method: type,
-                    timeout: this.config.timeout || 30000,
+                    timeout: timeout || this.config.timeout || 30000,
                     url,
                     withCredentials: options.withCredentials || endPoint.withCredentials
                 }).then((resp) => {
